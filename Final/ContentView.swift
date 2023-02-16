@@ -23,47 +23,70 @@ struct ContentView: View {
     @FocusState var emailFocus:Bool
     @FocusState var passFocus:Bool
     @FocusState var dobFocus:Bool
+    @State var width = UIScreen.main.bounds.width
+    @State var height = 500.0
     @State var temp = ""
-
+    @State var loginPage = LoginPage()
+    @State var gotoLogin = false
+    @State var isNameIncorrect = false
+    @State var isEmailIncorrect = false
+    @State var isPassIncorrect = false
+    @State var isDOBIncorrect = false
+    
     var body: some View {
-        NavigationView {
-            VStack(spacing: -10){
-                Image(uiImage: UIImage(named: "LaunchScreenImage")!).resizable().scaledToFill().frame(height: 50).padding(.top, 150).padding(.horizontal, 20).padding(.bottom, 100)
-                CustomTextField(defaultplaceholder: "Name", vm: vmName).focused($nameFocus)
-                CustomTextField(defaultplaceholder: "Email", vm: vmEmail).focused($emailFocus)
-                CustomTextField(defaultplaceholder: "Password", vm: vmPass, isProtected: true).focused($passFocus)
-                CustomTextField(defaultplaceholder: "Date of Birth", vm: vmDOB).focused($dobFocus)
-                 
-                Button("SignUp", action: {
-                    print(vmName.value, vmEmail.value, vmPass.value, vmDOB.value)
-                })
-                Spacer()
+        //NavigationView {
+            ScrollView{
                 
-            }.onAppear(){
-                CustomTextField.sendFocus = {received in
-                    if(received == "Name"){
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                            emailFocus = true
+                
+                VStack(spacing: -10){
+                    
+                    Image(uiImage: UIImage(named: "LaunchScreenImage")!).resizable()
+                        .frame(width: 250, height: 200)
+                        .scaledToFill()
+                        .padding(.horizontal, 50).padding(.vertical, 32)
+                    CustomTextField(defaultplaceholder: "Name", vm: vmName, isInCorrect: $isNameIncorrect).focused($nameFocus)
+                    CustomTextField(defaultplaceholder: "Email", vm: vmEmail, isInCorrect: $isNameIncorrect).focused($emailFocus)
+                    CustomTextField(defaultplaceholder: "Password", vm: vmPass, isProtected: true, isInCorrect: $isNameIncorrect).focused($passFocus)
+                    CustomTextField(defaultplaceholder: "Date of Birth", vm: vmDOB, isInCorrect: $isNameIncorrect).focused($dobFocus)
+                    
+                    CustomPrimaryButton(title: "Sign up"){
+                        isNameIncorrect = false
+                        isEmailIncorrect = false
+                        isPassIncorrect = false
+                        isDOBIncorrect = false
+                        UserDefaults.standard.set(vmPass.value, forKey: vmEmail.value)
+                    }.padding(.horizontal, 50).padding(.top, 64)
+                    
+                    NavigationLink(destination: loginPage, isActive: $gotoLogin){
+                        Text("Already have an account, SingIn")
+                    }.padding(.top, height/30)
+                    
+                }.onAppear(){
+                    CustomTextField.sendFocus = {received in
+                        if(received == "Name"){
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                                emailFocus = true
+                            }
                         }
-                    }
-                    if(received == "Email"){
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                            passFocus = true
+                        if(received == "Email"){
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                                passFocus = true
+                            }
                         }
-                    }
-                    if(received == "Password"){
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                            dobFocus = true
+                        if(received == "Password"){
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                                dobFocus = true
+                            }
                         }
-                    }
-                    if(received == "Date of Birth"){
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                            nameFocus = true
+                        if(received == "Date of Birth"){
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                                nameFocus = true
+                            }
                         }
                     }
                 }
             }
-        }
+        //}
     }
 }
 

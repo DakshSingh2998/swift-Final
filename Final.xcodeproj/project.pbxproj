@@ -19,6 +19,10 @@
 		526166BA1A558EFA002D73DA /* FinalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526166B91A558EFA002D73DA /* FinalTests.swift */; };
 		526166C41A558EFA002D73DA /* FinalUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526166C31A558EFA002D73DA /* FinalUITests.swift */; };
 		526166C61A558EFA002D73DA /* FinalUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526166C51A558EFA002D73DA /* FinalUITestsLaunchTests.swift */; };
+		52C8707E299E147C00491700 /* LoginPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C8707D299E147C00491700 /* LoginPage.swift */; };
+		52C87082299E20B800491700 /* CustomPrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C87081299E20B800491700 /* CustomPrimaryButton.swift */; };
+		52C87084299E213A00491700 /* CustomSecondaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C87083299E213A00491700 /* CustomSecondaryButton.swift */; };
+		52C87086299E247C00491700 /* FirstPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C87085299E247C00491700 /* FirstPage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +58,10 @@
 		526166BF1A558EFA002D73DA /* FinalUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FinalUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		526166C31A558EFA002D73DA /* FinalUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalUITests.swift; sourceTree = "<group>"; };
 		526166C51A558EFA002D73DA /* FinalUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		52C8707D299E147C00491700 /* LoginPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginPage.swift; sourceTree = "<group>"; };
+		52C87081299E20B800491700 /* CustomPrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPrimaryButton.swift; sourceTree = "<group>"; };
+		52C87083299E213A00491700 /* CustomSecondaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSecondaryButton.swift; sourceTree = "<group>"; };
+		52C87085299E247C00491700 /* FirstPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstPage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,8 +115,12 @@
 				526166AC1A558EFA002D73DA /* Persistence.swift */,
 				526166A31A558EF8002D73DA /* FinalApp.swift */,
 				526166A51A558EF8002D73DA /* ContentView.swift */,
-				5211AEC84036EAD900A97240 /* CustomTextField.swift */,
+				52C87085299E247C00491700 /* FirstPage.swift */,
+				52C8707D299E147C00491700 /* LoginPage.swift */,
 				5211AEC44036E94200A97240 /* LaunchScreen.swift */,
+				52C87081299E20B800491700 /* CustomPrimaryButton.swift */,
+				52C87083299E213A00491700 /* CustomSecondaryButton.swift */,
+				5211AEC84036EAD900A97240 /* CustomTextField.swift */,
 				526166A71A558EF9002D73DA /* Assets.xcassets */,
 				5211AEC64036EAD900A97240 /* Launch Screen.storyboard */,
 				526166AE1A558EFA002D73DA /* Final.xcdatamodeld */,
@@ -274,9 +286,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				526166B01A558EFA002D73DA /* Final.xcdatamodeld in Sources */,
+				52C87086299E247C00491700 /* FirstPage.swift in Sources */,
+				52C87082299E20B800491700 /* CustomPrimaryButton.swift in Sources */,
 				526166AD1A558EFA002D73DA /* Persistence.swift in Sources */,
 				5211AEC94036EAD900A97240 /* CustomTextField.swift in Sources */,
 				5211AEC54036E94200A97240 /* LaunchScreen.swift in Sources */,
+				52C8707E299E147C00491700 /* LoginPage.swift in Sources */,
+				52C87084299E213A00491700 /* CustomSecondaryButton.swift in Sources */,
 				526166A61A558EF8002D73DA /* ContentView.swift in Sources */,
 				526166A41A558EF8002D73DA /* FinalApp.swift in Sources */,
 			);
