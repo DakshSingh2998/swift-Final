@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		5211AEC54036E94200A97240 /* LaunchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5211AEC44036E94200A97240 /* LaunchScreen.swift */; };
 		5211AEC74036EAD900A97240 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5211AEC64036EAD900A97240 /* Launch Screen.storyboard */; };
+		5211AEC94036EAD900A97240 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5211AEC84036EAD900A97240 /* CustomTextField.swift */; };
 		526166A41A558EF8002D73DA /* FinalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526166A31A558EF8002D73DA /* FinalApp.swift */; };
 		526166A61A558EF8002D73DA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526166A51A558EF8002D73DA /* ContentView.swift */; };
 		526166A81A558EF9002D73DA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 526166A71A558EF9002D73DA /* Assets.xcassets */; };
@@ -40,6 +41,7 @@
 /* Begin PBXFileReference section */
 		5211AEC44036E94200A97240 /* LaunchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreen.swift; sourceTree = "<group>"; };
 		5211AEC64036EAD900A97240 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		5211AEC84036EAD900A97240 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		526166A01A558EF8002D73DA /* Final.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Final.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		526166A31A558EF8002D73DA /* FinalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalApp.swift; sourceTree = "<group>"; };
 		526166A51A558EF8002D73DA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 				526166AC1A558EFA002D73DA /* Persistence.swift */,
 				526166A31A558EF8002D73DA /* FinalApp.swift */,
 				526166A51A558EF8002D73DA /* ContentView.swift */,
+				5211AEC84036EAD900A97240 /* CustomTextField.swift */,
 				5211AEC44036E94200A97240 /* LaunchScreen.swift */,
 				526166A71A558EF9002D73DA /* Assets.xcassets */,
 				5211AEC64036EAD900A97240 /* Launch Screen.storyboard */,
@@ -272,6 +275,7 @@
 			files = (
 				526166B01A558EFA002D73DA /* Final.xcdatamodeld in Sources */,
 				526166AD1A558EFA002D73DA /* Persistence.swift in Sources */,
+				5211AEC94036EAD900A97240 /* CustomTextField.swift in Sources */,
 				5211AEC54036E94200A97240 /* LaunchScreen.swift in Sources */,
 				526166A61A558EF8002D73DA /* ContentView.swift in Sources */,
 				526166A41A558EF8002D73DA /* FinalApp.swift in Sources */,
