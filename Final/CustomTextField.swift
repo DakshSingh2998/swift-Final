@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 struct CustomTextField: View{
     
+        static var sendFocus: ((String) -> Void)?
     var defaultplaceholder:String
     @ObservedObject var vm:TextModel
     @State var placeholder = ""
@@ -26,11 +27,19 @@ struct CustomTextField: View{
                 }.frame(width: width+6, height: height+4) .background(isFocused ?  Color("Blue") : Color("Grey")).cornerRadius(8.0)
                 
                 //secure tf
-                SecureField(placeholder, text: $vm.value).autocorrectionDisabled(true).textInputAutocapitalization(TextInputAutocapitalization(.none)).frame(width: width-40, height: height).textFieldStyle(.roundedBorder).padding(.trailing, 40).isHidden(isProtected ? (tempIsProtected ? false : true) : true)
+                SecureField(placeholder, text: $vm.value, onCommit: {
+                    CustomTextField.sendFocus!(defaultplaceholder)
+                })
+                    .autocorrectionDisabled(true).textInputAutocapitalization(TextInputAutocapitalization(.none)).frame(width: width-40, height: height).textFieldStyle(.roundedBorder).padding(.trailing, 40)
+                    .isHidden(isProtected ? (tempIsProtected ? false : true) : true)
 
                 //simple tf
-                TextField(placeholder, text: $vm.value).autocorrectionDisabled(true).textInputAutocapitalization(TextInputAutocapitalization(.none)).frame(width: width, height: height).textFieldStyle(.roundedBorder).isHidden(isProtected ? (tempIsProtected ? true : false) : false)
+                TextField(placeholder, text: $vm.value, onCommit: {
+                    CustomTextField.sendFocus!(defaultplaceholder)
+                })
+                    .autocorrectionDisabled(true).textInputAutocapitalization(TextInputAutocapitalization(.none)).frame(width: width, height: height).textFieldStyle(.roundedBorder).isHidden(isProtected ? (tempIsProtected ? true : false) : false)
                 //pass image
+                
                 HStack{
                     Image(systemName: tempIsProtected ? "eye.fill" : "eyes.inverse")
                 }.frame(width: 40+8, height: 36-2).background(.white).padding(.leading, width-40-8).cornerRadius(6)
