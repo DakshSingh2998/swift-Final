@@ -23,7 +23,6 @@ struct ContentView: View {
     @FocusState var emailFocus:Bool
     @FocusState var passFocus:Bool
     @FocusState var dobFocus:Bool
-    @State var width = UIScreen.main.bounds.width
     @State var height = 500.0
     @State var temp = ""
     @State var loginPage = LoginPage()
@@ -38,7 +37,7 @@ struct ContentView: View {
             ScrollView{
                 
                 
-                VStack(spacing: -10){
+                VStack(spacing: 0){
                     
                     Image(uiImage: UIImage(named: "LaunchScreenImage")!).resizable()
                         .frame(width: 250, height: 200)
@@ -47,7 +46,7 @@ struct ContentView: View {
                     CustomTextField(defaultplaceholder: "Name", vm: vmName, isInCorrect: $isNameIncorrect).focused($nameFocus)
                     CustomTextField(defaultplaceholder: "Email", vm: vmEmail, isInCorrect: $isNameIncorrect).focused($emailFocus)
                     CustomTextField(defaultplaceholder: "Password", vm: vmPass, isProtected: true, isInCorrect: $isNameIncorrect).focused($passFocus)
-                    CustomTextField(defaultplaceholder: "Date of Birth", vm: vmDOB, isInCorrect: $isNameIncorrect).focused($dobFocus)
+                    CustomTextField(defaultplaceholder: "dd/mm/yyyy", vm: vmDOB, isInCorrect: $isNameIncorrect, isDate: true, labelText: "Date Of Birth").focused($dobFocus)
                     
                     CustomPrimaryButton(title: "Sign up"){
                         isNameIncorrect = false
@@ -58,7 +57,7 @@ struct ContentView: View {
                     }.padding(.horizontal, 50).padding(.top, 64)
                     
                     NavigationLink(destination: loginPage, isActive: $gotoLogin){
-                        Text("Already have an account, SingIn")
+                        Text("Already have an account, Sign In")
                     }.padding(.top, height/30)
                     
                 }.onAppear(){
@@ -89,8 +88,6 @@ struct ContentView: View {
         //}
     }
 }
-
-
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()

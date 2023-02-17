@@ -49,7 +49,7 @@ struct LoginPage: View {
                     }
                     
                 }.padding(.horizontal, 50).padding(.top, 64).padding(.bottom, 100)
-            }.frame(height: UIScreen.main.bounds.height)
+            }
             .onAppear(){
                 
             }

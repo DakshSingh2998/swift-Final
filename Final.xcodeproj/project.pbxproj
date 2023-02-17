@@ -10,6 +10,7 @@
 		5211AEC54036E94200A97240 /* LaunchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5211AEC44036E94200A97240 /* LaunchScreen.swift */; };
 		5211AEC74036EAD900A97240 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5211AEC64036EAD900A97240 /* Launch Screen.storyboard */; };
 		5211AEC94036EAD900A97240 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5211AEC84036EAD900A97240 /* CustomTextField.swift */; };
+		523164B640398D01001EB0FB /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523164B540398D01001EB0FB /* Global.swift */; };
 		526166A41A558EF8002D73DA /* FinalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526166A31A558EF8002D73DA /* FinalApp.swift */; };
 		526166A61A558EF8002D73DA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526166A51A558EF8002D73DA /* ContentView.swift */; };
 		526166A81A558EF9002D73DA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 526166A71A558EF9002D73DA /* Assets.xcassets */; };
@@ -46,6 +47,7 @@
 		5211AEC44036E94200A97240 /* LaunchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreen.swift; sourceTree = "<group>"; };
 		5211AEC64036EAD900A97240 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		5211AEC84036EAD900A97240 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		523164B540398D01001EB0FB /* Global.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
 		526166A01A558EF8002D73DA /* Final.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Final.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		526166A31A558EF8002D73DA /* FinalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalApp.swift; sourceTree = "<group>"; };
 		526166A51A558EF8002D73DA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 			children = (
 				526166AC1A558EFA002D73DA /* Persistence.swift */,
 				526166A31A558EF8002D73DA /* FinalApp.swift */,
+				523164B540398D01001EB0FB /* Global.swift */,
 				526166A51A558EF8002D73DA /* ContentView.swift */,
 				52C87085299E247C00491700 /* FirstPage.swift */,
 				52C8707D299E147C00491700 /* LoginPage.swift */,
@@ -291,6 +294,7 @@
 				526166AD1A558EFA002D73DA /* Persistence.swift in Sources */,
 				5211AEC94036EAD900A97240 /* CustomTextField.swift in Sources */,
 				5211AEC54036E94200A97240 /* LaunchScreen.swift in Sources */,
+				523164B640398D01001EB0FB /* Global.swift in Sources */,
 				52C8707E299E147C00491700 /* LoginPage.swift in Sources */,
 				52C87084299E213A00491700 /* CustomSecondaryButton.swift in Sources */,
 				526166A61A558EF8002D73DA /* ContentView.swift in Sources */,

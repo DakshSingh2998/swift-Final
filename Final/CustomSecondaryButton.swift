@@ -8,22 +8,23 @@
 import SwiftUI
 
 struct CustomSecondaryButton: View{
-    @State var title:String?
+    @State var title = "Button"
     @State var height:CGFloat = 36
     var closure: (() -> Void)?
     var body: some View {
-        Button(action: closure!,label:{
+        Button(action: closure ?? {
+            print("Button Action not Defined")
+        },label:{
             Spacer()
-            Text(title!)
+            Text(title)
             Spacer()
         }).frame(maxWidth: .infinity, minHeight: height).overlay{RoundedRectangle(cornerRadius: 8.0, style: .continuous).stroke( Color("Dark"), lineWidth: 6)}.background(Color("Dark")).cornerRadius(8.0).foregroundColor(.white)
     }
 }
-/*
+
 struct CustomSecondaryButton_Previews: PreviewProvider {
     static var previews: some View {
         CustomSecondaryButton()
     }
 }
 
-*/
