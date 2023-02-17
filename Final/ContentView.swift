@@ -25,6 +25,8 @@ struct ContentView: View {
     @FocusState var dobFocus:Bool
     @State var height = 500.0
     @State var temp = ""
+    @State var width = Global.shared.width
+    @State var tfWidth = Global.shared.width - 100
     @State var loginPage = LoginPage()
     @State var gotoLogin = false
     @State var isNameIncorrect = false
@@ -43,10 +45,10 @@ struct ContentView: View {
                         .frame(width: 250, height: 200)
                         .scaledToFill()
                         .padding(.horizontal, 50).padding(.vertical, 32)
-                    CustomTextField(defaultplaceholder: "Name", vm: vmName, isInCorrect: $isNameIncorrect).focused($nameFocus)
-                    CustomTextField(defaultplaceholder: "Email", vm: vmEmail, isInCorrect: $isNameIncorrect).focused($emailFocus)
-                    CustomTextField(defaultplaceholder: "Password", vm: vmPass, isProtected: true, isInCorrect: $isNameIncorrect).focused($passFocus)
-                    CustomTextField(defaultplaceholder: "dd/mm/yyyy", vm: vmDOB, isInCorrect: $isNameIncorrect, isDate: true, labelText: "Date Of Birth").focused($dobFocus)
+                    CustomTextField(defaultplaceholder: "Name", vm: vmName, width: $tfWidth, isInCorrect: $isNameIncorrect).focused($nameFocus)
+                    CustomTextField(defaultplaceholder: "Email", vm: vmEmail, width: $tfWidth, isInCorrect: $isNameIncorrect).focused($emailFocus)
+                    CustomTextField(defaultplaceholder: "Password", vm: vmPass, width: $tfWidth, isProtected: true, isInCorrect: $isNameIncorrect).focused($passFocus)
+                    CustomTextField(defaultplaceholder: "dd/mm/yyyy", vm: vmDOB, width: $tfWidth, isInCorrect: $isNameIncorrect, isDate: true, labelText: "Date Of Birth").focused($dobFocus)
                     
                     CustomPrimaryButton(title: "Sign up"){
                         isNameIncorrect = false
@@ -83,7 +85,19 @@ struct ContentView: View {
                             }
                         }
                     }
-                }
+                    self.width = Global.shared.width
+                    self.tfWidth = Global.shared.width - 100
+                }.padding(.horizontal, 50)
+                    .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)){_ in
+                        //Global.shared.updateOrientation()
+                        DispatchQueue.main.asyncAfter(deadline: .now()+0.8){
+                            self.width = Global.shared.width
+                            self.tfWidth = Global.shared.width - 100
+                            print(self.width)
+                        }
+                        
+                        
+                    }
             }
         //}
     }
