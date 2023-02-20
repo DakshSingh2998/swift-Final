@@ -12,60 +12,74 @@ struct LoginPage: View {
     @ObservedObject var vmPass = TextModel()
     @FocusState var emailFocus:Bool
     @FocusState var passFocus:Bool
-    @State var width = Global.shared.width
-    @State var tfWidth = Global.shared.width - 100
-    @State var height = 500.0
+    @State var width = CommonMethods.shared.width
+    @State var tfWidth = CommonMethods.shared.width - 100
+    @State var height = CommonMethods.shared.height
     @State var temp = ""
     @State var isPassIncorrect = false
     @State var isEmailIncorrect = false
     var body: some View {
-        ScrollView{
-            VStack(spacing: 0){
-                Image(uiImage: UIImage(named: "Logo")!).resizable()
-                    .frame(width: 250, height: 200)
-                    .scaledToFill()
-                CustomTextField(defaultplaceholder: "Email", vm: vmEmail, width: $tfWidth, isInCorrect: $isEmailIncorrect).focused($emailFocus)
-                CustomTextField(defaultplaceholder: "Password", vm: vmPass, width: $tfWidth, isProtected: true, isInCorrect: $isPassIncorrect).focused($passFocus)
-                CustomPrimaryButton(title: "Sign in"){
-                    isPassIncorrect = false
-                    isEmailIncorrect = false
-                    var originalPass = UserDefaults.standard.value(forKey: vmEmail.value)
-                    if(originalPass == nil){
-                        isEmailIncorrect = true
-                        DispatchQueue.main.asyncAfter(deadline: .now()+0.1){
-                            emailFocus = true
-                        }
-                        return
-                    }
-                    if(vmPass.value != originalPass as! String){
-                        isPassIncorrect = true
-                        DispatchQueue.main.asyncAfter(deadline: .now()+0.1){
+        
+            ScrollView{
+                VStack(spacing: -8){
+                    Image(uiImage: UIImage(named: "Logo")!).resizable()
+                        .frame(width: 250, height: 200)
+                        .scaledToFill()
+                        .padding(.vertical, -32)
+                    CustomTextField(defaultplaceholder: "Email", vm: vmEmail, width: $tfWidth, isInCorrect: $isEmailIncorrect, commitClosure: {
+                        DispatchQueue.main.asyncAfter(deadline: .now()+0.2, execute: {
                             passFocus = true
-                        }
-                        print("Incorrect")
-                    }else{
+                        })
+                    }).focused($emailFocus).onTapGesture {
+                        isEmailIncorrect = false
+                    }
+                    CustomTextField(defaultplaceholder: "Password", vm: vmPass, width: $tfWidth, isProtected: true, isInCorrect: $isPassIncorrect, commitClosure: {
+                        DispatchQueue.main.asyncAfter(deadline: .now()+0.2, execute: {
+                            emailFocus = true
+                        })
+                    }).focused($passFocus).onTapGesture {
+                        isPassIncorrect = false
+                    }
+                    CustomPrimaryButton(title: "Sign in"){
                         isPassIncorrect = false
                         isEmailIncorrect = false
-                        print("Correct")
+                        emailFocus = false
+                        passFocus = false
+                        var originalPass = UserDefaults.standard.value(forKey: vmEmail.value)
+                        if(originalPass == nil){
+                            isEmailIncorrect = true
+                            return
+                        }
+                        if(vmPass.value != originalPass as! String){
+                            isPassIncorrect = true
+                            print("Incorrect")
+                        }else{
+                            print("Correct")
+                        }
+                        
+                    }.padding(.top, 32)
+                }.padding(.horizontal, 50)
+                    .onAppear(){
+                        self.width = CommonMethods.shared.width
+                        self.tfWidth = CommonMethods.shared.width - 100
+                        self.height = CommonMethods.shared.height
                     }
-                    
-                }.padding(.horizontal, 50).padding(.top, 64).padding(.bottom, 100)
-            }.padding(.horizontal, 50)
-            .onAppear(){
-                self.width = Global.shared.width
-                self.tfWidth = Global.shared.width - 100
+                    .onDisappear(){
+                        vmEmail.value = ""
+                        vmPass.value = ""
+                    }
+                    .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)){_ in
+                        //Global.shared.updateOrientation()
+                        DispatchQueue.main.asyncAfter(deadline: .now()+0.8){
+                            self.width = CommonMethods.shared.width
+                            self.tfWidth = CommonMethods.shared.width - 100
+                            self.height = CommonMethods.shared.height
+                            print(self.width)
+                        }
+                    }
+                    .frame(minHeight: self.height - self.height/3)
             }
-            .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)){_ in
-                //Global.shared.updateOrientation()
-                DispatchQueue.main.asyncAfter(deadline: .now()+0.8){
-                    self.width = Global.shared.width
-                    self.tfWidth = Global.shared.width - 100
-                    print(self.width)
-                }
-                
-                
-            }
-        }
+        
     }
 }
 

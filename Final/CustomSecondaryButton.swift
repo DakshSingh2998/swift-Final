@@ -16,9 +16,9 @@ struct CustomSecondaryButton: View{
             print("Button Action not Defined")
         },label:{
             Spacer()
-            Text(title)
+            Text(title).fontWeight(.bold)
             Spacer()
-        }).frame(maxWidth: .infinity, minHeight: height).overlay{RoundedRectangle(cornerRadius: 8.0, style: .continuous).stroke( Color("Dark"), lineWidth: 6)}.background(Color("Dark")).cornerRadius(8.0).foregroundColor(.white)
+        }).frame(maxWidth: .infinity, minHeight: height).overlay{RoundedRectangle(cornerRadius: 8.0, style: .continuous).stroke( Color("Blue"), lineWidth: 6)}.cornerRadius(8.0).foregroundColor(Color("Blue"))
     }
 }
 

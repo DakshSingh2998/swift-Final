@@ -24,7 +24,7 @@ struct CustomTextField: View{
     @State var isDate = false
     @State var labelText = ""
     @State var originalDigit = 0
-    
+    var commitClosure: (() -> Void)?
     var body: some View{
         
         
@@ -32,11 +32,15 @@ struct CustomTextField: View{
                 ZStack{
                     //border
                     VStack{
-                    }.frame(width: width, height: height+6) .background(isFocused ? isInCorrect ? Color(.systemRed): Color("Blue") : Color("Grey")).cornerRadius(8.0)
+                    }.frame(width: width-2, height: height+2)
+                        
+                        .background(isInCorrect ? Color(.systemRed): isFocused ?  Color("Blue") : Color("Grey")).cornerRadius(8.0)
+                        
                     
                     //secure tf
                     SecureField(placeholder, text: $vm.value, onCommit: {
                         CustomTextField.sendFocus!(defaultplaceholder)
+                        commitClosure?()
                     })
                     .animation(nil)
                     .autocorrectionDisabled(true).textInputAutocapitalization(TextInputAutocapitalization(.none)).frame(width: width-50-6, height: height).textFieldStyle(.roundedBorder)
@@ -48,6 +52,7 @@ struct CustomTextField: View{
                         if(isDate == false){
                             return
                         }
+                        
                         if(newVal.count <= 1){
                             originalDigit = newVal.count
                         }
@@ -70,11 +75,17 @@ struct CustomTextField: View{
                             vm.value.remove(at: vm.value.index(vm.value.startIndex, offsetBy: 4))
                             originalDigit = 4
                         }
-                        else{
+                        else if(newVal.count <= 10){
                             originalDigit = newVal.count - 2
+                        }
+                        else{
+                            vm.value.remove(at: vm.value.index(vm.value.startIndex, offsetBy: 10))
                         }
                         
                         
+                        
+                    }.keyboardType(isDate ? .asciiCapableNumberPad : .asciiCapable).onSubmit {
+                        commitClosure?()
                     }
                     //CustomTextField.sendFocus!(defaultplaceholder)
                     .animation(nil)
@@ -82,22 +93,24 @@ struct CustomTextField: View{
                     //pass image
                     
                     HStack{
-                        Image(systemName: tempIsProtected ? "eye.fill" : "eyes.inverse")
+                        Image(systemName: tempIsProtected ? "eye.slash.fill" : "eye.fill")
                             .onTapGesture {
                             tempIsProtected = !tempIsProtected
                             DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
                                 isFocused = true
                             }
                         }
-                    }.frame(width: 50+4, height: 36-2.5).background(.white).padding(.leading, width-50-10).cornerRadius(6)
+                    }
+                    
+                    .frame(width: 50+4, height: 36-2.5).background(.white).padding(.leading, width-50-10).cornerRadius(6)
                         .isHidden(!isProtected)
                     ///Label
-                    Text(labelText).background(.white).padding(.leading, -width/2.2).padding(.bottom, height+4).contentShape(Rectangle()).foregroundColor(Color("Blue")).opacity(isFocused ? 1 : 0).animation(.linear(duration: 0.1))
+                    Text(labelText).background(.white).padding(.leading, -width/2.2).padding(.bottom, height+4).contentShape(Rectangle()).foregroundColor(Color("Blue")).opacity(isFocused ? 1 : 0).animation(.linear(duration: 0.1)).font(Font(CTFont(.system, size: 14)))
                     //incorrect label
                     Text(" Incorrect")
                         .background(.white)
                         .foregroundColor(Color(.systemRed)).opacity(isInCorrect ? 1 : 0).animation(.linear(duration: 0.1))
-                        .padding(.leading, +width/1.4).padding(.top, height+4)
+                        .padding(.leading, +width/1.4).padding(.top, height).font(Font(CTFont(.system, size: 14)))
                 }.focused($isFocused)
             
         }.animation(nil)
