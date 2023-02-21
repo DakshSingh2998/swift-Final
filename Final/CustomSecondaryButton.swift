@@ -9,7 +9,8 @@ import SwiftUI
 
 struct CustomSecondaryButton: View{
     @State var title = "Button"
-    @State var height:CGFloat = 36
+    @State var height:CGFloat = 50
+    @State var colorr = Color("Blue")
     var closure: (() -> Void)?
     var body: some View {
         Button(action: closure ?? {
@@ -18,7 +19,7 @@ struct CustomSecondaryButton: View{
             Spacer()
             Text(title).fontWeight(.bold)
             Spacer()
-        }).frame(maxWidth: .infinity, minHeight: height).overlay{RoundedRectangle(cornerRadius: 8.0, style: .continuous).stroke( Color("Blue"), lineWidth: 6)}.cornerRadius(8.0).foregroundColor(Color("Blue"))
+        }).frame(maxWidth: .infinity, minHeight: height).overlay{RoundedRectangle(cornerRadius: 8.0, style: .continuous).stroke( colorr, lineWidth: 6)}.cornerRadius(8.0).foregroundColor(colorr)
     }
 }
 

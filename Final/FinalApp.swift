@@ -10,10 +10,9 @@ import SwiftUI
 @main
 struct FinalApp: App {
     let persistenceController = PersistenceController.shared
-
     var body: some Scene {
         WindowGroup {
-            FirstPage()
+            HomePage()
         }
     }
 }

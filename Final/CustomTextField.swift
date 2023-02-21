@@ -4,7 +4,6 @@
 //
 //  Created by Daksh on 15/02/23.
 //
-
 import Foundation
 import SwiftUI
 struct CustomTextField: View{
@@ -35,8 +34,6 @@ struct CustomTextField: View{
                     }.frame(width: width-2, height: height+2)
                         
                         .background(isInCorrect ? Color(.systemRed): isFocused ?  Color("Blue") : Color("Grey")).cornerRadius(8.0)
-                        
-                    
                     //secure tf
                     SecureField(placeholder, text: $vm.value, onCommit: {
                         CustomTextField.sendFocus!(defaultplaceholder)
@@ -81,9 +78,6 @@ struct CustomTextField: View{
                         else{
                             vm.value.remove(at: vm.value.index(vm.value.startIndex, offsetBy: 10))
                         }
-                        
-                        
-                        
                     }.keyboardType(isDate ? .asciiCapableNumberPad : .asciiCapable).onSubmit {
                         commitClosure?()
                     }
@@ -101,7 +95,6 @@ struct CustomTextField: View{
                             }
                         }
                     }
-                    
                     .frame(width: 50+4, height: 36-2.5).background(.white).padding(.leading, width-50-10).cornerRadius(6)
                         .isHidden(!isProtected)
                     ///Label
@@ -122,13 +115,8 @@ struct CustomTextField: View{
                 }
                 //print("ss",isInCorrect)
             }
-            
     }
-    
 }
-
-
-
 struct Previews_CustomTextField_Previews: PreviewProvider {
     static var previews: some View {
         /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/

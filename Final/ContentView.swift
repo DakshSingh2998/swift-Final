@@ -34,6 +34,7 @@ struct ContentView: View {
     @State var isPassIncorrect = false
     @State var isDOBIncorrect = false
     @State var False = false
+    @State var successfulSignup = false
     var coloredSignIn: AttributedString{
         var result = AttributedString("Sign In")
         result.foregroundColor = Color("Blue")
@@ -146,8 +147,15 @@ struct ContentView: View {
                             return
                         }
                         print("data saved")
+                        successfulSignup = true
                         UserDefaults.standard.set(vmPass.value, forKey: vmEmail.value)
-                    }
+                    }.alert("SignUp Successful", isPresented: $successfulSignup, actions: {
+                        
+                    }).onChange(of: successfulSignup, perform: { newVal in
+                        if(successfulSignup == false){
+                            gotoLogin = true
+                        }
+                    })
                     .padding(.top, 32)
                     
                     NavigationLink(destination: loginPage, isActive: $gotoLogin){

@@ -11,9 +11,11 @@ class CommonMethods{
     static var shared = CommonMethods()
     var width = UIScreen.main.bounds.width
     var height = UIScreen.main.bounds.height
+    var currentOrientation = UIDevice.current.orientation
     static var orientationUpdated: (() -> Void)?
     func updateOrientation(){
         var orientation = UIDevice.current.orientation
+        currentOrientation = orientation
         if(orientation == .portrait || orientation == .portraitUpsideDown){
             print("Portrait")
             width = UIScreen.main.bounds.width
