@@ -45,17 +45,20 @@ struct GroceryMenu: View {
                 }
                 .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color("Green"), lineWidth:2))
                 .background(Color("GroceryYellow"))
-                //.cornerRadius(20)
+                
+                .cornerRadius(20)
+                .shadow(radius: 50)
                 .padding(.horizontal, 20)
-            }
-            Text("★ ENJOY THESE BENEFITS ★").font(Font.custom("Courier New", size: 18)).fontWeight(.bold).padding(.top, 40)
-            GroceryList(image: "GroceryImage2", text: "Enjoy 5000+ products to suit your needs")
-                .padding(.horizontal, 15).padding(.top, 16)
-            GroceryList(image: "GroceryImage2", text: "Everything delivered in minutes")
-                .padding(.horizontal, 15).padding(.top, 8)
-            GroceryList(image: "GroceryImage2", text: "Amazing payments and bank offers")
-                .padding(.horizontal, 15).padding(.top, 8)
-                .padding(.bottom, 16)
+                Text("★ ENJOY THESE BENEFITS ★").font(Font.custom("Courier New", size: 18)).fontWeight(.bold).padding(.top, 40)
+                GroceryList(image: "GroceryImage2", text: "Enjoy 5000+ products to suit your needs")
+                    .padding(.horizontal, 15).padding(.top, 16)
+                GroceryList(image: "GroceryImage2", text: "Everything delivered in minutes")
+                    .padding(.horizontal, 15).padding(.top, 8)
+                GroceryList(image: "GroceryImage2", text: "Amazing payments and bank offers")
+                    .padding(.horizontal, 15).padding(.top, 8)
+                    .padding(.bottom, 16)
+            }.shadow(radius: 20)
+            
         }
         
     }
