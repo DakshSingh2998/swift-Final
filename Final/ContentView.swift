@@ -194,6 +194,7 @@ struct ContentView: View {
                     self.width = CommonMethods.shared.width
                     self.height = CommonMethods.shared.height
                     self.tfWidth = CommonMethods.shared.width - 100
+                    nameFocus = true
                 }
                 .onDisappear(){
                     vmName.value = ""

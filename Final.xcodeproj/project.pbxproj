@@ -11,6 +11,8 @@
 		5211AEC74036EAD900A97240 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5211AEC64036EAD900A97240 /* Launch Screen.storyboard */; };
 		5211AEC94036EAD900A97240 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5211AEC84036EAD900A97240 /* CustomTextField.swift */; };
 		523164B640398D01001EB0FB /* CommonMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523164B540398D01001EB0FB /* CommonMethods.swift */; };
+		523819F929A5D1EB00C5F0F7 /* Cart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523819F829A5D1EB00C5F0F7 /* Cart.swift */; };
+		523819FB29A61E0000C5F0F7 /* TempSave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523819FA29A61E0000C5F0F7 /* TempSave.swift */; };
 		526166A41A558EF8002D73DA /* FinalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526166A31A558EF8002D73DA /* FinalApp.swift */; };
 		526166A61A558EF8002D73DA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526166A51A558EF8002D73DA /* ContentView.swift */; };
 		526166A81A558EF9002D73DA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 526166A71A558EF9002D73DA /* Assets.xcassets */; };
@@ -52,6 +54,8 @@
 		5211AEC64036EAD900A97240 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		5211AEC84036EAD900A97240 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		523164B540398D01001EB0FB /* CommonMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonMethods.swift; sourceTree = "<group>"; };
+		523819F829A5D1EB00C5F0F7 /* Cart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cart.swift; sourceTree = "<group>"; };
+		523819FA29A61E0000C5F0F7 /* TempSave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempSave.swift; sourceTree = "<group>"; };
 		526166A01A558EF8002D73DA /* Final.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Final.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		526166A31A558EF8002D73DA /* FinalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalApp.swift; sourceTree = "<group>"; };
 		526166A51A558EF8002D73DA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -125,12 +129,14 @@
 				526166AC1A558EFA002D73DA /* Persistence.swift */,
 				526166A31A558EF8002D73DA /* FinalApp.swift */,
 				523164B540398D01001EB0FB /* CommonMethods.swift */,
-				526166A51A558EF8002D73DA /* ContentView.swift */,
 				52C87085299E247C00491700 /* FirstPage.swift */,
-				529676BC29A4B57100DF6267 /* HomePage.swift */,
-				529676C029A4B66200DF6267 /* GroceryMenu.swift */,
-				529676BE29A4B62600DF6267 /* DeliveryMenu.swift */,
+				526166A51A558EF8002D73DA /* ContentView.swift */,
 				52C8707D299E147C00491700 /* LoginPage.swift */,
+				529676BC29A4B57100DF6267 /* HomePage.swift */,
+				529676BE29A4B62600DF6267 /* DeliveryMenu.swift */,
+				529676C029A4B66200DF6267 /* GroceryMenu.swift */,
+				523819F829A5D1EB00C5F0F7 /* Cart.swift */,
+				523819FA29A61E0000C5F0F7 /* TempSave.swift */,
 				5211AEC44036E94200A97240 /* LaunchScreen.swift */,
 				52C87081299E20B800491700 /* CustomPrimaryButton.swift */,
 				52C87083299E213A00491700 /* CustomSecondaryButton.swift */,
@@ -303,6 +309,7 @@
 				529676BB29A49BF300DF6267 /* NoWidthTextField.swift in Sources */,
 				526166B01A558EFA002D73DA /* Final.xcdatamodeld in Sources */,
 				529676BF29A4B62600DF6267 /* DeliveryMenu.swift in Sources */,
+				523819FB29A61E0000C5F0F7 /* TempSave.swift in Sources */,
 				52C87086299E247C00491700 /* FirstPage.swift in Sources */,
 				52C87082299E20B800491700 /* CustomPrimaryButton.swift in Sources */,
 				526166AD1A558EFA002D73DA /* Persistence.swift in Sources */,
@@ -315,6 +322,7 @@
 				52C87084299E213A00491700 /* CustomSecondaryButton.swift in Sources */,
 				526166A61A558EF8002D73DA /* ContentView.swift in Sources */,
 				526166A41A558EF8002D73DA /* FinalApp.swift in Sources */,
+				523819F929A5D1EB00C5F0F7 /* Cart.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

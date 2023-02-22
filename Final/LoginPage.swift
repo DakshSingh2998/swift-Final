@@ -63,6 +63,8 @@ struct LoginPage: View {
                         self.width = CommonMethods.shared.width
                         self.tfWidth = CommonMethods.shared.width - 100
                         self.height = CommonMethods.shared.height
+                        emailFocus = true
+                        
                     }
                     .onDisappear(){
                         vmEmail.value = ""

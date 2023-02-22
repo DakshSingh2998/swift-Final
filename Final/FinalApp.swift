@@ -13,6 +13,7 @@ struct FinalApp: App {
     var body: some Scene {
         WindowGroup {
             HomePage()
+            //FirstPage()
         }
     }
 }
