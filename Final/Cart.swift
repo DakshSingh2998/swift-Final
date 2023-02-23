@@ -16,6 +16,11 @@ struct Cart: View {
     @State var gotoDelivery: (() -> Void)?
     @State var subTotal = 0
     @Binding var location:String
+    @Binding var gst:Double
+    @State var gstAmt = 0.0
+    @State var grandTotal = 0.0
+    @State var gstInfo = false
+    @Binding var paymentMode:PaymentMode
     func calcSubTotal(){
         subTotal = 0
         for i in cartItems.indices{
@@ -23,9 +28,11 @@ struct Cart: View {
         }
     }
     var body: some View {
+        
         ZStack{
-            LinearGradient(gradient: Gradient(colors: [Color("Dark"), Color("Light")]), startPoint: .topLeading, endPoint: .bottomTrailing).ignoresSafeArea()
-            VStack{
+            LinearGradient(gradient: Gradient(colors: [Color("Dark"), Color("Light")]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                .ignoresSafeArea()
+            VStack(spacing: 0){
                 ScrollView{
                     VStack(spacing: 20){
                         VStack{
@@ -37,46 +44,53 @@ struct Cart: View {
                         }
                         .frame(maxWidth: .infinity)
                         .frame(height: 40)
-                        .background(.white)
+                        .background(Color("Light"))
                         .cornerRadius(10)
                         .padding(.top, 1)
                         
                         Separator(text: "ITEM(s) ADDED")
                         
-                        VStack{
+                        
                             
-                            ForEach(cartItems) { val in
-                                HStack(alignment: .top){
-                                    Image(systemName: "eye.fill")
-                                    
-                                    VStack(spacing: 6){
-                                        HStack{
-                                            
-                                            Text(val.name).font(Font(CTFont(.system, size: 14))).font(Font(CTFont(.system, size: 14))).bold()
-                                                .onTapGesture {
-                                                    
-                                                }
-                                            Spacer()
-                                            PlusMinus(cartItems: $cartItems, text: val.$quantity, id: val.id, subTotal: $subTotal)
-                                            //Text("\(val.quantity)")
-                                        }
-                                        HStack{
-                                            Text("₹\(val.price)").font(Font(CTFont(.system, size: 14))).font(Font(CTFont(.system, size: 14)))
-                                            Spacer()
-                                            Text("₹\(val.price*val.quantity)").font(Font(CTFont(.system, size: 14)))
-                                        }
-                                    }
-                                    Spacer()
-                                }.padding(.all, 10)
+                        List(cartItems) { val in
+                            HStack(alignment: .top){
+                                Image(systemName: "eye.fill")
                                 
-                            }
+                                VStack(spacing: 0){
+                                    HStack{
+                                        
+                                        Text(val.name).font(Font(CTFont(.system, size: 14))).font(Font(CTFont(.system, size: 14))).bold()
+                                            .onTapGesture {
+                                                
+                                            }
+                                        Spacer()
+                                        PlusMinus(cartItems: $cartItems, food: val, id: val.id, subTotal: $subTotal)
+                                        //Text("\(val.quantity)")
+                                    }
+                                    HStack{
+                                        Text("₹\(val.price)").font(Font(CTFont(.system, size: 14))).font(Font(CTFont(.system, size: 14)))
+                                        Spacer()
+                                        Text("₹\(val.price*val.quantity)").font(Font(CTFont(.system, size: 14)))
+                                    }
+                                }
+                                Spacer()
                         }
-                        //.overlay(RoundedRectangle(cornerRadius: 4).stroke(Color("Dark"), lineWidth:2))
-                        .cornerRadius(10)
-                        .background(Color(.white))
-                        .cornerRadius(10)
+                            
+                        .frame(height: 50)
+                        .listRowBackground(Color("Light"))
+                            
+                    }
+                    .listStyle(.plain)
+                    .scrollDisabled(true)
+                    .frame(height: 72*CGFloat(cartItems.count))
+                    .frame(maxWidth: .infinity)
+                    .cornerRadius(20)
+                    
+                    
+                    
+                        
                         HStack{
-                            Image(systemName: "eyes.inverse")
+                            Image(systemName: "plus.circle")
                             Text("Add more items").font(Font(CTFont(.system, size: 14)))
                             Spacer()
                             Text(">").font(Font(CTFont(.system, size: 14)))
@@ -84,36 +98,146 @@ struct Cart: View {
                         .frame(height: 40)
                         .padding(.horizontal, 10)
                         
-                        .background(.white)
+                        .background(Color("Light"))
                         .cornerRadius(10)
                         .onTapGesture {
                             gotoPage = 1
                         }
                         Separator(text: "BILL SUMMARY")
-                        HStack{
+                        VStack{
+                            HStack{
+                                VStack(alignment: .leading, spacing: 10){
+                                    Text("Subtotal").font(Font(CTFont(.system, size: 14))).bold()
+                                    HStack{
+                                        Image(systemName: "building.columns.circle")
+                                            .frame(width: 20, height: 20)
+                                        Text("Gst \(String(format: "%.2f", gst))% ⓘ").font(Font(CTFont(.system, size: 12))).onTapGesture {
+                                            gstInfo = true
+                                        }
+                                        .alert(isPresented: $gstInfo){
+                                            Alert(title: Text("GST INFO"), message: Text("Our App has no role to play in taxes being levied by govt and restaurants"), dismissButton: .default(Text("Got It!")))
+                                        }
+                                    }
+                                    
+                                    
+                                }
+                                .padding(.top, 10)
+                                .padding(.horizontal, 10)
+                                Spacer()
+                                VStack(alignment: .trailing, spacing: 10){
+                                    Text("₹\(subTotal)").font(Font(CTFont(.system, size: 14))).bold()
+                                    Text("₹\(String(format: "%.2f", gstAmt))").font(Font(CTFont(.system, size: 12)))
+                                    
+                                }
+                                .padding(.top, 10)
+                                .padding(.horizontal, 10)
+                            }
                             VStack{
-                                Text("Subtotal").font(Font(CTFont(.system, size: 18))).bold()
-                            }.padding(.all, 10)
-                            Spacer()
-                            VStack{
-                                Text("₹\(subTotal)")
-                            }.padding(.all, 10)
-                        }
-                        .background(.white)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 1)
+                            .background(Color("Dark"))
+                            .cornerRadius(20)
+                            .padding(.horizontal, 10)
+                            HStack{
+                                VStack(alignment: .leading, spacing: 10){
+                                    Text("Grand Total").font(Font(CTFont(.system, size: 14))).bold()
+                                }
+                                .padding(.bottom, 10)
+                                .padding(.horizontal, 10)
+                                Spacer()
+                                VStack(alignment: .trailing, spacing: 10){
+                                    Text("₹\(String(format: "%.2f", grandTotal))").font(Font(CTFont(.system, size: 14))).bold()
+                                }
+                                .padding(.bottom, 10)
+                                .padding(.horizontal, 10)
+                                
+                                
+                            }
+                            
+                        }.background(Color("Light"))
+                            .cornerRadius(10)
+                        ////Cancellation
+                        Separator(text: "CANCELLATION POLICY")
+                        
+                        VStack{
+                            Text("Orders once placed cannot be cancelled and are non-refundable")
+                                .font(Font(CTFont(.system, size: 14))).foregroundColor(.red).multilineTextAlignment(.center)
+                                .padding(.all, 10)
+                                
+                        }.frame(maxWidth: .infinity)
+                        .background(Color("Light"))
                         .cornerRadius(10)
                     }
                     .padding(.horizontal, 10)
-                }
+                    
+                    VStack{
+                        
+                    }
+                    .frame(maxWidth: .infinity, minHeight: 20)
+                    .background(.clear)
+                    .ignoresSafeArea()
+                    
+                }.padding(.bottom, -20)
+                Spacer()
                 VStack{
+                    
+                    
+                    LinearGradient(gradient: Gradient(colors: [Color("Dark"), Color("Light")]), startPoint: .top, endPoint: .bottom)
+                    .frame(height: 8)
+                      
                     HStack{
-                        Image(systemName: "eyes.inverse")
+                        Image(systemName: "location.circle").foregroundColor(.red)
                         Text("Delivery at **\(location)**").font(Font(CTFont(.system, size: 14)))
                         Spacer()
-                        Text("Change").font(Font(CTFont(.system, size: 14))).foregroundColor(Color("Dark"))
+                        Text("Change")
+                            .foregroundColor(.red)
+                            .font(Font(CTFont(.system, size: 14)))
                     }
-                }.frame(height: 40)
-                    .background(.white)
-                    .cornerRadius(10)
+                    .padding(.horizontal, 10)
+                    .padding(.top, 10)
+                    .padding(.bottom, 4)
+                    VStack{
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 1)
+                    .background(Color("Dark"))
+                    .cornerRadius(20)
+                    HStack{
+                        
+                        
+                            Menu(content: {
+                                Button("COD", action: {
+                                    paymentMode = .cash
+                                })
+                                Button("UPI", action: {
+                                    paymentMode = .upi
+                                })
+                            }, label: {
+                                VStack{
+                                    HStack{
+                                        Image(systemName: "indianrupeesign.square.fill").foregroundColor(.red)
+                                        Text("PAY USING ▲").font(Font(CTFont(.system, size: 12)))
+                                    }
+                                    Text(paymentMode == .cash ? "Cash on Delivery" : "UPI").font(Font(CTFont(.system, size: 14)))
+                                }
+                                .foregroundColor(.black)
+                                
+                            }
+                                
+                            ).padding(.vertical, 4)
+                        Spacer()
+                        CustomPrimaryButton(title: "Select Address at next step ►", height: 40, colorr: Color("Dark"), borderColor: Color("Dark"), textColor: Color(.black), closure: {
+                            
+                        })
+                    }
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 4)
+                    .padding(.bottom, 10)
+                }
+                //.frame(height: 40)
+                    .background(Color("Light"))
+                .upperCurve(10, corners: [.topLeft, .topRight])
                     
             }
             
@@ -122,7 +246,14 @@ struct Cart: View {
         
         .onAppear(){
             calcSubTotal()
+            print(cartItems.count)
+            
         }
+        .onChange(of: subTotal, perform: {newVal in
+            gstAmt = Double(subTotal)*gst/100
+            gstAmt = Double(round(100 * gstAmt) / 100)
+            grandTotal = Double(subTotal) + gstAmt
+        })
         
     }
 }
@@ -130,12 +261,12 @@ struct PlusMinus:View{
     @Binding var cartItems:[Food]
     
     @State var showRemove = false
-    @Binding var text:Int
+    @State var food:Food
     @State var id: UUID?
     @State var index = 0
     @Binding var subTotal:Int
     var body: some View{
-        HStack(spacing: 5){
+        HStack(spacing: 2){
             Text("-").padding(.leading, 8).onTapGesture {
                 for i in cartItems.indices{
                     if(id == cartItems[i].id){
@@ -163,7 +294,7 @@ struct PlusMinus:View{
                     showRemove = false
                 })
             })
-            Text("\(text)").font(Font(CTFont(.system, size: 14))).frame(width: 20)
+            Text("\(food.quantity)").font(Font(CTFont(.system, size: 14))).frame(width: 20)
             Text("+").padding(.trailing, 8).onTapGesture {
                 for i in cartItems.indices{
                     if(id == cartItems[i].id){
@@ -179,7 +310,7 @@ struct PlusMinus:View{
         
         .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color("Dark"), lineWidth:2))
         .cornerRadius(4)
-        .background(Color("Light"))
+        .background(Color("LightDark"))
         .cornerRadius(4)
         .onAppear(){
             
@@ -194,16 +325,20 @@ struct Separator:View{
                 
             }
             .frame(maxWidth: .infinity)
-            .frame(height: 2)
+            .frame(height: 1)
                 
-                .background(Color("Light"))
-            Text(text).font(Font(CTFont(.system, size: 14)))
+                .background(Color("Dark"))
+            
+            Text(text)
+                .fixedSize()
+                .font(Font(CTFont(.system, size: 16)))
                 .lineLimit(1)
+            
             VStack{
                 
-            }.frame(height: 2)
+            }.frame(height: 1)
                 .frame(maxWidth: .infinity)
-                .background(Color("Light"))
+                .background(Color("Dark"))
         }
     }
 }
@@ -214,3 +349,17 @@ struct Cart_Previews: PreviewProvider {
     }
 }
 */
+
+extension View{
+    func upperCurve(_ radius: CGFloat, corners: UIRectCorner) -> some View{
+        clipShape(RoundedCorner(radius: radius, corners: corners))
+    }
+}
+struct RoundedCorner:Shape{
+    var radius:CGFloat = . infinity
+    var corners: UIRectCorner = .allCorners
+    func path(in rect: CGRect) -> Path{
+        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        return Path(path.cgPath)
+    }
+}

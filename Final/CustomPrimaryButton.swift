@@ -11,6 +11,8 @@ struct CustomPrimaryButton: View{
     @State var title = "Button"
     @State var height:CGFloat = 50
     @State var colorr = Color("Blue")
+    @State var borderColor = Color("Blue")
+    @State var textColor = Color(.white)
     var closure: (() -> Void)?
     var body: some View {
         Button(action: closure ?? {
@@ -20,7 +22,7 @@ struct CustomPrimaryButton: View{
             Text(title).fontWeight(.bold)
             Spacer()
         })
-        .frame(maxWidth: .infinity, minHeight: height).overlay{RoundedRectangle(cornerRadius: 8.0, style: .continuous).stroke( colorr, lineWidth: 6)}.background(colorr).cornerRadius(8.0).foregroundColor(.white)
+        .frame(maxWidth: .infinity, minHeight: height).overlay{RoundedRectangle(cornerRadius: 8.0, style: .continuous).stroke( borderColor, lineWidth: 6)}.background(colorr).cornerRadius(8.0).foregroundColor(textColor)
         //.buttonStyle(CustomButtonStyle())
         
     }
