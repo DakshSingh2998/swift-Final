@@ -21,6 +21,8 @@ struct Cart: View {
     @State var grandTotal = 0.0
     @State var gstInfo = false
     @Binding var paymentMode:PaymentMode
+    @Binding var distance:Double
+    @State var showDeliveryInfo = false
     func calcSubTotal(){
         subTotal = 0
         for i in cartItems.indices{
@@ -32,180 +34,293 @@ struct Cart: View {
         ZStack{
             LinearGradient(gradient: Gradient(colors: [Color("Dark"), Color("Light")]), startPoint: .topLeading, endPoint: .bottomTrailing)
                 .ignoresSafeArea()
-            VStack(spacing: 0){
-                ScrollView{
-                    VStack(spacing: 20){
-                        VStack{
-                            HStack{
-                                Image(systemName: "clock")
-                                Text("Delivery in **\(deliveryTime)-\(deliveryTime+5)** min(s)").font(Font(CTFont(.system, size: 14)))
-                                Spacer()
-                            }.padding(.all, 10)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 40)
-                        .background(Color("Light"))
-                        .cornerRadius(10)
-                        .padding(.top, 1)
-                        
-                        Separator(text: "ITEM(s) ADDED")
-                        
-                        
+            if(cartItems.count != 0){
+                VStack(spacing: 0){
+                    ScrollView{
+                        VStack(spacing: 20){
+                            VStack{
+                                HStack{
+                                    Image(systemName: "clock")
+                                    Text("Delivery in **\(deliveryTime)-\(deliveryTime+5)** min(s)").font(Font(CTFont(.system, size: 14)))
+                                    Spacer()
+                                }.padding(.all, 10)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 40)
+                            .background(Color("Light"))
+                            .cornerRadius(10)
+                            .padding(.top, 1)
                             
-                        List(cartItems) { val in
-                            HStack(alignment: .top){
-                                Image(systemName: "eye.fill")
-                                
-                                VStack(spacing: 0){
-                                    HStack{
-                                        
-                                        Text(val.name).font(Font(CTFont(.system, size: 14))).font(Font(CTFont(.system, size: 14))).bold()
-                                            .onTapGesture {
-                                                
-                                            }
-                                        Spacer()
-                                        PlusMinus(cartItems: $cartItems, food: val, id: val.id, subTotal: $subTotal)
-                                        //Text("\(val.quantity)")
+                            Separator(text: "ITEM(s) ADDED")
+                            
+                            
+                            
+                            List(cartItems) { val in
+                                HStack(alignment: .top){
+                                    Image(systemName: "eye.fill")
+                                    
+                                    VStack(spacing: 0){
+                                        HStack{
+                                            
+                                            Text(val.name).font(Font(CTFont(.system, size: 14))).font(Font(CTFont(.system, size: 14))).bold()
+                                                .onTapGesture {
+                                                    
+                                                }
+                                            Spacer()
+                                            PlusMinus(cartItems: $cartItems, food: val, id: val.id, subTotal: $subTotal)
+                                            //Text("\(val.quantity)")
+                                        }
+                                        HStack{
+                                            Text("₹\(val.price)").font(Font(CTFont(.system, size: 14))).font(Font(CTFont(.system, size: 14)))
+                                            Spacer()
+                                            Text("₹\(val.price*val.quantity)").font(Font(CTFont(.system, size: 14)))
+                                        }
                                     }
-                                    HStack{
-                                        Text("₹\(val.price)").font(Font(CTFont(.system, size: 14))).font(Font(CTFont(.system, size: 14)))
-                                        Spacer()
-                                        Text("₹\(val.price*val.quantity)").font(Font(CTFont(.system, size: 14)))
-                                    }
+                                    Spacer()
                                 }
-                                Spacer()
-                        }
+                                
+                                .frame(height: 50)
+                                .listRowBackground(Color("Light"))
+                                
+                            }
+                            .listStyle(.plain)
+                            .scrollDisabled(true)
+                            .frame(height: 72*CGFloat(cartItems.count))
+                            .frame(maxWidth: .infinity)
+                            .cornerRadius(20)
                             
-                        .frame(height: 50)
-                        .listRowBackground(Color("Light"))
                             
-                    }
-                    .listStyle(.plain)
-                    .scrollDisabled(true)
-                    .frame(height: 72*CGFloat(cartItems.count))
-                    .frame(maxWidth: .infinity)
-                    .cornerRadius(20)
-                    
-                    
-                    
-                        
-                        HStack{
-                            Image(systemName: "plus.circle")
-                            Text("Add more items").font(Font(CTFont(.system, size: 14)))
-                            Spacer()
-                            Text(">").font(Font(CTFont(.system, size: 14)))
-                        }
-                        .frame(height: 40)
-                        .padding(.horizontal, 10)
-                        
-                        .background(Color("Light"))
-                        .cornerRadius(10)
-                        .onTapGesture {
-                            gotoPage = 1
-                        }
-                        Separator(text: "BILL SUMMARY")
-                        VStack{
+                            
+                            
                             HStack{
-                                VStack(alignment: .leading, spacing: 10){
+                                Image(systemName: "plus.circle")
+                                Text("Add more items").font(Font(CTFont(.system, size: 14)))
+                                Spacer()
+                                Text(">").font(Font(CTFont(.system, size: 14)))
+                            }
+                            .frame(height: 40)
+                            .padding(.horizontal, 10)
+                            
+                            .background(Color("Light"))
+                            .cornerRadius(10)
+                            .onTapGesture {
+                                gotoPage = 1
+                            }
+                            Separator(text: "BILL SUMMARY")
+                            
+                            ////////////billing
+                            VStackLayout(alignment: .leading, spacing: 6){
+                                /*
+                                 HStack{
+                                 Text("Subtotal").font(Font(CTFont(.system, size: 14))).bold()
+                                 Spacer()
+                                 Text("₹\(subTotal)").font(Font(CTFont(.system, size: 14))).bold()
+                                 }
+                                 .padding(.top, 10)
+                                 .padding(.horizontal, 10)
+                                 HStack{
+                                 VStack(alignment: .leading, spacing: 6){
+                                 Image(systemName: "building.columns.circle")
+                                 .frame(width: 40, height: 40)
+                                 .onTapGesture {
+                                 gstInfo = true
+                                 }
+                                 Image(systemName: "car")
+                                 .frame(width: 40, height: 40)
+                                 Spacer()
+                                 }
+                                 VStack(alignment: .leading, spacing: 6){
+                                 Text("Gst \(String(format: "%.2f", gst))% ⓘ").font(Font(CTFont(.system, size: 12)))
+                                 .onTapGesture {
+                                 gstInfo = true
+                                 }
+                                 Text("Restaurant delivery fee for \(String(format: "%.2f", distance)) km").font(Font(CTFont(.system, size: 12)))
+                                 Text("See how this is calculated \(showDeliveryInfo ? "▲" : "▼")")
+                                 .font(Font(CTFont(.system, size: 12)))
+                                 .onTapGesture {
+                                 showDeliveryInfo = !showDeliveryInfo
+                                 }
+                                 
+                                 }
+                                 Spacer()
+                                 VStack(alignment: .trailing, spacing: 6){
+                                 Text("₹\(String(format: "%.2f", (gst * Double(subTotal) / 100).roundTo() ))")
+                                 .font(Font(CTFont(.system, size: 12)))
+                                 Text("₹\(String(format: "%.2f", (distance * 5) ))").font(Font(CTFont(.system, size: 12)))
+                                 Spacer()
+                                 }
+                                 
+                                 }
+                                 //
+                                 .padding(.horizontal, 10)
+                                 
+                                 .alert(isPresented: $gstInfo){
+                                 Alert(title: Text("GST INFO"), message: Text("Our App has no role to play in taxes being levied by govt and restaurants"), dismissButton: .default(Text("Got It!")))
+                                 }
+                                 VStack{
+                                 VStack{
+                                 HStack{
+                                 Text("Base Fee")
+                                 Spacer()
+                                 Text("40")
+                                 }
+                                 }
+                                 }.isHidden(showDeliveryInfo ? false : true)
+                                 */
+                                HStack{
                                     Text("Subtotal").font(Font(CTFont(.system, size: 14))).bold()
-                                    HStack{
-                                        Image(systemName: "building.columns.circle")
-                                            .frame(width: 20, height: 20)
-                                        Text("Gst \(String(format: "%.2f", gst))% ⓘ").font(Font(CTFont(.system, size: 12))).onTapGesture {
+                                    Spacer()
+                                    Text("₹\(subTotal)").font(Font(CTFont(.system, size: 14))).bold()
+                                }.padding(.top, 6)
+                                    .padding(.horizontal, 10)
+                                HStack{
+                                    Image(systemName: "building.columns.circle")
+                                        .frame(width: 20, height: 20)
+                                        .onTapGesture {
                                             gstInfo = true
                                         }
+                                    Text("Gst \(String(format: "%.2f", gst))% ⓘ").font(Font(CTFont(.system, size: 12)))
+                                        .onTapGesture {
+                                            gstInfo = true
+                                        }
+                                    Spacer()
+                                    Text("₹\(String(format: "%.2f", (gst * Double(subTotal) / 100).roundTo() ))")
+                                        .font(Font(CTFont(.system, size: 12)))
+                                    
                                         .alert(isPresented: $gstInfo){
                                             Alert(title: Text("GST INFO"), message: Text("Our App has no role to play in taxes being levied by govt and restaurants"), dismissButton: .default(Text("Got It!")))
                                         }
+                                }
+                                .padding(.horizontal, 10)
+                                HStack{
+                                    Image(systemName: "car")
+                                        .frame(width: 20, height: 20)
+                                    
+                                    Text("Restaurant delivery fee for \(String(format: "%.2f", distance)) km").font(Font(CTFont(.system, size: 12)))
+                                        .onTapGesture(perform: {
+                                            gst = gst + 2
+                                            distance = distance + 2
+                                        })
+                                    Spacer()
+                                    Text("₹\(String(format: "%.2f", (distance <= 5.0 ? 40.0 : 40.0 + (distance - 5) * 5 ) ))").font(Font(CTFont(.system, size: 12)))
+                                    /*
+                                     
+                                     */
+                                    
+                                }
+                                .padding(.horizontal, 10)
+                                Text("See how this is calculated \(showDeliveryInfo ? "▲" : "▼")")
+                                    .font(Font(CTFont(.system, size: 12)))
+                                    .onTapGesture {
+                                        showDeliveryInfo = !showDeliveryInfo
                                     }
+                                    .padding(.all, 6)
+                                    .background(Color("LightDark"))
+                                    .cornerRadius(10)
+                                    .padding(.horizontal, 10)
+                                    .padding(.leading, 20 + 10)
+                                if(showDeliveryInfo){
+                                    VStack{
+                                        HStack{
+                                            Text("Base Fee")
+                                                .font(Font(CTFont(.system, size: 12)))
+                                            Spacer()
+                                            Text("₹40")
+                                                .font(Font(CTFont(.system, size: 12)))
+                                        }
+                                        
+                                        HStack{
+                                            Text("Long Distance Fee (after 5km)")
+                                                .font(Font(CTFont(.system, size: 12)))
+                                            Spacer()
+                                            Text("₹\(String(format: "%.2f",(distance <= 5.0 ? 0 : (distance - 5.0) * 5)) ) ")
+                                                .font(Font(CTFont(.system, size: 12)))
+                                        }
+                                        
+                                        
+                                    }
+                                    .padding(.all, 6)
+                                    .background(Color("LightDark"))
+                                    .cornerRadius(10)
+                                    .padding(.horizontal, 10)
+                                    .padding(.leading, 20 + 10)
+                                    
+                                }
+                                // grand
+                                VStack{
+                                }
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 1)
+                                .background(Color("Dark"))
+                                .cornerRadius(20)
+                                .padding(.horizontal, 10)
+                                HStack{
+                                    VStack(alignment: .leading, spacing: 10){
+                                        Text("Grand Total").font(Font(CTFont(.system, size: 14))).bold()
+                                    }
+                                    .padding(.bottom, 10)
+                                    .padding(.horizontal, 10)
+                                    Spacer()
+                                    VStack(alignment: .trailing, spacing: 10){
+                                        Text("₹\(String(format: "%.2f", (Double(subTotal) * gst / 100).roundTo() + Double(subTotal) + (distance * 5) ))").font(Font(CTFont(.system, size: 14))).bold()
+                                    }
+                                    .padding(.bottom, 10)
+                                    .padding(.horizontal, 10)
                                     
                                     
                                 }
-                                .padding(.top, 10)
-                                .padding(.horizontal, 10)
-                                Spacer()
-                                VStack(alignment: .trailing, spacing: 10){
-                                    Text("₹\(subTotal)").font(Font(CTFont(.system, size: 14))).bold()
-                                    Text("₹\(String(format: "%.2f", gstAmt))").font(Font(CTFont(.system, size: 12)))
-                                    
-                                }
-                                .padding(.top, 10)
-                                .padding(.horizontal, 10)
-                            }
-                            VStack{
-                            }
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 1)
-                            .background(Color("Dark"))
-                            .cornerRadius(20)
-                            .padding(.horizontal, 10)
-                            HStack{
-                                VStack(alignment: .leading, spacing: 10){
-                                    Text("Grand Total").font(Font(CTFont(.system, size: 14))).bold()
-                                }
-                                .padding(.bottom, 10)
-                                .padding(.horizontal, 10)
-                                Spacer()
-                                VStack(alignment: .trailing, spacing: 10){
-                                    Text("₹\(String(format: "%.2f", grandTotal))").font(Font(CTFont(.system, size: 14))).bold()
-                                }
-                                .padding(.bottom, 10)
-                                .padding(.horizontal, 10)
                                 
-                                
-                            }
+                            }.background(Color("Light"))
+                                .cornerRadius(10)
+                            ////Cancellation
+                            Separator(text: "CANCELLATION POLICY")
                             
-                        }.background(Color("Light"))
-                            .cornerRadius(10)
-                        ////Cancellation
-                        Separator(text: "CANCELLATION POLICY")
+                            VStack{
+                                Text("Orders once placed cannot be cancelled and are non-refundable")
+                                    .font(Font(CTFont(.system, size: 14))).foregroundColor(.red).multilineTextAlignment(.center)
+                                    .padding(.all, 10)
+                                
+                            }.frame(maxWidth: .infinity)
+                                .background(Color("Light"))
+                                .cornerRadius(10)
+                        }
+                        .padding(.horizontal, 10)
                         
                         VStack{
-                            Text("Orders once placed cannot be cancelled and are non-refundable")
-                                .font(Font(CTFont(.system, size: 14))).foregroundColor(.red).multilineTextAlignment(.center)
-                                .padding(.all, 10)
-                                
-                        }.frame(maxWidth: .infinity)
-                        .background(Color("Light"))
-                        .cornerRadius(10)
-                    }
-                    .padding(.horizontal, 10)
-                    
+                            
+                        }
+                        .frame(maxWidth: .infinity, minHeight: 20)
+                        .background(.clear)
+                        .ignoresSafeArea()
+                        
+                    }.padding(.bottom, -20)
+                    Spacer()
                     VStack{
                         
-                    }
-                    .frame(maxWidth: .infinity, minHeight: 20)
-                    .background(.clear)
-                    .ignoresSafeArea()
-                    
-                }.padding(.bottom, -20)
-                Spacer()
-                VStack{
-                    
-                    
-                    LinearGradient(gradient: Gradient(colors: [Color("Dark"), Color("Light")]), startPoint: .top, endPoint: .bottom)
-                    .frame(height: 8)
-                      
-                    HStack{
-                        Image(systemName: "location.circle").foregroundColor(.red)
-                        Text("Delivery at **\(location)**").font(Font(CTFont(.system, size: 14)))
-                        Spacer()
-                        Text("Change")
-                            .foregroundColor(.red)
-                            .font(Font(CTFont(.system, size: 14)))
-                    }
-                    .padding(.horizontal, 10)
-                    .padding(.top, 10)
-                    .padding(.bottom, 4)
-                    VStack{
-                    }
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 1)
-                    .background(Color("Dark"))
-                    .cornerRadius(20)
-                    HStack{
                         
+                        LinearGradient(gradient: Gradient(colors: [Color("Dark"), Color("Light")]), startPoint: .top, endPoint: .bottom)
+                            .frame(height: 8)
                         
+                        HStack{
+                            Image(systemName: "location.circle").foregroundColor(.red)
+                            Text("Delivery at **\(location)**").font(Font(CTFont(.system, size: 14)))
+                            Spacer()
+                            Text("Change")
+                                .foregroundColor(.red)
+                                .font(Font(CTFont(.system, size: 14)))
+                        }
+                        .padding(.horizontal, 10)
+                        .padding(.top, 10)
+                        .padding(.bottom, 4)
+                        VStack{
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 1)
+                        .background(Color("Dark"))
+                        .cornerRadius(20)
+                        HStack{
+                            
+                            
                             Menu(content: {
                                 Button("COD", action: {
                                     paymentMode = .cash
@@ -224,23 +339,33 @@ struct Cart: View {
                                 .foregroundColor(.black)
                                 
                             }
-                                
+                                 
                             ).padding(.vertical, 4)
-                        Spacer()
-                        CustomPrimaryButton(title: "Select Address at next step ►", height: 40, colorr: Color("Dark"), borderColor: Color("Dark"), textColor: Color(.black), closure: {
-                            
-                        })
+                            Spacer()
+                            CustomPrimaryButton(title: "Select Address at next step ►", height: 40, colorr: Color("Dark"), borderColor: Color("Dark"), textColor: Color(.black), closure: {
+                                
+                            })
+                        }
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 4)
+                        .padding(.bottom, 10)
                     }
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 4)
-                    .padding(.bottom, 10)
-                }
-                //.frame(height: 40)
+                    //.frame(height: 40)Image(systemName: "cart.badge.questionmark.ar")
                     .background(Color("Light"))
-                .upperCurve(10, corners: [.topLeft, .topRight])
+                    .upperCurve(10, corners: [.topLeft, .topRight])
                     
+                }
             }
-            
+            else{
+                VStack{
+                    Image(systemName: "cart.fill.badge.questionmark.rtl").resizable().scaledToFit()
+                        .minimumScaleFactor(2)
+                        
+                        .frame(width: 200, height: 200)
+                        .fixedSize()
+                    Text("Cart is Empty :/")
+                }
+            }
             
         }
         
@@ -249,12 +374,15 @@ struct Cart: View {
             print(cartItems.count)
             
         }
-        .onChange(of: subTotal, perform: {newVal in
-            gstAmt = Double(subTotal)*gst/100
-            gstAmt = Double(round(100 * gstAmt) / 100)
-            grandTotal = Double(subTotal) + gstAmt
-        })
         
+        
+    }
+    func calcTotal(){
+        gstAmt = Double(subTotal) * gst / 100
+        
+        grandTotal = Double(subTotal) + gstAmt
+        grandTotal = grandTotal + distance * 5
+        //(Double(subTotal) * gst / 100) + Double(subTotal) + distance * 5
     }
 }
 struct PlusMinus:View{
@@ -355,6 +483,19 @@ extension View{
         clipShape(RoundedCorner(radius: radius, corners: corners))
     }
 }
+
+extension Double{
+    func roundTo(_ places:Int = 2) -> Double{
+        var starting = Int(self)
+        var decimal = self - Double(starting)
+        decimal = decimal * 100
+        var decdigit = Int(decimal)
+        var finalans = Double(starting) + Double(decdigit) / 100
+        //print(self, finalans)
+        return finalans
+    }
+}
+
 struct RoundedCorner:Shape{
     var radius:CGFloat = . infinity
     var corners: UIRectCorner = .allCorners

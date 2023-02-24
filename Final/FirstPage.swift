@@ -28,7 +28,7 @@ struct FirstPage: View {
                             Image(uiImage: UIImage(named: "Logo")!).resizable()
                                 .frame(width: 250, height: 200)
                                 .scaledToFill()
-                                .padding(.top, 200)
+                                .padding(.top, 250)
                                 //.padding(.top, (orientation == .portrait) ? height/4 : height/1.6)
                             //.padding(.top, Global.shared.height/5)
                             

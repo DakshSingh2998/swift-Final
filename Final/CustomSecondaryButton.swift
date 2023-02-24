@@ -10,7 +10,7 @@ import SwiftUI
 struct CustomSecondaryButton: View{
     @State var title = "Button"
     @State var height:CGFloat = 50
-    @State var colorr = Color("Dark")
+    @State var colorr = Color("Blue")
     var closure: (() -> Void)?
     var body: some View {
         Button(action: closure ?? {

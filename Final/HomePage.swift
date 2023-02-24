@@ -20,7 +20,8 @@ struct HomePage: View {
     @State var temp = ""
     @State var cartItems:[Food] = []
     @State var location = "Rapipay"
-    @State var gst = 10.0
+    @State var gst = 15.81
+    @State var distance = 10.69
     @State var paymentMode = PaymentMode.cash
     func addDummyData(){
         cartItems = []
@@ -28,7 +29,7 @@ struct HomePage: View {
         cartItems.append(Food(name: "Double Cheese Margherita", price: 149, quantity: 1))
         cartItems.append(Food(name: "Onion", price: 9999, quantity: 1))
         
-        for i in 4...100{
+        for i in 4...4{
             
             cartItems.append(Food(name: "Temp", price: i, quantity: 1))
         }
@@ -36,7 +37,7 @@ struct HomePage: View {
     var body: some View {
         
         TabView(selection: $onPage){
-            DeliveryMenu()
+            DeliveryMenu(cartItems: $cartItems)
                 .tabItem{
                     Label("Delivery", systemImage: "eye.fill").background(.green)
                 }.tag(1)
@@ -44,12 +45,12 @@ struct HomePage: View {
                 
             GroceryMenu()
                 .tabItem{
-                    Label("Grocery", systemImage: "eyes.inverse")
+                    Label("Grocery", systemImage: "basket")
                 }.tag(2)
                 
-            Cart(cartItems: $cartItems, gotoPage: $onPage, location: $location, gst: $gst, paymentMode: $paymentMode)
+            Cart(cartItems: $cartItems, gotoPage: $onPage, location: $location, gst: $gst, paymentMode: $paymentMode, distance: $distance)
                 .tabItem{
-                    Label("Cart", systemImage: "eye")
+                    Label("Cart", systemImage: "cart")
                         
                 }.tag(3)
                 
