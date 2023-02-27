@@ -20,8 +20,8 @@ struct HomePage: View {
     @State var temp = ""
     @State var cartItems:[Food] = []
     @State var location = "Rapipay"
-    @State var gst = 15.81
-    @State var distance = 10.69
+    @State var gst = 15.80651654
+    @State var distance = 4.9516151
     @State var paymentMode = PaymentMode.cash
     func addDummyData(){
         cartItems = []
@@ -68,6 +68,8 @@ struct HomePage: View {
             //UITabBar.appearance().shadowImage = UIImage(named: "ShadowImage")
             UITableView.appearance().separatorStyle = .none
             UITableViewCell.appearance().tintColor = .systemPink
+            gst = gst.roundTo()
+            distance = distance.roundTo()
             addDummyData()
             
         }

@@ -92,6 +92,7 @@ struct Cart: View {
                             
                             
                             
+                            
                             HStack{
                                 Image(systemName: "plus.circle")
                                 Text("Add more items").font(Font(CTFont(.system, size: 14)))
@@ -196,7 +197,7 @@ struct Cart: View {
                                     Image(systemName: "car")
                                         .frame(width: 20, height: 20)
                                     
-                                    Text("Restaurant delivery fee for \(String(format: "%.2f", distance)) km").font(Font(CTFont(.system, size: 12)))
+                                    Text("Delivery partner fee for \(String(format: "%.2f", distance)) km").font(Font(CTFont(.system, size: 12)))
                                         .onTapGesture(perform: {
                                             gst = gst + 2
                                             distance = distance + 2
@@ -209,18 +210,35 @@ struct Cart: View {
                                     
                                 }
                                 .padding(.horizontal, 10)
-                                Text("See how this is calculated \(showDeliveryInfo ? "▲" : "▼")")
-                                    .font(Font(CTFont(.system, size: 12)))
-                                    .onTapGesture {
+                                HStack{
+                                    Text("fully goes to them for their time and effort")
+                                        .font(Font(CTFont(.system, size: 10)))
+                                        .padding(.horizontal, 6)
+                                        .foregroundColor(Color("DarkGrey"))
+                                }
+                                .padding(.horizontal, 6)
+                                //.padding(.horizontal, 10)
+                                .padding(.leading, 20 + 10)
+                                VStack{
+                                    Text("See how this is calculated \(showDeliveryInfo ? "▲" : "▼")")
+                                        .font(Font(CTFont(.system, size: 12)))
+                                        //.padding(.horizontal, 6)
+                                }
+                                .onTapGesture {
+                                    withAnimation(.linear, {
                                         showDeliveryInfo = !showDeliveryInfo
-                                    }
-                                    .padding(.all, 6)
+                                    })
+                                    
+                                }
+                                .padding(.all, 6)
+                                    .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color("Dark"), lineWidth:1))
+                                    
                                     .background(Color("LightDark"))
-                                    .cornerRadius(10)
+                                    .cornerRadius(6)
                                     .padding(.horizontal, 10)
                                     .padding(.leading, 20 + 10)
                                 if(showDeliveryInfo){
-                                    VStack{
+                                    VStack(spacing: 6){
                                         HStack{
                                             Text("Base Fee")
                                                 .font(Font(CTFont(.system, size: 12)))
@@ -228,22 +246,38 @@ struct Cart: View {
                                             Text("₹40")
                                                 .font(Font(CTFont(.system, size: 12)))
                                         }
-                                        
-                                        HStack{
-                                            Text("Long Distance Fee (after 5km)")
-                                                .font(Font(CTFont(.system, size: 12)))
-                                            Spacer()
-                                            Text("₹\(String(format: "%.2f",(distance <= 5.0 ? 0 : (distance - 5.0) * 5)) ) ")
-                                                .font(Font(CTFont(.system, size: 12)))
+                                        //.padding(.top, 6)
+                                            //.padding(.horizontal, 6)
+                                        if(distance >= 5){
+                                            HStack{
+                                                Text("Long Distance Fee")
+                                                    .font(Font(CTFont(.system, size: 12)))
+                                                Spacer()
+                                                Text("₹\(String(format: "%.2f",(distance <= 5.0 ? 0 : (distance - 5.0) * 5)) ) ")
+                                                    .font(Font(CTFont(.system, size: 12)))
+                                            }
+                                            HStack{
+                                                Text("charget from 5km ownwards")
+                                                    .font(Font(CTFont(.system, size: 10)))
+                                                //.padding(.horizontal, 6)
+                                                    .foregroundColor(Color("DarkGrey"))
+                                                Spacer()
+                                            }
                                         }
+                                        //.padding(6)
                                         
                                         
                                     }
                                     .padding(.all, 6)
+                                    .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color("Dark"), lineWidth:1))
                                     .background(Color("LightDark"))
-                                    .cornerRadius(10)
+                                    .cornerRadius(6)
+                                    
                                     .padding(.horizontal, 10)
                                     .padding(.leading, 20 + 10)
+
+                                    
+                                    
                                     
                                 }
                                 // grand
@@ -262,7 +296,7 @@ struct Cart: View {
                                     .padding(.horizontal, 10)
                                     Spacer()
                                     VStack(alignment: .trailing, spacing: 10){
-                                        Text("₹\(String(format: "%.2f", (Double(subTotal) * gst / 100).roundTo() + Double(subTotal) + (distance * 5) ))").font(Font(CTFont(.system, size: 14))).bold()
+                                        Text("₹\(String(format: "%.2f", (Double(subTotal) * gst / 100).roundTo() + Double(subTotal) + (distance <= 5.0 ? 40.0 : 40.0 + (distance - 5) * 5 ) ))").font(Font(CTFont(.system, size: 14))).bold()
                                     }
                                     .padding(.bottom, 10)
                                     .padding(.horizontal, 10)
@@ -342,9 +376,33 @@ struct Cart: View {
                                  
                             ).padding(.vertical, 4)
                             Spacer()
+                            
+                            HStack{
+                                VStack(alignment: .leading){
+                                    Text("₹\(String(format: "%.2f", (Double(subTotal) * gst / 100).roundTo() + Double(subTotal) + (distance <= 5.0 ? 40.0 : 40.0 + (distance - 5) * 5 ) ))")
+                                        .font(Font(CTFont(.system, size: 14))).foregroundColor(.white)
+                                        .multilineTextAlignment(.leading)
+                                        
+                                        //.frame(width: 80)
+                                        //.background(.black)
+                                        
+                                    Text("Total").font(Font(CTFont(.system, size: 12)))
+                                        .foregroundColor(.white)
+                                        
+                                }.padding(10)
+                                    
+                                Spacer()
+                                VStack{
+                                    Text("Place Order ►").foregroundColor(.white)
+                                }.padding(10)
+                            }
+                            .background(Color("Dark"))
+                            .cornerRadius(10)
+                            /*
                             CustomPrimaryButton(title: "Select Address at next step ►", height: 40, colorr: Color("Dark"), borderColor: Color("Dark"), textColor: Color(.black), closure: {
                                 
                             })
+                             */
                         }
                         .padding(.horizontal, 10)
                         .padding(.vertical, 4)
@@ -368,7 +426,7 @@ struct Cart: View {
             }
             
         }
-        
+        .animation(.easeInOut(duration: 0.1))
         .onAppear(){
             calcSubTotal()
             print(cartItems.count)
