@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct Cart: View {
-    @State var deliveryTime = 0
+    @Binding var deliveryTime:Int
     @Binding var cartItems:[Food]
     @Binding var gotoPage:Int
     @State var closure: (() -> Void)?
@@ -169,9 +169,9 @@ struct Cart: View {
                                  }.isHidden(showDeliveryInfo ? false : true)
                                  */
                                 HStack{
-                                    Text("Subtotal").font(Font(CTFont(.system, size: 14))).bold()
+                                    Text("Subtotal").font(Font(CTFont(.system, size: 16))).bold()
                                     Spacer()
-                                    Text("₹\(subTotal)").font(Font(CTFont(.system, size: 14))).bold()
+                                    Text("₹\(subTotal)").font(Font(CTFont(.system, size: 16))).bold()
                                 }.padding(.top, 6)
                                     .padding(.horizontal, 10)
                                 HStack{
@@ -290,13 +290,13 @@ struct Cart: View {
                                 .padding(.horizontal, 10)
                                 HStack{
                                     VStack(alignment: .leading, spacing: 10){
-                                        Text("Grand Total").font(Font(CTFont(.system, size: 14))).bold()
+                                        Text("Grand Total").font(Font(CTFont(.system, size: 16))).bold()
                                     }
                                     .padding(.bottom, 10)
                                     .padding(.horizontal, 10)
                                     Spacer()
                                     VStack(alignment: .trailing, spacing: 10){
-                                        Text("₹\(String(format: "%.2f", (Double(subTotal) * gst / 100).roundTo() + Double(subTotal) + (distance <= 5.0 ? 40.0 : 40.0 + (distance - 5) * 5 ) ))").font(Font(CTFont(.system, size: 14))).bold()
+                                        Text("₹\(String(format: "%.2f", (Double(subTotal) * gst / 100).roundTo() + Double(subTotal) + (distance <= 5.0 ? 40.0 : 40.0 + (distance - 5) * 5 ) ))").font(Font(CTFont(.system, size: 16))).bold()
                                     }
                                     .padding(.bottom, 10)
                                     .padding(.horizontal, 10)
@@ -307,6 +307,29 @@ struct Cart: View {
                             }.background(Color("Light"))
                                 .cornerRadius(10)
                             ////Cancellation
+                            Separator(text: "PROFILE")
+                            HStack{
+                                VStack(alignment: .leading, spacing: 6){
+                                    Text("Your Details")
+                                        .font(Font(CTFont(.system, size: 12))).bold()
+                                        
+                                    Text("TADA")
+                                        .font(Font(CTFont(.system, size: 12)))
+                                        
+                                        
+                                }.padding(.all, 10)
+                                Spacer()
+                                VStack{
+                                    Text(">")
+                                        .font(Font(CTFont(.system, size: 18)))
+                                }.padding(.all, 10)
+                                
+                                
+                            }.frame(maxWidth: .infinity)
+                                .background(Color("Light"))
+                                .cornerRadius(10)
+                            
+                            
                             Separator(text: "CANCELLATION POLICY")
                             
                             VStack{
@@ -363,7 +386,7 @@ struct Cart: View {
                                     paymentMode = .upi
                                 })
                             }, label: {
-                                VStack{
+                                VStack(alignment: .leading, spacing: 6){
                                     HStack{
                                         Image(systemName: "indianrupeesign.square.fill").foregroundColor(.red)
                                         Text("PAY USING ▲").font(Font(CTFont(.system, size: 12)))
@@ -382,6 +405,8 @@ struct Cart: View {
                                     Text("₹\(String(format: "%.2f", (Double(subTotal) * gst / 100).roundTo() + Double(subTotal) + (distance <= 5.0 ? 40.0 : 40.0 + (distance - 5) * 5 ) ))")
                                         .font(Font(CTFont(.system, size: 14))).foregroundColor(.white)
                                         .multilineTextAlignment(.leading)
+                                        .lineLimit(1)
+                                        //.frame(width: 80)
                                         
                                         //.frame(width: 80)
                                         //.background(.black)
@@ -390,14 +415,18 @@ struct Cart: View {
                                         .foregroundColor(.white)
                                         
                                 }.padding(10)
+                                    .frame(width: 100)
                                     
                                 Spacer()
                                 VStack{
                                     Text("Place Order ►").foregroundColor(.white)
                                 }.padding(10)
                             }
+                            
                             .background(Color("Dark"))
                             .cornerRadius(10)
+                            .fixedSize()
+                            //.padding(.leading, 16)
                             /*
                             CustomPrimaryButton(title: "Select Address at next step ►", height: 40, colorr: Color("Dark"), borderColor: Color("Dark"), textColor: Color(.black), closure: {
                                 

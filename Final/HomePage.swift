@@ -23,6 +23,7 @@ struct HomePage: View {
     @State var gst = 15.80651654
     @State var distance = 4.9516151
     @State var paymentMode = PaymentMode.cash
+    @State var deliveryTime = 20
     func addDummyData(){
         cartItems = []
         cartItems.append(Food(name: "Margherita", price: 100, quantity: 1))
@@ -48,7 +49,7 @@ struct HomePage: View {
                     Label("Grocery", systemImage: "basket")
                 }.tag(2)
                 
-            Cart(cartItems: $cartItems, gotoPage: $onPage, location: $location, gst: $gst, paymentMode: $paymentMode, distance: $distance)
+            Cart(deliveryTime: $deliveryTime, cartItems: $cartItems, gotoPage: $onPage, location: $location, gst: $gst, paymentMode: $paymentMode, distance: $distance)
                 .tabItem{
                     Label("Cart", systemImage: "cart")
                         
