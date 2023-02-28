@@ -10,10 +10,12 @@ import SwiftUI
 @main
 struct FinalApp: App {
     let persistenceController = PersistenceController.shared
+    @State var ONPAGE:Double = 1.0
     var body: some Scene {
         WindowGroup {
-            HomePage()
-            //FirstPage()
+            //HomePage()
+            FirstPage(ONPAGE: $ONPAGE)
+            //Profile()
         }
     }
 }

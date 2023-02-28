@@ -23,6 +23,9 @@ struct Cart: View {
     @Binding var paymentMode:PaymentMode
     @Binding var distance:Double
     @State var showDeliveryInfo = false
+    @State var gotoProfile = false
+    @State var profile = Profile()
+    @Binding var ONPAGE:Double
     func calcSubTotal(){
         subTotal = 0
         for i in cartItems.indices{
@@ -36,6 +39,12 @@ struct Cart: View {
                 .ignoresSafeArea()
             if(cartItems.count != 0){
                 VStack(spacing: 0){
+                    VStack{
+                        
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 64)
+                    .overlay(CustomNavigation(title: "Cart" , ONPAGE: $ONPAGE))
                     ScrollView{
                         VStack(spacing: 20){
                             VStack{
@@ -105,7 +114,8 @@ struct Cart: View {
                             .background(Color("Light"))
                             .cornerRadius(10)
                             .onTapGesture {
-                                gotoPage = 1
+                                //gotoPage = 1
+                                gotoProfile = true
                             }
                             Separator(text: "BILL SUMMARY")
                             
@@ -201,6 +211,7 @@ struct Cart: View {
                                         .onTapGesture(perform: {
                                             gst = gst + 2
                                             distance = distance + 2
+                                            
                                         })
                                     Spacer()
                                     Text("₹\(String(format: "%.2f", (distance <= 5.0 ? 40.0 : 40.0 + (distance - 5) * 5 ) ))").font(Font(CTFont(.system, size: 12)))
@@ -248,7 +259,7 @@ struct Cart: View {
                                         }
                                         //.padding(.top, 6)
                                             //.padding(.horizontal, 6)
-                                        if(distance >= 5){
+                                        if(distance > 5){
                                             HStack{
                                                 Text("Long Distance Fee")
                                                     .font(Font(CTFont(.system, size: 12)))
@@ -359,7 +370,7 @@ struct Cart: View {
                             .frame(height: 8)
                         
                         HStack{
-                            Image(systemName: "location.circle").foregroundColor(.red)
+                            Image(systemName: "location.circle").foregroundColor(Color("Dark"))
                             Text("Delivery at **\(location)**").font(Font(CTFont(.system, size: 14)))
                             Spacer()
                             Text("Change")
@@ -388,7 +399,7 @@ struct Cart: View {
                             }, label: {
                                 VStack(alignment: .leading, spacing: 6){
                                     HStack{
-                                        Image(systemName: "indianrupeesign.square.fill").foregroundColor(.red)
+                                        Image(systemName: "indianrupeesign.square.fill").foregroundColor(Color("Dark"))
                                         Text("PAY USING ▲").font(Font(CTFont(.system, size: 12)))
                                     }
                                     Text(paymentMode == .cash ? "Cash on Delivery" : "UPI").font(Font(CTFont(.system, size: 14)))
@@ -453,6 +464,7 @@ struct Cart: View {
                     Text("Cart is Empty :/")
                 }
             }
+            
             
         }
         .animation(.easeInOut(duration: 0.1))

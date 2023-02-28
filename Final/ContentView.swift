@@ -15,6 +15,8 @@ class TextModel:ObservableObject{
 }
 
 struct ContentView: View {
+    @Environment(\.dismiss) var dismiss
+    @Binding var ONPAGE:Double
     @ObservedObject var vmName = TextModel()
     @ObservedObject var vmEmail = TextModel()
     @ObservedObject var vmPass = TextModel()
@@ -27,7 +29,7 @@ struct ContentView: View {
     @State var temp = ""
     @State var width = CommonMethods.shared.width
     @State var tfWidth = CommonMethods.shared.width - 100
-    @State var loginPage = LoginPage()
+    @State var loginPage:LoginPage?
     @State var gotoLogin = false
     @State var isNameIncorrect = false
     @State var isEmailIncorrect = false
@@ -44,9 +46,7 @@ struct ContentView: View {
     
     
     var body: some View {
-        
-            
-        
+        ZStack(alignment: .top){
             ScrollView{
                 
                 
@@ -55,7 +55,7 @@ struct ContentView: View {
                     Image(uiImage: UIImage(named: "LaunchScreenImage")!).resizable()
                         .frame(width: 250, height: 200)
                         .scaledToFill()
-                        
+                    
                         .padding(.bottom, 32)
                     CustomTextField(defaultplaceholder: "Name", vm: vmName, width: $tfWidth, isInCorrect: $isNameIncorrect, commitClosure: {
                         if(CommonMethods.shared.isValidName(vmName.value) == false){
@@ -153,6 +153,7 @@ struct ContentView: View {
                         
                     }).onChange(of: successfulSignup, perform: { newVal in
                         if(successfulSignup == false){
+                            ONPAGE = 3.0
                             gotoLogin = true
                         }
                     })
@@ -160,15 +161,21 @@ struct ContentView: View {
                     
                     NavigationLink(destination: loginPage, isActive: $gotoLogin){
                         
-                        Text("Already have account? " + coloredSignIn).font(Font(CTFont(.kCTFontSystemFontType, size: 16))).foregroundColor(.black)
-                    }.padding(.vertical, 16)
+                        Text("Already have account? " + coloredSignIn).font(Font(CTFont(.kCTFontSystemFontType, size: 16))).foregroundColor(.black).onTapGesture(perform: {
+                            ONPAGE = 3.0
+                            gotoLogin = true
+                        })
+                    }
+                    .padding(.vertical, 16)
+                        
                     
                 }
                 .padding(.horizontal, 50)
                 .frame(minHeight: self.height - self.height/5)
                 
                 .onAppear(){
-                    loginPage = LoginPage()
+                    print("ONPAGE \(ONPAGE)")
+                    loginPage = LoginPage(ONPAGE: $ONPAGE)
                     CustomTextField.sendFocus = {received in
                         if(received == "Name"){
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
@@ -212,16 +219,32 @@ struct ContentView: View {
                     }
                     
                 }
-                    
+                
             }
+            .navigationBarHidden(true)
+            .padding(.top, 64)
+        }
+        .overlay(CustomNavigation(title: "Sign Up", ONPAGE: $ONPAGE, rightImage: ""))
+        .onAppear(){
+            loginPage = LoginPage(ONPAGE: $ONPAGE)
+        }
         
+        .onChange(of: ONPAGE){newVal in
+            if(ONPAGE < 2.0){
+                try? dismiss()
+            }
+        }
+    
     }
 }
+/*
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
     }
 }
+ */
 extension View{
     @ViewBuilder func isHidden(_ hide:Bool) -> some View {
         if hide{

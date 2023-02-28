@@ -36,7 +36,7 @@ struct CustomTextField: View{
                         .background(isInCorrect ? Color(.systemRed): isFocused ?  Color("Blue") : Color("Grey")).cornerRadius(8.0)
                     //secure tf
                     SecureField(placeholder, text: $vm.value, onCommit: {
-                        CustomTextField.sendFocus!(defaultplaceholder)
+                        CustomTextField.sendFocus?(defaultplaceholder)
                         commitClosure?()
                     })
                     .animation(nil)

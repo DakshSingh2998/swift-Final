@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct LoginPage: View {
+    @Environment(\.dismiss) var dismiss
+    @Binding var ONPAGE:Double
     @ObservedObject var vmEmail = TextModel()
     @ObservedObject var vmPass = TextModel()
     @FocusState var emailFocus:Bool
@@ -18,8 +20,9 @@ struct LoginPage: View {
     @State var temp = ""
     @State var isPassIncorrect = false
     @State var isEmailIncorrect = false
+    @State var gotoHomePage = false
     var body: some View {
-        
+        ZStack{
             ScrollView{
                 VStack(spacing: -8){
                     Image(uiImage: UIImage(named: "Logo")!).resizable()
@@ -41,6 +44,7 @@ struct LoginPage: View {
                         isPassIncorrect = false
                     }
                     CustomPrimaryButton(title: "Sign in"){
+                        /*
                         isPassIncorrect = false
                         isEmailIncorrect = false
                         emailFocus = false
@@ -55,11 +59,18 @@ struct LoginPage: View {
                             print("Incorrect")
                         }else{
                             print("Correct")
+                            ONPAGE = 4.0
+                            gotoHomePage = true
+                            
                         }
+                         */
+                        ONPAGE = 4.0
+                        gotoHomePage = true
                         
                     }.padding(.top, 32)
                 }.padding(.horizontal, 50)
                     .onAppear(){
+                        print("ONPAGE \(ONPAGE)")
                         self.width = CommonMethods.shared.width
                         self.tfWidth = CommonMethods.shared.width - 100
                         self.height = CommonMethods.shared.height
@@ -80,13 +91,25 @@ struct LoginPage: View {
                         }
                     }
                     .frame(minHeight: self.height - self.height/3)
+                NavigationLink(destination: HomePage(ONPAGE: $ONPAGE), isActive: $gotoHomePage){
+                    
+                }.hidden()
+                    .navigationBarHidden(true)
+            }
+            .padding(.top, 64)
+        }.overlay(CustomNavigation(title: "Log In", ONPAGE: $ONPAGE, rightImage: ""))
+            .onChange(of: ONPAGE){newVal in
+                if(ONPAGE < 3.0){
+                    try? dismiss()
+                }
             }
         
     }
 }
-
-struct LoginPage_Previews: PreviewProvider {
-    static var previews: some View {
-        LoginPage()
-    }
-}
+/*
+ struct LoginPage_Previews: PreviewProvider {
+ static var previews: some View {
+ LoginPage()
+ }
+ }
+ */
