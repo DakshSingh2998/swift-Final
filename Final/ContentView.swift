@@ -29,8 +29,8 @@ struct ContentView: View {
     @State var temp = ""
     @State var width = CommonMethods.shared.width
     @State var tfWidth = CommonMethods.shared.width - 100
-    @State var loginPage:LoginPage?
-    @State var gotoLogin = false
+    //@State var loginPage:LoginPage?
+    //@State var gotoLogin = false
     @State var isNameIncorrect = false
     @State var isEmailIncorrect = false
     @State var isPassIncorrect = false
@@ -154,28 +154,28 @@ struct ContentView: View {
                     }).onChange(of: successfulSignup, perform: { newVal in
                         if(successfulSignup == false){
                             ONPAGE = 3.0
-                            gotoLogin = true
+                            //gotoLogin = true
                         }
                     })
                     .padding(.top, 32)
-                    
+                    /*
                     NavigationLink(destination: loginPage, isActive: $gotoLogin){
                         
-                        Text("Already have account? " + coloredSignIn).font(Font(CTFont(.kCTFontSystemFontType, size: 16))).foregroundColor(.black).onTapGesture(perform: {
-                            ONPAGE = 3.0
-                            gotoLogin = true
-                        })
-                    }
-                    .padding(.vertical, 16)
                         
+                    }
                     
+                        */
+                    Text("Already have account? " + coloredSignIn).font(Font(CTFont(.kCTFontSystemFontType, size: 16))).foregroundColor(.black).onTapGesture(perform: {
+                        ONPAGE = 3.0
+                        //gotoLogin = true
+                    }).padding(.vertical, 16)
                 }
                 .padding(.horizontal, 50)
                 .frame(minHeight: self.height - self.height/5)
                 
                 .onAppear(){
-                    print("ONPAGE \(ONPAGE)")
-                    loginPage = LoginPage(ONPAGE: $ONPAGE)
+                    print("ONPAGE2 \(ONPAGE)")
+                    //loginPage = LoginPage(ONPAGE: $ONPAGE)
                     CustomTextField.sendFocus = {received in
                         if(received == "Name"){
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
@@ -226,7 +226,8 @@ struct ContentView: View {
         }
         .overlay(CustomNavigation(title: "Sign Up", ONPAGE: $ONPAGE, rightImage: ""))
         .onAppear(){
-            loginPage = LoginPage(ONPAGE: $ONPAGE)
+            //loginPage = LoginPage(ONPAGE: $ONPAGE)
+            //print("ONPAGE \(ONPAGE)")
         }
         
         .onChange(of: ONPAGE){newVal in
@@ -234,6 +235,9 @@ struct ContentView: View {
                 try? dismiss()
             }
         }
+         
+        
+         
     
     }
 }

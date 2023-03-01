@@ -24,7 +24,6 @@ struct Cart: View {
     @Binding var distance:Double
     @State var showDeliveryInfo = false
     @State var gotoProfile = false
-    @State var profile = Profile()
     @Binding var ONPAGE:Double
     func calcSubTotal(){
         subTotal = 0
@@ -44,7 +43,7 @@ struct Cart: View {
                     }
                     .frame(maxWidth: .infinity)
                     .frame(height: 64)
-                    .overlay(CustomNavigation(title: "Cart" , ONPAGE: $ONPAGE))
+                    .overlay(CustomNavigation(title: "Cart" , ONPAGE: $ONPAGE, leftImage: "location.north.circle.fill"))
                     ScrollView{
                         VStack(spacing: 20){
                             VStack{
@@ -456,13 +455,22 @@ struct Cart: View {
             }
             else{
                 VStack{
+                    VStack{
+                        
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(maxHeight: .infinity)
+                    .frame(height: 64, alignment: .top)
+                    .overlay(CustomNavigation(title: "Cart" , ONPAGE: $ONPAGE, leftImage: "location.north.circle.fill"))
+                    Spacer()
                     Image(systemName: "cart.fill.badge.questionmark.rtl").resizable().scaledToFit()
                         .minimumScaleFactor(2)
                         
                         .frame(width: 200, height: 200)
                         .fixedSize()
                     Text("Cart is Empty :/")
-                }
+                    Spacer()
+                }.frame(maxHeight: .infinity)
             }
             
             

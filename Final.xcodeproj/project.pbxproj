@@ -29,6 +29,7 @@
 		529676BD29A4B57100DF6267 /* HomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529676BC29A4B57100DF6267 /* HomePage.swift */; };
 		529676BF29A4B62600DF6267 /* DeliveryMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529676BE29A4B62600DF6267 /* DeliveryMenu.swift */; };
 		529676C129A4B66200DF6267 /* GroceryMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529676C029A4B66200DF6267 /* GroceryMenu.swift */; };
+		52BB038829AF50A8008D0AC7 /* FoodItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52BB038729AF50A8008D0AC7 /* FoodItemCell.swift */; };
 		52C8707E299E147C00491700 /* LoginPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C8707D299E147C00491700 /* LoginPage.swift */; };
 		52C87082299E20B800491700 /* CustomPrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C87081299E20B800491700 /* CustomPrimaryButton.swift */; };
 		52C87084299E213A00491700 /* CustomSecondaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C87083299E213A00491700 /* CustomSecondaryButton.swift */; };
@@ -78,6 +79,7 @@
 		529676BC29A4B57100DF6267 /* HomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePage.swift; sourceTree = "<group>"; };
 		529676BE29A4B62600DF6267 /* DeliveryMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryMenu.swift; sourceTree = "<group>"; };
 		529676C029A4B66200DF6267 /* GroceryMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroceryMenu.swift; sourceTree = "<group>"; };
+		52BB038729AF50A8008D0AC7 /* FoodItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodItemCell.swift; sourceTree = "<group>"; };
 		52C8707D299E147C00491700 /* LoginPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginPage.swift; sourceTree = "<group>"; };
 		52C87081299E20B800491700 /* CustomPrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPrimaryButton.swift; sourceTree = "<group>"; };
 		52C87083299E213A00491700 /* CustomSecondaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSecondaryButton.swift; sourceTree = "<group>"; };
@@ -141,10 +143,11 @@
 				526166A51A558EF8002D73DA /* ContentView.swift */,
 				52C8707D299E147C00491700 /* LoginPage.swift */,
 				529676BC29A4B57100DF6267 /* HomePage.swift */,
-				529676BE29A4B62600DF6267 /* DeliveryMenu.swift */,
 				529676C029A4B66200DF6267 /* GroceryMenu.swift */,
 				523819F829A5D1EB00C5F0F7 /* Cart.swift */,
 				522D978629AC97D800803BD9 /* Profile.swift */,
+				529676BE29A4B62600DF6267 /* DeliveryMenu.swift */,
+				52BB038729AF50A8008D0AC7 /* FoodItemCell.swift */,
 				523819FA29A61E0000C5F0F7 /* TempSave.swift */,
 				5211AEC44036E94200A97240 /* LaunchScreen.swift */,
 				52C87081299E20B800491700 /* CustomPrimaryButton.swift */,
@@ -327,6 +330,7 @@
 				529676C129A4B66200DF6267 /* GroceryMenu.swift in Sources */,
 				5211AEC94036EAD900A97240 /* CustomTextField.swift in Sources */,
 				529676BD29A4B57100DF6267 /* HomePage.swift in Sources */,
+				52BB038829AF50A8008D0AC7 /* FoodItemCell.swift in Sources */,
 				5211AEC54036E94200A97240 /* LaunchScreen.swift in Sources */,
 				523164B640398D01001EB0FB /* CommonMethods.swift in Sources */,
 				52C8707E299E147C00491700 /* LoginPage.swift in Sources */,

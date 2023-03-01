@@ -43,8 +43,8 @@ struct FirstPage: View {
                         signInScale = 1.2
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05){
                             self.signInScale = 1.0
-                            ONPAGE = 3.0
-                            self.gotoSignIn = true
+                            self.ONPAGE = 3.0
+                            //self.gotoSignIn = true
                         }
                         
                     }.scaleEffect(signInScale)
@@ -55,8 +55,8 @@ struct FirstPage: View {
                         signUpScale = 1.2
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05){
                             self.signUpScale = 1.0
-                            ONPAGE = 2.0
-                            self.gotoSignUp = true
+                            self.ONPAGE = 2.0
+                            //self.gotoSignUp = true
                         }
                         
                     }.scaleEffect(signUpScale)
@@ -82,10 +82,17 @@ struct FirstPage: View {
         }
         
         .onAppear(){
-            print("ONPAGE \(ONPAGE)")
+            print("ONPAGE1 \(ONPAGE)")
                 CommonMethods.shared.updateOrientation()
                 signUp = ContentView(ONPAGE: $ONPAGE)
                 signIn = LoginPage(ONPAGE: $ONPAGE)
+                if(ONPAGE == 2.0){
+                    self.gotoSignUp = true
+                }
+                if(ONPAGE == 3.0){
+                    self.gotoSignIn = true
+                }
+                
             }
                 .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)){_ in
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
@@ -96,6 +103,19 @@ struct FirstPage: View {
                     }
                     
                 }
+                .onChange(of: ONPAGE){newVal in
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.6){
+                        if(ONPAGE == 2.0){
+                            self.gotoSignUp = true
+                        }
+                        if(ONPAGE == 3.0){
+                            self.gotoSignIn = true
+                        }
+                    }
+                    
+                }
+                
+                
     }
 }
 /*

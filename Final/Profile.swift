@@ -21,15 +21,23 @@ struct childSection: Identifiable{
 }
 
 struct Profile: View {
+    @Environment(\.dismiss) var dismiss
     @State var sectionList:[Section] = []
     @State var sectionChildList:[[childSection]] = []
     @State var secNo = 0
     @State var i = 0
     @State var toast:String?
+    @Binding var ONPAGE:Double
     var body: some View {
-        ZStack(alignment: .bottom){
+        ZStack(alignment: .top){
             LinearGradient(gradient: Gradient(colors: [Color("Dark"), Color("Light")]), startPoint: .topLeading, endPoint: .bottomTrailing)
                 .ignoresSafeArea()
+            VStack{
+                
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 64)
+            .overlay(CustomNavigation(title: "Profile" , ONPAGE: $ONPAGE, rightImage: ""))
             VStack(spacing: 0){
                 VStack{
                     HStack{
@@ -58,14 +66,16 @@ struct Profile: View {
                     .background(.clear)
                 
                 List{
-                    VStack(alignment: .leading){
+                    //VStack(alignment: .leading){
+                    /*
                         VStack{
 
                         }.frame(maxWidth: .infinity)
                         .background(.clear)
                             .frame(height: 20)
-                        VStack(alignment: .leading, spacing: 10){
-                            VStack(alignment: .leading, spacing: 16){
+                     */
+//                        VStack(alignment: .leading, spacing: 10){
+//                            VStack(alignment: .leading, spacing: 16){
                                 ForEach(sectionList) { list in
                                     VStack(alignment: .leading, spacing: 6){
 
@@ -119,44 +129,48 @@ struct Profile: View {
                                 }.padding(10)
                                     .background(Color("Light"))
                                     .cornerRadius(10)
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 16)
-                            .padding(.horizontal, 20)
+                                    //.cornerRadius(10)
+//                            }
+//                            .frame(maxWidth: .infinity)
+//                            .padding(.vertical, 16)
+//                            .padding(.horizontal, 20)
 
-                        }
-                        .padding(.horizontal, -10)
-                        .frame(maxWidth: .infinity)
-                        .background(.clear)
-
-                        .cornerRadius(10)
-                    }
+                        //}
+//                        .padding(.horizontal, -10)
+//                        .frame(maxWidth: .infinity)
+//                        .background(.clear)
+//
+//                        .cornerRadius(10)
+                    //}
                     .padding(.horizontal, -20)
                     .listRowBackground(Color.clear)
                     .listRowSeparator(.hidden)
                     .listSectionSeparator(.hidden)
                 }
                 .listStyle(.plain)
-                .padding(.horizontal, -10)
+                //.padding(.horizontal, -10)
                 .padding(.top, -2)
                 .frame(minHeight: 10)
                 //.cornerRadius(10)
                 .background(.clear)
             Spacer()
                 
-        }.padding(.all, 10)
+        }
+            .padding(.top, 64)
+            .padding(.all, 10)
             
             
             if(toast != nil){
                 VStack{
                     Text(toast ?? "").bold()
-                        .padding(10)
+                        .padding(6)
                 }
+                //.padding(.top, 30)
                 .background(Color("Dark"))
-                .padding(.bottom, 0)
+                
                 .cornerRadius(10)
-                .ignoresSafeArea()
-                .padding(.bottom, 10)
+                .padding(.top, 50)
+                //.ignoresSafeArea()
                     .onAppear(){
                         DispatchQueue.main.asyncAfter(deadline: .now()+2, execute: {
                             toast = nil
@@ -165,6 +179,7 @@ struct Profile: View {
             }
             
         }.animation(.linear(duration: 0.2))
+            .navigationBarHidden(true)
         .onAppear(){
             
             sectionList.append(Section(sectionName: "Food Order", sectionNumber: 0))
@@ -181,6 +196,11 @@ struct Profile: View {
              */
             //print(sectionChildList)
         }
+        .onChange(of: ONPAGE){newVal in
+            if(ONPAGE < 5.0){
+                dismiss()
+            }
+        }
     }
     func addDummyData(){
         for i in 2...40{
@@ -193,9 +213,11 @@ struct Profile: View {
         }
     }
 }
-
-struct Profile_Previews: PreviewProvider {
-    static var previews: some View {
-        Profile()
-    }
-}
+/*
+ 
+ struct Profile_Previews: PreviewProvider {
+ static var previews: some View {
+ Profile()
+ }
+ }
+ */

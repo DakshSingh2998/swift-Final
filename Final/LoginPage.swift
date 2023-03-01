@@ -44,7 +44,7 @@ struct LoginPage: View {
                         isPassIncorrect = false
                     }
                     CustomPrimaryButton(title: "Sign in"){
-                        /*
+                        
                         isPassIncorrect = false
                         isEmailIncorrect = false
                         emailFocus = false
@@ -59,18 +59,19 @@ struct LoginPage: View {
                             print("Incorrect")
                         }else{
                             print("Correct")
+                            UserDefaults.standard.set(vmEmail.value, forKey: "loggedInUser")
                             ONPAGE = 4.0
-                            gotoHomePage = true
+                            //gotoHomePage = true
                             
                         }
-                         */
-                        ONPAGE = 4.0
-                        gotoHomePage = true
+                         
+                        
+                        
                         
                     }.padding(.top, 32)
                 }.padding(.horizontal, 50)
                     .onAppear(){
-                        print("ONPAGE \(ONPAGE)")
+                        print("ONPAGE3 \(ONPAGE)")
                         self.width = CommonMethods.shared.width
                         self.tfWidth = CommonMethods.shared.width - 100
                         self.height = CommonMethods.shared.height
@@ -103,7 +104,7 @@ struct LoginPage: View {
                     try? dismiss()
                 }
             }
-        
+            //.animation(.easeInOut(duration: 0.5))
     }
 }
 /*

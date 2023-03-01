@@ -56,24 +56,42 @@ struct CustomNavigation: View{
     
     @Binding var ONPAGE:Double
     @State var rightImage = "person"
+    @State var leftImage = "arrowshape.backward"
+    @State var gotoProfile = false
     var body: some View{
         ZStack(alignment: .top){
             VStack(spacing: -1){
                 HStack{
-                    Image(systemName: "arrowshape.backward")
+                    Image(systemName: leftImage).resizable().scaledToFit()
+                        .frame(width: 32, height: 32)
+                        //.foregroundColor(Color("Dark"))
                         .onTapGesture(perform: {
-                            if(ONPAGE == 3.0 || ONPAGE == 4.0){
-                                ONPAGE = 1.0
-                                print(ONPAGE)
-                                return
+                            if(leftImage == "arrowshape.backward"){
+                                if(ONPAGE == 3.0){
+                                    ONPAGE = 1.0
+                                    print(ONPAGE)
+                                    return
+                                }
+                                
+                                ONPAGE = ONPAGE - 1.0
                             }
-                            
-                            ONPAGE = ONPAGE - 1.0
+                            else{
+                                // location code
+                            }
                         })
                     Spacer()
-                    Text(title)
+                    Text(title).font(Font(CTFont(.system, size: 18))).bold()
                     Spacer()
-                    Image(systemName: rightImage).isHidden(rightImage == "")
+                    Image(systemName: rightImage).resizable().scaledToFit()
+                        .frame(width: 32, height: 32)
+                        //.foregroundColor(Color("Dark"))
+                        .isHidden(rightImage == "")
+                        .onTapGesture(){
+                            if(rightImage == "person"){
+                                ONPAGE = 5.0
+                                gotoProfile = true
+                            }
+                        }
                 }
                 .frame(height: 63)
                 VStack{
@@ -89,10 +107,14 @@ struct CustomNavigation: View{
             .padding(16)
             .frame(height: 64)
             .background(Color("Light"))
+            NavigationLink("Profile", destination: Profile(ONPAGE: $ONPAGE), isActive: $gotoProfile).hidden()
         }
         //.frame(height: 40)
         //.frame(alignment: .top)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .onAppear(){
+            
+        }
         
         
         
