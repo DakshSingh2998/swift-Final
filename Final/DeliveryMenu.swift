@@ -226,20 +226,31 @@ struct DeliveryMenu: View {
         }
         .gesture(DragGesture(minimumDistance: 10, coordinateSpace: .local)
             .onEnded({ value in
+                if(sortHidden == true){
+                    return
+                }
                 if value.translation.width < 0 {
                     // left
+                    sortShow()
                 }
 
                 if value.translation.width > 0 {
                     // right
+                    sortShow()
                 }
                 if value.translation.height < 0 {
                     // up
+                    sortShow()
                 }
 
                 if value.translation.height > 0 {
                     // down
-                    //sortHide()
+                    if(value.translation.height > 140){
+                        sortHide()
+                    }
+                    else{
+                        sortShow()
+                    }
                 }
             })
                 .onChanged{change in
