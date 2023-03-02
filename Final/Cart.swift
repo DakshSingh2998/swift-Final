@@ -93,7 +93,7 @@ struct Cart: View {
                             }
                             .listStyle(.plain)
                             .scrollDisabled(true)
-                            .frame(height: 72*CGFloat(cartItems.count))
+                            .frame(height: 72 * CGFloat(cartItems.count))
                             .frame(maxWidth: .infinity)
                             .cornerRadius(20)
                             

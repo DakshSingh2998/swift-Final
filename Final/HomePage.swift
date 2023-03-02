@@ -32,7 +32,7 @@ struct HomePage: View {
         cartItems.append(Food(name: "Double Cheese Margherita", price: 149, quantity: 1))
         cartItems.append(Food(name: "Onion", price: 9999, quantity: 1))
         
-        for i in 4...100{
+        for i in 4...10{
             
             cartItems.append(Food(name: "Temp", price: i, quantity: 1))
         }
