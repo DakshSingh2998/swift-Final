@@ -34,10 +34,14 @@ struct DeliveryMenu: View {
                 List{
                     
                     ForEach(cartItems) { item in
-                        VStack{
+                        VStack(spacing: 0){
                             //Text(item.name)
-                            FoodItemCell().frame(height: 200)
+                            FoodItemCell(height: 200.0).frame(height: 200)
                         }
+                        .padding(6)
+                        //.background(Color.black.opacity(0.2))
+                        .shadow(radius: 4)
+                        .cornerRadius(10)
                     }
                     .listRowBackground(Color.clear)
                     .listRowSeparator(.hidden)
