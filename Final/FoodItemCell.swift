@@ -12,6 +12,9 @@ struct FoodItemCell: View {
     @State var height = CGFloat(100)
     @State var loved = false
     @State var loveScale = 1.0
+    @State var loveAnimationScale = 1.0
+    @State var loveAnimationHidden = true
+    @State var animationRotation = 0.0
     var body: some View {
         VStack(spacing: 0){
             ZStack(alignment: .bottom){
@@ -36,39 +39,70 @@ struct FoodItemCell: View {
                         }
                         .padding(2)
                         .foregroundColor(.white)
-                            .background(Color.black.opacity(0.7))
-                            .font(Font(CTFont(.system, size: 14)))
-                            //.overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.black, lineWidth:2))
-                            .cornerRadius(6)
-                            
+                        .background(Color.black.opacity(0.7))
+                        .font(Font(CTFont(.system, size: 14)))
+                        //.overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.black, lineWidth:2))
+                        .cornerRadius(6)
+                        
                         
                         
                         Spacer()
-                        Image(systemName: "suit.heart.fill")
-                            .resizable()
+                        ZStack{
+                            Image("Animation").resizable()
+                                .frame(width: 20, height: 18)
+                                .cornerRadius(9)
+                                .scaleEffect(loveAnimationScale)
+                                //.animation(.linear(duration: 0.4), value: loveAnimationScale)
+                                .rotationEffect(.degrees(animationRotation))
+                                .isHidden(loveAnimationHidden)
+                            
+                            
+                            Image(systemName: "suit.heart.fill")
+                                .resizable()
                             //.shadow(radius: 6)
                             
-                            .foregroundColor(loved ? Color.pink.opacity(0.9) : Color.black.opacity(0.9))
-                            .frame(width: 20, height: 20)
-                            .overlay(Image(systemName: "suit.heart")
-                                .resizable()
-                                .frame(width: 20, height: 20)
-                                .foregroundColor(Color.white))
-                            .scaleEffect(loveScale)
+                                .foregroundColor(loved ? Color.pink.opacity(0.9) : Color.black.opacity(0.9))
+                                .frame(width: 20, height: 18)
+                                .overlay(Image(systemName: "suit.heart")
+                                    .resizable()
+                                    .frame(width: 20, height: 18)
+                                    .foregroundColor(Color.white))
+                                .scaleEffect(loveScale)
                                 .animation(.linear(duration: 0.2))
-                            .onTapGesture(){
-                                if(loved){
-                                    loveScale = 0.7
+                                .onTapGesture(){
+                                    if(loved){
+                                        loveScale = 0.7
+                                    }
+                                    else{
+                                        
+                                        loveAnimationHidden = false
+                                        
+                                        loveScale = 1.3
+                                        withAnimation(.linear(duration: 0.2)){
+                                            loveAnimationScale = 2.5
+                                            //animationRotation = -90.0
+                                        }
+                                        
+                                    }
+                                    loved.toggle()
+                                    
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
+                                        withAnimation(.linear(duration: 0.1)){
+                                            loveAnimationHidden = true
+                                        }
+                                        animationRotation = 0.0
+                                        loveAnimationScale = 1.0
+                                        loveScale = 1.0
+                                        
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
+                                            
+                                        }
+                                        
+                                        
+                                    }
                                 }
-                                else{
-                                    loveScale = 1.3
-                                }
-                                loved.toggle()
-                                
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                                    loveScale = 1.0
-                                }
-                            }
+                        }
+                        .padding(.trailing, 6)
                             //.frame(width: 48, height: 48)
                             
                     }
