@@ -35,7 +35,7 @@ struct GroceryMenu: View {
     var body: some View {
         ZStack(alignment: .top){
             CustomNavigation(title: "Grocery" , ONPAGE: $ONPAGE, leftImage: "location.north.circle.fill")
-                .frame(height: 64)
+                .frame(height: 48)
             VStack(spacing: 0){
                 
                 ScrollView{
@@ -92,7 +92,7 @@ struct GroceryMenu: View {
                         }
                     }
                 }
-            }.padding(.top, 64)
+            }.padding(.top, 48)
             .frame(maxHeight: .infinity)
         }
         .frame(maxHeight: .infinity)

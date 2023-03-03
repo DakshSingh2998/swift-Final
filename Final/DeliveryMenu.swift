@@ -29,6 +29,7 @@ struct DeliveryMenu: View {
     @State var filterHidden = true
     @State var sortPaddingBottom = -9999.0
     @State var sortSelected = -1
+    @State var tempSortSelected = -1
     @State var vegOnly = false
     @ObservedObject var filterMin = TextModel()
     @ObservedObject var filterMax = TextModel()
@@ -51,9 +52,9 @@ struct DeliveryMenu: View {
                  */
                 VStack(spacing: 0){
                     CustomNavigation(title: "Delivery" , ONPAGE: $ONPAGE, leftImage: "location.north.circle.fill")
-                        .frame(height: 64)
+                        .frame(height: 48)
                         .frame(maxWidth: .infinity)
-                        .frame(height: 64)
+                        .frame(height: 48)
                     VStack{
                         HStack{
                             Image(systemName: "magnifyingglass").resizable()
@@ -135,11 +136,6 @@ struct DeliveryMenu: View {
                     }
                     .background(.clear)
                     .padding(.horizontal, -30)
-                    
-                    
-                    
-                    
-                    
                 }
                 VStack{
                     Spacer()
@@ -186,20 +182,20 @@ struct DeliveryMenu: View {
                                         VStack{
                                             Spacer()
                                         }.frame(width: 8, height: 8)
-                                            .background(Circle().fill(item.idx == sortSelected ? Color("Dark") : Color.white))
+                                            .background(Circle().fill(item.idx == tempSortSelected ? Color("Dark") : Color.white))
                                         
                                     }
                                     .frame(width: 14, height: 14)
                                     .background(Circle().fill(Color.white))
                                 }.frame(width: 18, height: 18)
-                                    .background(Circle().fill(item.idx == sortSelected ? Color("Dark") : Color("Grey")))
+                                    .background(Circle().fill(item.idx == tempSortSelected ? Color("Dark") : Color("Grey")))
                                 
                                 
                             }.frame(height: 18)
                                 .contentShape(Rectangle())
                                 .onTapGesture(perform: {
                                     
-                                    sortSelected = item.idx
+                                    tempSortSelected = item.idx
                                     
                                     
                                 })
@@ -254,7 +250,7 @@ struct DeliveryMenu: View {
                                         .onTapGesture(perform: {
                                             filterCategory[((idx - 1) * 3)] = FilterCategory(category: filterCategory[((idx - 1) * 3)].category, idx: filterCategory[((idx - 1) * 3)].idx, isSelected: !filterCategory[((idx - 1) * 3)].isSelected)
                                         })
-                                    Spacer()
+                                    //Spacer()
                                     if(((idx - 1) * 3 + 1) < filterCategory.count){
                                         Text("\(filterCategory[((idx - 1) * 3 + 1)].category)")
                                             .padding(.horizontal, 8)
@@ -265,7 +261,7 @@ struct DeliveryMenu: View {
                                                 filterCategory[((idx - 1) * 3 + 1)] = FilterCategory(category: filterCategory[((idx - 1) * 3 + 1)].category, idx: filterCategory[((idx - 1) * 3 + 1)].idx, isSelected: !filterCategory[((idx - 1) * 3 + 1)].isSelected)
                                             })
                                     }
-                                    Spacer()
+                                    //Spacer()
                                     if(((idx - 1) * 3 + 2) < filterCategory.count){
                                         Text("\(filterCategory[((idx - 1) * 3 + 2)].category)")
                                             .padding(.horizontal, 8)
@@ -279,7 +275,7 @@ struct DeliveryMenu: View {
                                     
                                     
                                     
-                                }
+                                }.frame(maxWidth: .infinity)
                                 
                             }
                         }
@@ -293,11 +289,12 @@ struct DeliveryMenu: View {
                         Text("Clear All")
                             .foregroundColor(Color("Dark"))
                             .onTapGesture(perform: {
-                                
+                                tempSortSelected = -1
                             })
                             .padding(.horizontal, 32)
                         CustomPrimaryButton(title: "Apply", height: 32, colorr: Color("Dark"), textColor: Color.white, closure: {
-                            
+                            sortSelected = tempSortSelected
+                            sortHide()
                         })
                     }
                     .padding(.bottom, 10)
@@ -309,7 +306,7 @@ struct DeliveryMenu: View {
                 
                 
             }.background(.clear)
-                
+                .font(Font(CTFont(.system, size: 16)))
                 .padding(.bottom, sortPaddingBottom)
                 .isHidden(sortHidden)
                 
@@ -390,7 +387,7 @@ struct DeliveryMenu: View {
         
     }
     func sortHide(){
-        
+        tempSortSelected = sortSelected
         withAnimation(.linear(duration: 0.2)){
             sortPaddingBottom = -9999.0
             
@@ -403,6 +400,7 @@ struct DeliveryMenu: View {
     }
     func sortShow(){
         sortHidden = false
+        
         withAnimation(.linear(duration: 0.2)){
             sortPaddingBottom = 0
             

@@ -87,10 +87,16 @@ struct FirstPage: View {
                 signUp = ContentView(ONPAGE: $ONPAGE)
                 signIn = LoginPage(ONPAGE: $ONPAGE)
                 if(ONPAGE == 2.0){
-                    self.gotoSignUp = true
+                    withAnimation(.linear(duration: 0.3)){
+                        self.gotoSignUp = true
+                    }
+                    
                 }
                 if(ONPAGE == 3.0){
-                    self.gotoSignIn = true
+                    withAnimation(.linear(duration: 0.3)){
+                        self.gotoSignIn = true
+                    }
+                    
                 }
                 
             }
@@ -106,10 +112,16 @@ struct FirstPage: View {
                 .onChange(of: ONPAGE){newVal in
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.6){
                         if(ONPAGE == 2.0){
-                            self.gotoSignUp = true
+                            withAnimation(.linear(duration: 0.3)){
+                                self.gotoSignUp = true
+                            }
+                            
                         }
                         if(ONPAGE == 3.0){
-                            self.gotoSignIn = true
+                            withAnimation(.linear(duration: 0.3)){
+                                self.gotoSignIn = true
+                            }
+                            
                         }
                     }
                     

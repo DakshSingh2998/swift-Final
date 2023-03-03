@@ -63,7 +63,7 @@ struct CustomNavigation: View{
             VStack(spacing: -1){
                 HStack{
                     Image(systemName: leftImage).resizable().scaledToFit()
-                        .frame(width: 32, height: 32)
+                        .frame(width: 24, height: 24)
                         //.foregroundColor(Color("Dark"))
                         .onTapGesture(perform: {
                             if(leftImage == "arrowshape.backward"){
@@ -83,7 +83,7 @@ struct CustomNavigation: View{
                     Text(title).font(Font(CTFont(.system, size: 18))).bold()
                     Spacer()
                     Image(systemName: rightImage).resizable().scaledToFit()
-                        .frame(width: 32, height: 32)
+                        .frame(width: 24, height: 24)
                         //.foregroundColor(Color("Dark"))
                         .isHidden(rightImage == "")
                         .onTapGesture(){
@@ -93,7 +93,7 @@ struct CustomNavigation: View{
                             }
                         }
                 }
-                .frame(height: 63)
+                .frame(height: 47)
                 VStack{
                     
                 }
@@ -105,7 +105,7 @@ struct CustomNavigation: View{
                     .padding(.horizontal, -16)
             }
             .padding(16)
-            .frame(height: 64)
+            .frame(height: 48)
             .background(Color("Light"))
             NavigationLink("Profile", destination: Profile(ONPAGE: $ONPAGE), isActive: $gotoProfile).hidden()
         }

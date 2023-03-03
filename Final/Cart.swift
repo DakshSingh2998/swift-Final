@@ -42,8 +42,9 @@ struct Cart: View {
                         
                     }
                     .frame(maxWidth: .infinity)
-                    .frame(height: 64)
+                    .frame(height: 48)
                     .overlay(CustomNavigation(title: "Cart" , ONPAGE: $ONPAGE, leftImage: "location.north.circle.fill"))
+                    
                     ScrollView{
                         VStack(spacing: 20){
                             VStack{
@@ -377,7 +378,7 @@ struct Cart: View {
                                 .font(Font(CTFont(.system, size: 14)))
                         }
                         .padding(.horizontal, 10)
-                        .padding(.top, 10)
+                        //.padding(.top, 10)
                         .padding(.bottom, 4)
                         VStack{
                         }
@@ -460,7 +461,7 @@ struct Cart: View {
                     }
                     .frame(maxWidth: .infinity)
                     .frame(maxHeight: .infinity)
-                    .frame(height: 64, alignment: .top)
+                    .frame(height: 48, alignment: .top)
                     .overlay(CustomNavigation(title: "Cart" , ONPAGE: $ONPAGE, leftImage: "location.north.circle.fill"))
                     Spacer()
                     Image(systemName: "cart.fill.badge.questionmark.rtl").resizable().scaledToFit()

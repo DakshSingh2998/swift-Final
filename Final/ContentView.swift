@@ -166,6 +166,7 @@ struct ContentView: View {
                     
                         */
                     Text("Already have account? " + coloredSignIn).font(Font(CTFont(.kCTFontSystemFontType, size: 16))).foregroundColor(.black).onTapGesture(perform: {
+                        
                         ONPAGE = 3.0
                         //gotoLogin = true
                     }).padding(.vertical, 16)
@@ -222,7 +223,7 @@ struct ContentView: View {
                 
             }
             .navigationBarHidden(true)
-            .padding(.top, 64)
+            .padding(.top, 48)
         }
         .overlay(CustomNavigation(title: "Sign Up", ONPAGE: $ONPAGE, rightImage: ""))
         .onAppear(){

@@ -36,7 +36,7 @@ struct Profile: View {
                 
             }
             .frame(maxWidth: .infinity)
-            .frame(height: 64)
+            .frame(height: 48)
             .overlay(CustomNavigation(title: "Profile" , ONPAGE: $ONPAGE, rightImage: ""))
             VStack(spacing: 0){
                 VStack{
@@ -96,6 +96,7 @@ struct Profile: View {
                                                     if(child.name == "Log Out"){
                                                         //log out
                                                         toast = "Log Out Successful"
+                                                        
                                                         //addDummyData()
                                                     }
                                                     if(child.name == "About"){
@@ -156,7 +157,7 @@ struct Profile: View {
             Spacer()
                 
         }
-            .padding(.top, 64)
+            .padding(.top, 48)
             .padding(.all, 10)
             
             
@@ -172,8 +173,16 @@ struct Profile: View {
                 .padding(.top, 50)
                 //.ignoresSafeArea()
                     .onAppear(){
-                        DispatchQueue.main.asyncAfter(deadline: .now()+2, execute: {
+                        DispatchQueue.main.asyncAfter(deadline: .now()+1, execute: {
+                            if(toast == "Log Out Successful"){
+                                withAnimation(.linear(duration: 0.2)){
+                                    ONPAGE = 1.0
+                                    UserDefaults.standard.removeObject(forKey: "loggedInUser")
+                                }
+                                
+                            }
                             toast = nil
+                            
                         })
                     }
             }
