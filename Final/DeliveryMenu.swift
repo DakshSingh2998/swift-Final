@@ -11,6 +11,12 @@ struct sortCategory: Identifiable{
     @State var category:String
     @State var idx = 0
 }
+struct FilterCategory: Identifiable{
+    @State var id = UUID()
+    @State var category:String
+    @State var idx = 0
+    @State var isSelected = false
+}
 
 
 struct DeliveryMenu: View {
@@ -20,9 +26,16 @@ struct DeliveryMenu: View {
     @Binding var ONPAGE:Double
     @State var searchText = ""
     @State var sortHidden = true
+    @State var filterHidden = true
     @State var sortPaddingBottom = -9999.0
     @State var sortSelected = -1
-    
+    @State var vegOnly = false
+    @ObservedObject var filterMin = TextModel()
+    @ObservedObject var filterMax = TextModel()
+    @State var tempIsIncorrect = false
+    @State var tfWidth = CommonMethods.shared.width / 2 - 20
+    @State var filterCategory:[FilterCategory] = []
+    @State var filterCategoryCount = 0
     var body: some View {
         ZStack(alignment: .bottom){
             ZStack(alignment: .top){
@@ -84,7 +97,8 @@ struct DeliveryMenu: View {
                             .cornerRadius(6)
                         //
                         Button(action:{
-                            
+                            sortShow()
+                            filterHidden = false
                         }){
                             Image(systemName: "highlighter").resizable()
                                 .frame(width: 12, height: 10)
@@ -131,7 +145,7 @@ struct DeliveryMenu: View {
                     Spacer()
                 }
                 .frame(maxWidth: .infinity)
-                .background(Color.black.opacity(0.8))
+                .background(Color.black.opacity(1 - (sortPaddingBottom * -1) / 400 - 0.2))
                 .isHidden(sortHidden)
                 
                 
@@ -154,7 +168,7 @@ struct DeliveryMenu: View {
                 .foregroundColor(Color.white)
                 .background(Circle().fill(Color.black.opacity(0.7)))
                 VStack(alignment: .leading, spacing: 10){
-                    Text("Sort")
+                    Text(filterHidden ? "Sort" : "Filter").bold()
                         
                     .padding(.top, 20)
                     HStack{
@@ -162,43 +176,114 @@ struct DeliveryMenu: View {
                     }
                     .frame(height: 1)
                     .background(Color("Grey"))
-                    List(sortCategoryList, id: \.id){ item in
-                        HStack{
-                            Text(item.category)
-                            Spacer()
-                            VStack{
+                    if(filterHidden){
+                        List(sortCategoryList, id: \.id){ item in
+                            HStack{
+                                Text(item.category)
+                                Spacer()
                                 VStack{
                                     VStack{
-                                        Spacer()
-                                    }.frame(width: 8, height: 8)
-                                        .background(Circle().fill(item.idx == sortSelected ? Color("Dark") : Color.white))
+                                        VStack{
+                                            Spacer()
+                                        }.frame(width: 8, height: 8)
+                                            .background(Circle().fill(item.idx == sortSelected ? Color("Dark") : Color.white))
                                         
-                                }
-                                .frame(width: 14, height: 14)
-                                .background(Circle().fill(Color.white))
-                            }.frame(width: 18, height: 18)
-                                .background(Circle().fill(item.idx == sortSelected ? Color("Dark") : Color("Grey")))
+                                    }
+                                    .frame(width: 14, height: 14)
+                                    .background(Circle().fill(Color.white))
+                                }.frame(width: 18, height: 18)
+                                    .background(Circle().fill(item.idx == sortSelected ? Color("Dark") : Color("Grey")))
                                 
+                                
+                            }.frame(height: 18)
+                                .contentShape(Rectangle())
+                                .onTapGesture(perform: {
+                                    
+                                    sortSelected = item.idx
+                                    
+                                    
+                                })
                             
-                        }.frame(height: 18)
-                            .contentShape(Rectangle())
-                            .onTapGesture(perform: {
-                                
-                                sortSelected = item.idx
-                                
+                            
+                                .padding(.horizontal, -10)
+                                .listRowBackground(Color.clear)
+                                .listRowSeparator(.hidden)
+                                .listSectionSeparator(.hidden)
+                        }
+                        .listStyle(.plain)
+                        .scrollDisabled(true)
+                        .frame(height: 44 * CGFloat(sortCategoryList.count))
+                        .padding(0)
+                        ////
+                    }
+                    else{
+                        HStack{
+                            Text("Veg Only")
+                            Spacer()
+                            Toggle("veg only", isOn: $vegOnly)
+                        }
+                        HStack{
+                            Spacer()
+                        }
+                        .frame(height: 1)
+                        .background(Color("Grey"))
+                        Text("Price")
+                        HStack{
+                            CustomTextField(defaultplaceholder: "Min", vm: filterMin, width: $tfWidth, isInCorrect: $tempIsIncorrect, commitClosure: {
                                 
                             })
-                        
-                        
-                        .padding(.horizontal, -10)
-                        .listRowBackground(Color.clear)
-                        .listRowSeparator(.hidden)
-                        .listSectionSeparator(.hidden)
+                            Spacer()
+                            CustomTextField(defaultplaceholder: "Max", vm: filterMax, width: $tfWidth, isInCorrect: $tempIsIncorrect, commitClosure: {
+                                
+                            })
+                        }.padding(.vertical, -10)
+                        HStack{
+                            Spacer()
+                        }
+                        .frame(height: 1)
+                        .background(Color("Grey"))
+                        Text("Category")
+                        VStack(spacing: 10){
+                            ForEach(1...(((filterCategory.count / 3) + (filterCategory.count % 3 == 0 ? 0 : 1 ))), id: \.self) {idx in
+                                HStack{
+                                    Text("\(filterCategory[((idx - 1) * 3)].category)")
+                                        .padding(.horizontal, 8)
+                                        .padding(.all, 4)
+                                        .background(filterCategory[((idx - 1) * 3)].isSelected ? Color("Dark") :  Color("Light"))
+                                        .cornerRadius(6)
+                                        .onTapGesture(perform: {
+                                            filterCategory[((idx - 1) * 3)] = FilterCategory(category: filterCategory[((idx - 1) * 3)].category, idx: filterCategory[((idx - 1) * 3)].idx, isSelected: !filterCategory[((idx - 1) * 3)].isSelected)
+                                        })
+                                    Spacer()
+                                    if(((idx - 1) * 3 + 1) < filterCategory.count){
+                                        Text("\(filterCategory[((idx - 1) * 3 + 1)].category)")
+                                            .padding(.horizontal, 8)
+                                            .padding(.all, 4)
+                                            .background(filterCategory[((idx - 1) * 3 + 1)].isSelected ? Color("Dark") :  Color("Light"))
+                                            .cornerRadius(6)
+                                            .onTapGesture(perform: {
+                                                filterCategory[((idx - 1) * 3 + 1)] = FilterCategory(category: filterCategory[((idx - 1) * 3 + 1)].category, idx: filterCategory[((idx - 1) * 3 + 1)].idx, isSelected: !filterCategory[((idx - 1) * 3 + 1)].isSelected)
+                                            })
+                                    }
+                                    Spacer()
+                                    if(((idx - 1) * 3 + 2) < filterCategory.count){
+                                        Text("\(filterCategory[((idx - 1) * 3 + 2)].category)")
+                                            .padding(.horizontal, 8)
+                                            .padding(.all, 4)
+                                            .background(filterCategory[((idx - 1) * 3 + 2)].isSelected ? Color("Dark") :  Color("Light"))
+                                            .cornerRadius(6)
+                                            .onTapGesture(perform: {
+                                                filterCategory[((idx - 1) * 3 + 2)] = FilterCategory(category: filterCategory[((idx - 1) * 3 + 2)].category, idx: filterCategory[((idx - 1) * 3 + 2)].idx, isSelected: !filterCategory[((idx - 1) * 3 + 2)].isSelected)
+                                            })
+                                    }
+                                    
+                                    
+                                    
+                                }
+                                
+                            }
+                        }
                     }
-                    .listStyle(.plain)
-                    .scrollDisabled(true)
-                    .frame(height: 44 * CGFloat(sortCategoryList.count))
-                    .padding(0)
                     HStack{
                         Spacer()
                     }
@@ -210,7 +295,12 @@ struct DeliveryMenu: View {
                             .onTapGesture(perform: {
                                 
                             })
+                            .padding(.horizontal, 32)
+                        CustomPrimaryButton(title: "Apply", height: 32, colorr: Color("Dark"), textColor: Color.white, closure: {
+                            
+                        })
                     }
+                    .padding(.bottom, 10)
                 }
                 .padding(.horizontal, 10)
                 .background(Color.white)
@@ -261,7 +351,7 @@ struct DeliveryMenu: View {
                     var cur_height = change.location.y
                     var diff = cur_height - start_height
                     if(diff > 11){
-                        print(diff)
+                        //print(diff)
                         sortPaddingBottom = diff * -1
                         return
                     }
@@ -278,6 +368,20 @@ struct DeliveryMenu: View {
             sortCategoryList.append(sortCategory(category: "Distance: Low to High", idx: 2))
             sortCategoryList.append(sortCategory(category: "Cost: Low to High", idx: 3))
             sortCategoryList.append(sortCategory(category: "Cost: High To Low", idx: 4))
+            filterCategory = []
+        
+            filterCategory.append(FilterCategory(category: "North Indian", idx: 0))
+            filterCategory.append(FilterCategory(category: "South Indian", idx: 1))
+            filterCategory.append(FilterCategory(category: "East Indian", idx: 2))
+            filterCategory.append(FilterCategory(category: "West Indian", idx: 3))
+            filterCategory.append(FilterCategory(category: "Eastern", idx: 4))
+            filterCategory.append(FilterCategory(category: "Western", idx: 5))
+            filterCategory.append(FilterCategory(category: "Chinese", idx: 6))
+            filterCategory.append(FilterCategory(category: "Chinese", idx: 7))
+            filterCategory.append(FilterCategory(category: "Chinese", idx: 7))
+            filterCategory.append(FilterCategory(category: "Chinese", idx: 7))
+
+            print(filterCategory.count)
             
         }
         .onDisappear(){
@@ -286,13 +390,16 @@ struct DeliveryMenu: View {
         
     }
     func sortHide(){
+        
         withAnimation(.linear(duration: 0.2)){
             sortPaddingBottom = -9999.0
             
         }
         DispatchQueue.main.asyncAfter(deadline: .now()+0.2, execute: {
             sortHidden = true
+            filterHidden = true
         })
+        
     }
     func sortShow(){
         sortHidden = false
