@@ -16,6 +16,7 @@
 		5233AAF229ADF0720033B5C8 /* temp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233AAF129ADF0720033B5C8 /* temp.swift */; };
 		523819F929A5D1EB00C5F0F7 /* Cart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523819F829A5D1EB00C5F0F7 /* Cart.swift */; };
 		523819FB29A61E0000C5F0F7 /* TempSave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523819FA29A61E0000C5F0F7 /* TempSave.swift */; };
+		523E4B4A404803F700ED87DD /* LoadingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523E4B49404803F700ED87DD /* LoadingScreen.swift */; };
 		526166A41A558EF8002D73DA /* FinalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526166A31A558EF8002D73DA /* FinalApp.swift */; };
 		526166A61A558EF8002D73DA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526166A51A558EF8002D73DA /* ContentView.swift */; };
 		526166A81A558EF9002D73DA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 526166A71A558EF9002D73DA /* Assets.xcassets */; };
@@ -63,6 +64,7 @@
 		5233AAF129ADF0720033B5C8 /* temp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = temp.swift; sourceTree = "<group>"; };
 		523819F829A5D1EB00C5F0F7 /* Cart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cart.swift; sourceTree = "<group>"; };
 		523819FA29A61E0000C5F0F7 /* TempSave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempSave.swift; sourceTree = "<group>"; };
+		523E4B49404803F700ED87DD /* LoadingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingScreen.swift; sourceTree = "<group>"; };
 		526166A01A558EF8002D73DA /* Final.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Final.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		526166A31A558EF8002D73DA /* FinalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalApp.swift; sourceTree = "<group>"; };
 		526166A51A558EF8002D73DA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 			children = (
 				526166AC1A558EFA002D73DA /* Persistence.swift */,
 				526166A31A558EF8002D73DA /* FinalApp.swift */,
+				523E4B49404803F700ED87DD /* LoadingScreen.swift */,
 				523164B540398D01001EB0FB /* CommonMethods.swift */,
 				5233AAEF29ADE4870033B5C8 /* CustomNavigation.swift */,
 				5233AAF129ADF0720033B5C8 /* temp.swift */,
@@ -330,6 +333,7 @@
 				529676C129A4B66200DF6267 /* GroceryMenu.swift in Sources */,
 				5211AEC94036EAD900A97240 /* CustomTextField.swift in Sources */,
 				529676BD29A4B57100DF6267 /* HomePage.swift in Sources */,
+				523E4B4A404803F700ED87DD /* LoadingScreen.swift in Sources */,
 				52BB038829AF50A8008D0AC7 /* FoodItemCell.swift in Sources */,
 				5211AEC54036E94200A97240 /* LaunchScreen.swift in Sources */,
 				523164B640398D01001EB0FB /* CommonMethods.swift in Sources */,

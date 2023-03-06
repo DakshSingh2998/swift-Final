@@ -36,7 +36,7 @@ struct Profile: View {
                 
             }
             .frame(maxWidth: .infinity)
-            .frame(height: 48)
+            .frame(height: 40)
             .overlay(CustomNavigation(title: "Profile" , ONPAGE: $ONPAGE, rightImage: ""))
             VStack(spacing: 0){
                 VStack{
@@ -79,9 +79,15 @@ struct Profile: View {
                                 ForEach(sectionList) { list in
                                     VStack(alignment: .leading, spacing: 6){
 
-
-                                        Text(list.sectionName).font(Font(CTFont(.system, size: 18)))
-                                            .bold()
+                                        HStack(spacing: 4){
+                                            VStack{
+                                                Spacer()
+                                            }.frame(width: 4, height: 18)
+                                                .background(Color("Blue"))
+                                                .upperCurve(10, corners: [.topRight, .bottomRight])
+                                            Text(list.sectionName).font(Font(CTFont(.system, size: 18)))
+                                                .bold()
+                                        }.padding(.leading, -10)
                                         ForEach(sectionChildList[list.sectionNumber]){ child in
                                             VStack(spacing: 6){
                                                 HStack{
@@ -157,7 +163,7 @@ struct Profile: View {
             Spacer()
                 
         }
-            .padding(.top, 48)
+            .padding(.top, 40)
             .padding(.all, 10)
             
             

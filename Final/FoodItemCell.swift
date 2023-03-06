@@ -16,7 +16,7 @@ struct FoodItemCell: View {
     @State var loveAnimationHidden = true
     @State var animationRotation = 0.0
     var body: some View {
-        VStack(spacing: 0){
+        VStack(spacing: 6){
             ZStack(alignment: .bottom){
                 Image(bgImage)
                     .resizable()
@@ -147,7 +147,8 @@ struct FoodItemCell: View {
                 Text("150 for one")
             }.font(Font(CTFont(.system, size: 14)))
                 .padding(.all, 6)
-                .padding(.vertical, 8)
+                .padding(.bottom, 8)
+                .padding(.top, -6)
                 //.shadow(radius: 0)
                 .background(.white)
                 //.frame(height: 24)

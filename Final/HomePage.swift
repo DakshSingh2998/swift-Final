@@ -60,9 +60,9 @@ struct HomePage: View {
             }.frame(maxHeight: .infinity)
             VStack{
                 
-            }.frame(height: 20)
+            }.frame(width: 2, height: 20)
             
-        }
+        }.navigationViewStyle(.stack)
         .frame(maxHeight: .infinity)
         .navigationBarHidden(true)
             .accentColor(onPage == 1 ? .brown : onPage == 2 ? Color("GroceryBorder") : Color("Dark"))
@@ -71,6 +71,9 @@ struct HomePage: View {
                 print("ONPAGE4 \(ONPAGE)")
                 UITableView.appearance().separatorStyle = .none
                 UITableViewCell.appearance().tintColor = .systemPink
+                let tabBarAppearance = UITabBarAppearance()
+                tabBarAppearance.configureWithOpaqueBackground()
+                UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
                 gst = gst.roundTo()
                 distance = distance.roundTo()
                 addDummyData()

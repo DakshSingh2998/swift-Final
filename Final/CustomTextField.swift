@@ -23,6 +23,7 @@ struct CustomTextField: View{
     @State var isDate = false
     @State var labelText = ""
     @State var originalDigit = 0
+    @State var isNumeric = false
     var commitClosure: (() -> Void)?
     var body: some View{
         
@@ -78,7 +79,7 @@ struct CustomTextField: View{
                         else{
                             vm.value.remove(at: vm.value.index(vm.value.startIndex, offsetBy: 10))
                         }
-                    }.keyboardType(isDate ? .asciiCapableNumberPad : .asciiCapable).onSubmit {
+                    }.keyboardType((isDate || isNumeric) ? .asciiCapableNumberPad : .asciiCapable).onSubmit {
                         commitClosure?()
                     }
                     //CustomTextField.sendFocus!(defaultplaceholder)

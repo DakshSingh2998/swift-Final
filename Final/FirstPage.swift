@@ -79,7 +79,7 @@ struct FirstPage: View {
             }
             
             .navigationBarHidden(true)
-        }
+        }.navigationViewStyle(.stack)
         
         .onAppear(){
             print("ONPAGE1 \(ONPAGE)")

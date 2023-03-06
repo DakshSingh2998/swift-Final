@@ -55,18 +55,18 @@ struct CustomNavigation: View{
     @State var title = ""
     
     @Binding var ONPAGE:Double
-    @State var rightImage = "person"
-    @State var leftImage = "arrowshape.backward"
+    @State var rightImage = "person.fill"
+    @State var leftImage = "arrowshape.turn.up.backward.fill"
     @State var gotoProfile = false
     var body: some View{
         ZStack(alignment: .top){
             VStack(spacing: -1){
                 HStack{
                     Image(systemName: leftImage).resizable().scaledToFit()
-                        .frame(width: 24, height: 24)
+                        .frame(width: 20, height: 20)
                         //.foregroundColor(Color("Dark"))
                         .onTapGesture(perform: {
-                            if(leftImage == "arrowshape.backward"){
+                            if(leftImage == "arrowshape.turn.up.backward.fill"){
                                 if(ONPAGE == 3.0){
                                     ONPAGE = 1.0
                                     print(ONPAGE)
@@ -83,17 +83,17 @@ struct CustomNavigation: View{
                     Text(title).font(Font(CTFont(.system, size: 18))).bold()
                     Spacer()
                     Image(systemName: rightImage).resizable().scaledToFit()
-                        .frame(width: 24, height: 24)
+                        .frame(width: 20, height: 20)
                         //.foregroundColor(Color("Dark"))
                         .isHidden(rightImage == "")
                         .onTapGesture(){
-                            if(rightImage == "person"){
+                            if(rightImage == "person.fill"){
                                 ONPAGE = 5.0
                                 gotoProfile = true
                             }
                         }
                 }
-                .frame(height: 47)
+                .frame(height: 39)
                 VStack{
                     
                 }
@@ -105,7 +105,7 @@ struct CustomNavigation: View{
                     .padding(.horizontal, -16)
             }
             .padding(16)
-            .frame(height: 48)
+            .frame(height: 40)
             .background(Color("Light"))
             NavigationLink("Profile", destination: Profile(ONPAGE: $ONPAGE), isActive: $gotoProfile).hidden()
         }

@@ -38,12 +38,7 @@ struct Cart: View {
                 .ignoresSafeArea()
             if(cartItems.count != 0){
                 VStack(spacing: 0){
-                    VStack{
-                        
-                    }
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 48)
-                    .overlay(CustomNavigation(title: "Cart" , ONPAGE: $ONPAGE, leftImage: "location.north.circle.fill"))
+                    CustomNavigation(title: "Cart" , ONPAGE: $ONPAGE, leftImage: "location.north.circle.fill").frame(height: 40)
                     
                     ScrollView{
                         VStack(spacing: 20){
@@ -363,7 +358,7 @@ struct Cart: View {
                         
                     }.padding(.bottom, -20)
                     Spacer()
-                    VStack{
+                    VStack(spacing: 4){
                         
                         
                         LinearGradient(gradient: Gradient(colors: [Color("Dark"), Color("Light")]), startPoint: .top, endPoint: .bottom)
@@ -387,8 +382,6 @@ struct Cart: View {
                         .background(Color("Dark"))
                         .cornerRadius(20)
                         HStack{
-                            
-                            
                             Menu(content: {
                                 Button("COD", action: {
                                     paymentMode = .cash
@@ -446,7 +439,7 @@ struct Cart: View {
                         }
                         .padding(.horizontal, 10)
                         .padding(.vertical, 4)
-                        .padding(.bottom, 10)
+                        //.padding(.bottom, 10)
                     }
                     //.frame(height: 40)Image(systemName: "cart.badge.questionmark.ar")
                     .background(Color("Light"))
@@ -461,7 +454,7 @@ struct Cart: View {
                     }
                     .frame(maxWidth: .infinity)
                     .frame(maxHeight: .infinity)
-                    .frame(height: 48, alignment: .top)
+                    .frame(height: 40, alignment: .top)
                     .overlay(CustomNavigation(title: "Cart" , ONPAGE: $ONPAGE, leftImage: "location.north.circle.fill"))
                     Spacer()
                     Image(systemName: "cart.fill.badge.questionmark.rtl").resizable().scaledToFit()

@@ -223,7 +223,7 @@ struct ContentView: View {
                 
             }
             .navigationBarHidden(true)
-            .padding(.top, 48)
+            .padding(.top, 40)
         }
         .overlay(CustomNavigation(title: "Sign Up", ONPAGE: $ONPAGE, rightImage: ""))
         .onAppear(){

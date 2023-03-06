@@ -31,11 +31,15 @@ struct DeliveryMenu: View {
     @State var sortSelected = -1
     @State var tempSortSelected = -1
     @State var vegOnly = false
+    @State var tempVegOnly = false
     @ObservedObject var filterMin = TextModel()
+    @ObservedObject var tempFilterMin = TextModel()
     @ObservedObject var filterMax = TextModel()
+    @ObservedObject var tempFilterMax = TextModel()
     @State var tempIsIncorrect = false
     @State var tfWidth = CommonMethods.shared.width / 2 - 20
     @State var filterCategory:[FilterCategory] = []
+    @State var tempFilterCategory:[FilterCategory] = []
     @State var filterCategoryCount = 0
     var body: some View {
         ZStack(alignment: .bottom){
@@ -52,9 +56,9 @@ struct DeliveryMenu: View {
                  */
                 VStack(spacing: 0){
                     CustomNavigation(title: "Delivery" , ONPAGE: $ONPAGE, leftImage: "location.north.circle.fill")
-                        .frame(height: 48)
+                        .frame(height: 40)
                         .frame(maxWidth: .infinity)
-                        .frame(height: 48)
+                        .frame(height: 40)
                     VStack{
                         HStack{
                             Image(systemName: "magnifyingglass").resizable()
@@ -216,7 +220,7 @@ struct DeliveryMenu: View {
                         HStack{
                             Text("Veg Only")
                             Spacer()
-                            Toggle("veg only", isOn: $vegOnly)
+                            Toggle("veg only", isOn: $tempVegOnly)
                         }
                         HStack{
                             Spacer()
@@ -225,11 +229,11 @@ struct DeliveryMenu: View {
                         .background(Color("Grey"))
                         Text("Price")
                         HStack{
-                            CustomTextField(defaultplaceholder: "Min", vm: filterMin, width: $tfWidth, isInCorrect: $tempIsIncorrect, commitClosure: {
+                            CustomTextField(defaultplaceholder: "Min", vm: tempFilterMin, width: $tfWidth, isInCorrect: $tempIsIncorrect, isNumeric: true, commitClosure: {
                                 
                             })
                             Spacer()
-                            CustomTextField(defaultplaceholder: "Max", vm: filterMax, width: $tfWidth, isInCorrect: $tempIsIncorrect, commitClosure: {
+                            CustomTextField(defaultplaceholder: "Max", vm: tempFilterMax, width: $tfWidth, isInCorrect: $tempIsIncorrect, isNumeric: true, commitClosure: {
                                 
                             })
                         }.padding(.vertical, -10)
@@ -240,36 +244,36 @@ struct DeliveryMenu: View {
                         .background(Color("Grey"))
                         Text("Category")
                         VStack(spacing: 10){
-                            ForEach(1...(((filterCategory.count / 3) + (filterCategory.count % 3 == 0 ? 0 : 1 ))), id: \.self) {idx in
+                            ForEach(1...(((tempFilterCategory.count / 3) + (tempFilterCategory.count % 3 == 0 ? 0 : 1 ))), id: \.self) {idx in
                                 HStack{
-                                    Text("\(filterCategory[((idx - 1) * 3)].category)")
+                                    Text("\(tempFilterCategory[((idx - 1) * 3)].category)")
                                         .padding(.horizontal, 8)
                                         .padding(.all, 4)
-                                        .background(filterCategory[((idx - 1) * 3)].isSelected ? Color("Dark") :  Color("Light"))
+                                        .background(tempFilterCategory[((idx - 1) * 3)].isSelected ? Color("Dark") :  Color("Light"))
                                         .cornerRadius(6)
                                         .onTapGesture(perform: {
-                                            filterCategory[((idx - 1) * 3)] = FilterCategory(category: filterCategory[((idx - 1) * 3)].category, idx: filterCategory[((idx - 1) * 3)].idx, isSelected: !filterCategory[((idx - 1) * 3)].isSelected)
+                                            tempFilterCategory[((idx - 1) * 3)] = FilterCategory(category: tempFilterCategory[((idx - 1) * 3)].category, idx: tempFilterCategory[((idx - 1) * 3)].idx, isSelected: !tempFilterCategory[((idx - 1) * 3)].isSelected)
                                         })
                                     //Spacer()
-                                    if(((idx - 1) * 3 + 1) < filterCategory.count){
-                                        Text("\(filterCategory[((idx - 1) * 3 + 1)].category)")
+                                    if(((idx - 1) * 3 + 1) < tempFilterCategory.count){
+                                        Text("\(tempFilterCategory[((idx - 1) * 3 + 1)].category)")
                                             .padding(.horizontal, 8)
                                             .padding(.all, 4)
-                                            .background(filterCategory[((idx - 1) * 3 + 1)].isSelected ? Color("Dark") :  Color("Light"))
+                                            .background(tempFilterCategory[((idx - 1) * 3 + 1)].isSelected ? Color("Dark") :  Color("Light"))
                                             .cornerRadius(6)
                                             .onTapGesture(perform: {
-                                                filterCategory[((idx - 1) * 3 + 1)] = FilterCategory(category: filterCategory[((idx - 1) * 3 + 1)].category, idx: filterCategory[((idx - 1) * 3 + 1)].idx, isSelected: !filterCategory[((idx - 1) * 3 + 1)].isSelected)
+                                                tempFilterCategory[((idx - 1) * 3 + 1)] = FilterCategory(category: tempFilterCategory[((idx - 1) * 3 + 1)].category, idx: tempFilterCategory[((idx - 1) * 3 + 1)].idx, isSelected: !tempFilterCategory[((idx - 1) * 3 + 1)].isSelected)
                                             })
                                     }
                                     //Spacer()
-                                    if(((idx - 1) * 3 + 2) < filterCategory.count){
-                                        Text("\(filterCategory[((idx - 1) * 3 + 2)].category)")
+                                    if(((idx - 1) * 3 + 2) < tempFilterCategory.count){
+                                        Text("\(tempFilterCategory[((idx - 1) * 3 + 2)].category)")
                                             .padding(.horizontal, 8)
                                             .padding(.all, 4)
-                                            .background(filterCategory[((idx - 1) * 3 + 2)].isSelected ? Color("Dark") :  Color("Light"))
+                                            .background(tempFilterCategory[((idx - 1) * 3 + 2)].isSelected ? Color("Dark") :  Color("Light"))
                                             .cornerRadius(6)
                                             .onTapGesture(perform: {
-                                                filterCategory[((idx - 1) * 3 + 2)] = FilterCategory(category: filterCategory[((idx - 1) * 3 + 2)].category, idx: filterCategory[((idx - 1) * 3 + 2)].idx, isSelected: !filterCategory[((idx - 1) * 3 + 2)].isSelected)
+                                                tempFilterCategory[((idx - 1) * 3 + 2)] = FilterCategory(category: tempFilterCategory[((idx - 1) * 3 + 2)].category, idx: tempFilterCategory[((idx - 1) * 3 + 2)].idx, isSelected: !tempFilterCategory[((idx - 1) * 3 + 2)].isSelected)
                                             })
                                     }
                                     
@@ -289,11 +293,33 @@ struct DeliveryMenu: View {
                         Text("Clear All")
                             .foregroundColor(Color("Dark"))
                             .onTapGesture(perform: {
-                                tempSortSelected = -1
+                                if(filterHidden == true){
+                                    tempSortSelected = -1
+                                }
+                                else{
+                                    tempVegOnly = false
+                                    tempFilterMin.value = ""
+                                    tempFilterMax.value = ""
+                                    for i in 0..<tempFilterCategory.count{
+                                        tempFilterCategory[i] = FilterCategory(category: tempFilterCategory[i].category, idx: tempFilterCategory[i].idx, isSelected: false)
+                                    }
+                                    
+                                }
+                                
+                                
                             })
                             .padding(.horizontal, 32)
                         CustomPrimaryButton(title: "Apply", height: 32, colorr: Color("Dark"), textColor: Color.white, closure: {
-                            sortSelected = tempSortSelected
+                            if(filterHidden == true){
+                                sortSelected = tempSortSelected
+                            }
+                            else{
+                                vegOnly = tempVegOnly
+                                filterMin.value = tempFilterMin.value
+                                filterMax.value = tempFilterMax.value
+                                filterCategory = tempFilterCategory
+                            }
+                            
                             sortHide()
                         })
                     }
@@ -377,7 +403,7 @@ struct DeliveryMenu: View {
             filterCategory.append(FilterCategory(category: "Chinese", idx: 7))
             filterCategory.append(FilterCategory(category: "Chinese", idx: 7))
             filterCategory.append(FilterCategory(category: "Chinese", idx: 7))
-
+            tempFilterCategory = filterCategory
             print(filterCategory.count)
             
         }
@@ -388,6 +414,11 @@ struct DeliveryMenu: View {
     }
     func sortHide(){
         tempSortSelected = sortSelected
+        tempVegOnly = vegOnly
+        tempFilterMin.value = filterMin.value
+        tempFilterMax.value = filterMax.value
+        tempFilterCategory = filterCategory
+        
         withAnimation(.linear(duration: 0.2)){
             sortPaddingBottom = -9999.0
             
