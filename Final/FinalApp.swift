@@ -14,8 +14,8 @@ struct FinalApp: App {
     
     var body: some Scene {
         WindowGroup {
-            LoadingScreen()
-            
+            //LoadingScreen()
+            RestaurantHomePage()
             //Profile()
         }
         
