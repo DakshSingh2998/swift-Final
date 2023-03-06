@@ -38,7 +38,7 @@ struct RestaurantHomePage: View {
             content.append(ContentData( name: "IJKL", idx: 6) )
             for i in 0...6{
                 var temp:[Dish] = []
-                temp.append(Dish(name: "\(i)A", idx: i))
+                    temp.append(Dish(name: "\(i)A", idx: i))
                 temp.append(Dish(name: "\(i)B", idx: i))
                 temp.append(Dish(name: "\(i)C", idx: i))
                 temp.append(Dish(name: "\(i)D", idx: i))
@@ -85,11 +85,15 @@ struct RestaurantHomePage: View {
                                 }else{
                                     VStack{
                                         Spacer()
-                                    }.hidden()
+                                    }
+                                    .frame(height: 1)
+                                    
                                 }
+                                
                             //}
                         }
                     }
+                    
                     .padding(6)
                     .background(.white)
                     .cornerRadius(6)
@@ -113,7 +117,7 @@ struct RestaurantHomePage: View {
                 Image(systemName: "dot.square").foregroundColor(Color("Green")).bold()
                 Text(curDish.name).font(Font(CTFont(.system, size: 16))).bold()
                 HStack{
-                    Text("4.5 *").padding(4)
+                    Text("4.5 ★").padding(4)
                         .background(Color("Green"))
                         .cornerRadius(6)
                     Text("29 ratings")
@@ -125,14 +129,21 @@ struct RestaurantHomePage: View {
 
             }.font(Font(CTFont(.system, size: 14)))
             Spacer()
-            VStack{
-                Image("Pizza").resizable()
-                    .frame(width: 120 ,height: 100)
-                    .scaledToFill()
-
-                    .cornerRadius(10)
+            ZStack(alignment: .bottom){
+                VStack{
+                    Image("Pizza").resizable()
+                        .frame(width: 120 ,height: 100)
+                        .scaledToFill()
+                    
+                        .cornerRadius(10)
+                    HStack{
+                        Spacer()
+                    }.frame(height: 20)
+                }
+                
             }
-        }
+        }.animation(Animation.easeInOut(duration: 0.2))
+        
     }
     func heading() -> some View{
         return HStack{
@@ -149,10 +160,11 @@ struct RestaurantHomePage: View {
             Spacer()
             VStack(spacing: 0){
                 VStack{
-                    Text("5.5 *").font(Font(CTFont(.system, size: 20))).bold()
+                    Text("5.5 ★").font(Font(CTFont(.system, size: 20))).bold()
                         .padding(.vertical, 4)
                         .padding(.horizontal, 8)
                 }.background(Color("Green"))
+                    .foregroundColor(Color.white)
                     .upperCurve(10, corners: [.topLeft, .topRight])
                 VStack{
                     Text("14.3K").bold()
