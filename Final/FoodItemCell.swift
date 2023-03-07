@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct FoodItemCell: View {
+    @Binding var restaurantModel:[RestaurantModel]
+    @State var idx = -1
     @State var bgImage = "Pizza"
     @State var height = CGFloat(100)
-    @State var loved = false
     @State var loveScale = 1.0
     @State var loveAnimationScale = 1.0
     @State var loveAnimationHidden = true
@@ -35,7 +36,7 @@ struct FoodItemCell: View {
                         
                         HStack{
                             Text("Margherita•")
-                            Text("149")
+                            Text("\(restaurantModel[idx].price!)")
                         }
                         .padding(2)
                         .foregroundColor(.white)
@@ -61,7 +62,7 @@ struct FoodItemCell: View {
                                 .resizable()
                             //.shadow(radius: 6)
                             
-                                .foregroundColor(loved ? Color.pink.opacity(0.9) : Color.black.opacity(0.9))
+                                .foregroundColor(restaurantModel[idx].isLiked! ? Color.pink.opacity(0.9) : Color.black.opacity(0.9))
                                 .frame(width: 20, height: 18)
                                 .overlay(Image(systemName: "suit.heart")
                                     .resizable()
@@ -70,7 +71,7 @@ struct FoodItemCell: View {
                                 .scaleEffect(loveScale)
                                 .animation(.linear(duration: 0.2))
                                 .onTapGesture(){
-                                    if(loved){
+                                    if(restaurantModel[idx].isLiked!){
                                         loveScale = 0.7
                                     }
                                     else{
@@ -84,7 +85,7 @@ struct FoodItemCell: View {
                                         }
                                         
                                     }
-                                    loved.toggle()
+                                    restaurantModel[idx] = RestaurantModel(isVeg: restaurantModel[idx].isVeg, category: restaurantModel[idx].category, price: restaurantModel[idx].price, isLiked: !restaurantModel[idx].isLiked!, id: restaurantModel[idx].id, location: restaurantModel[idx].location, rating: restaurantModel[idx].rating, name:restaurantModel[idx].name)
                                     
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
                                         withAnimation(.linear(duration: 0.1)){
@@ -112,17 +113,17 @@ struct FoodItemCell: View {
                         
                             
                             VStack(alignment: .leading){
-                                Text("Res Name").font(Font(CTFont(.system, size: 24))).bold()
+                                Text(restaurantModel[idx].name!).font(Font(CTFont(.system, size: 24))).bold()
                                     
                                 Text("Pizza • Pasta").font(Font(CTFont(.system, size: 14)))
                                     
                             }
                             Spacer()
                         HStack(spacing: 0){
-                                Text("3.5").font(Font(CTFont(.system, size: 14)))
+                            Text("\(restaurantModel[idx].rating!)").font(Font(CTFont(.system, size: 14)))
                                 .padding(.all, 2)
-                                Text("★").font(Font(CTFont(.system, size: 10)))
-                                .padding(.all, 2)
+                                //Text("★").font(Font(CTFont(.system, size: 10)))
+                                //.padding(.all, 2)
                         }.bold()
                             .padding(.horizontal, 2)
                             .background(Color("Green"))
@@ -141,10 +142,10 @@ struct FoodItemCell: View {
             HStack{
                 Image(systemName: "deskclock.fill").frame(width: 20, height: 20)
                     .foregroundColor(Color("Green"))
-                Text("20-25 min • ")
-                Text("1 km")
+                Text("\(restaurantModel[idx].category! * 5 )-\(restaurantModel[idx].category! * 5 + 5) min • ")
+                Text("\(restaurantModel[idx].category!) km")
                 Spacer()
-                Text("150 for one")
+                Text("\(restaurantModel[idx].price!) for one")
             }.font(Font(CTFont(.system, size: 14)))
                 .padding(.all, 6)
                 .padding(.bottom, 8)
@@ -168,9 +169,11 @@ struct FoodItemCell: View {
         
     }
 }
-
+/*
 struct FoodItemCell_Previews: PreviewProvider {
     static var previews: some View {
         FoodItemCell()
     }
 }
+
+*/

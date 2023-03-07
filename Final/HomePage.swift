@@ -26,6 +26,7 @@ struct HomePage: View {
     @State var distance = 5.0
     @State var paymentMode = PaymentMode.cash
     @State var deliveryTime = 20
+    @State var restaurantModel:[RestaurantModel] = []
     func addDummyData(){
         cartItems = []
         cartItems.append(Food(name: "Margherita", price: 100, quantity: 1))
@@ -40,7 +41,7 @@ struct HomePage: View {
     var body: some View {
         NavigationView{
             TabView(selection: $onPage){
-                DeliveryMenu(cartItems: $cartItems, onPage: $onPage, ONPAGE: $ONPAGE)
+                DeliveryMenu(cartItems: $cartItems, onPage: $onPage, ONPAGE: $ONPAGE, restaurantModel: $restaurantModel)
                     .tabItem{
                         Label("Delivery", systemImage: "eye.fill").background(.green)
                     }.tag(1)
@@ -86,6 +87,9 @@ struct HomePage: View {
         }
     }
 }
+
+
+
 /*
 
 struct HomePage_Previews: PreviewProvider {

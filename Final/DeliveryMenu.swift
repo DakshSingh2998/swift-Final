@@ -41,6 +41,9 @@ struct DeliveryMenu: View {
     @State var filterCategory:[FilterCategory] = []
     @State var tempFilterCategory:[FilterCategory] = []
     @State var filterCategoryCount = 0
+    @State var gotoRestaurantHomePage = false
+    @State var restaurantHomePage = RestaurantHomePage()
+    @Binding var restaurantModel:[RestaurantModel]
     var body: some View {
         ZStack(alignment: .bottom){
             ZStack(alignment: .top){
@@ -123,10 +126,12 @@ struct DeliveryMenu: View {
                     
                     
                     List{
-                        ForEach(cartItems) { item in
+                        ForEach(0..<restaurantModel.count, id: \.self) { idx in
                             VStack(spacing: 0){
                                 //Text(item.name)
-                                FoodItemCell(height: 200.0).frame(height: 200)
+                                FoodItemCell(restaurantModel: $restaurantModel, idx: idx, height: 200.0).frame(height: 200).onTapGesture(perform: {
+                                    gotoRestaurantHomePage = true
+                                })
                             }
                             .padding(12)
                             //.background(Color.black.opacity(0.2))
@@ -336,6 +341,8 @@ struct DeliveryMenu: View {
                 .padding(.bottom, sortPaddingBottom)
                 .isHidden(sortHidden)
                 
+            NavigationLink(destination: restaurantHomePage, isActive: $gotoRestaurantHomePage){
+            }.hidden()
         }
         .gesture(DragGesture(minimumDistance: 10, coordinateSpace: .local)
             .onEnded({ value in
@@ -383,6 +390,13 @@ struct DeliveryMenu: View {
         )
         //.frame(maxWidth: .infinity)
         .onAppear(){
+            NetworkManager.shared.getApi(){
+                data in
+                guard let data = data as? [[String: Any]] else {return}
+                let values = data
+                print(values)
+                self.restaurantModel = values.map{RestaurantModel(data: $0)}
+            }
             cartItems.append(Food(name: "Margherita", price: 100, quantity: 1))
             sortCategoryList = []
             sortCategoryList.append(sortCategory(category: "Rating: High To Low", idx: 0))

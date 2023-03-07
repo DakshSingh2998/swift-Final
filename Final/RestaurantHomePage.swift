@@ -11,17 +11,22 @@ struct ContentData: Identifiable{
     @State var name = ""
     @State var isOpen = true
     @State var idx = 0
+    @State var offset = CGFloat.zero
 }
 struct Dish: Identifiable{
     @State var id = UUID()
     @State var name = ""
     @State var idx = 0
+    @State var childIdx = 0
+    
 }
 struct RestaurantHomePage: View {
     @State var content:[ContentData] = []
     @State var dish:[[Dish]] = []
     @State var location = "Noida sec 68"
     @State var distance = 7
+    @State var offset = CGFloat.zero
+    @State var descArray:[String] = []
     var body: some View {
         getContentView()
         
@@ -38,10 +43,10 @@ struct RestaurantHomePage: View {
             content.append(ContentData( name: "IJKL", idx: 6) )
             for i in 0...6{
                 var temp:[Dish] = []
-                    temp.append(Dish(name: "\(i)A", idx: i))
-                temp.append(Dish(name: "\(i)B", idx: i))
-                temp.append(Dish(name: "\(i)C", idx: i))
-                temp.append(Dish(name: "\(i)D", idx: i))
+                temp.append(Dish(name: "\(i)A", idx: i, childIdx: 0))
+                temp.append(Dish(name: "\(i)B", idx: i, childIdx: 1))
+                temp.append(Dish(name: "\(i)C", idx: i, childIdx: 2))
+                temp.append(Dish(name: "\(i)D", idx: i, childIdx: 3))
                 dish.append(temp)
             }
              
@@ -53,34 +58,78 @@ struct RestaurantHomePage: View {
     private func getContentView() -> some View{
         ZStack{
             //LinearGradient(gradient: Gradient(colors: [Color("Dark"), Color("Light")]), startPoint: .topLeading, endPoint: .bottomTrailing).ignoresSafeArea()
-            List{
-                ForEach(0..<content.count, id: \.self){ idx in
-                    VStack{
-                        if(idx == 0){
+            VStack{
+                HStack{
+                    Text((descArray.count - 1) >= 0 ? descArray[descArray.count - 1] : "Restaurant Name" )
+                    Spacer()
+                }.frame(maxWidth: .infinity)
+                    .background(Color.white)
+                List{
+                    ForEach(0..<content.count, id: \.self){ idx in
+                        VStack{
+                            if(idx == 0){
                                 heading()
-                                .padding(8)
-                                .background(Color.white)
+                                    .font(Font(CTFont(.system, size: 14)))
                                 
-                                .cornerRadius(10)
-                                .padding(10)
-                                
-                                
-                                .font(Font(CTFont(.system, size: 14)))
-                            
-                        }
-                        else{
-                            HStack{
-                                Text(content[idx].name).font(Font(CTFont(.system, size: 16))).bold()
-                                Spacer()
-                                Text(content[idx].isOpen ? "▲" : "▼").onTapGesture(perform: {
-                                    
-                                    content[idx] = ContentData(id: content[idx].id, name: content[idx].name, isOpen: !content[idx].isOpen)
-                                })
                             }
-                            //Group{
+                            else{
+                                HStack{
+                                    Text(content[idx].name).font(Font(CTFont(.system, size: 16))).bold()
+                                    Spacer()
+                                    Text(content[idx].isOpen ? "▲" : "▼").onTapGesture(perform: {
+                                        
+                                        content[idx] = ContentData(id: content[idx].id, name: content[idx].name, isOpen: !content[idx].isOpen, offset: content[idx].offset)
+                                    })
+                                }
+                                .onTapGesture(perform: {
+                                    print(content[idx].offset)
+                                })
+                                .background(GeometryReader{ proxy -> Color in
+                                    DispatchQueue.main.async{
+                                        content[idx] = ContentData(id: content[idx].id, name: content[idx].name, isOpen: content[idx].isOpen, offset: proxy.frame(in: .named("scroll")).origin.y)
+                                        //print(idx, content[idx].offset)
+                                        
+                                        if(content[idx].offset < 110 && content[idx].offset > 0 && idx >= 1){
+                                            if((idx - 1) == descArray.count){
+                                                descArray.append(content[idx].name)
+                                            }
+                                            
+                                        }
+                                        else if(content[idx].offset > 80 && idx >= 1){
+                                            if(descArray.count <= 0){
+                                                
+                                            }
+                                            else if(descArray[descArray.count - 1] == content[idx].name){
+                                                descArray.remove(at: descArray.count - 1)
+                                            }
+                                         
+                                        }
+                                        
+                                    }
+                                    return Color.white
+                                })
+                                
+                                
+                                //Group{
                                 if(content[idx].isOpen){
                                     ForEach(dish[content[idx].idx]){ curDish in
                                         row(cd: curDish)
+                                        if(curDish.childIdx < dish[curDish.idx].count - 1){
+                                            Line().stroke(style: StrokeStyle(lineWidth: 1, dash: [5]))
+                                                .frame( height: 1)
+                                                .foregroundColor(Color("DarkGrey"))
+                                                .padding(.vertical, 8)
+                                                .padding(.bottom, 6)
+                                            
+                                        }
+                                        else{
+                                            VStack{
+                                                
+                                            }.frame(height: 1)
+                                                .frame(maxWidth: .infinity)
+                                                .background(Color.white)
+                                        }
+                                        
                                     }
                                 }else{
                                     VStack{
@@ -90,30 +139,35 @@ struct RestaurantHomePage: View {
                                     
                                 }
                                 
-                            //}
+                                //}
+                            }
+                            
                         }
+                        
+                        .padding(10)
+                        .background(idx == 0 ? Color("LightGrey") : Color.white)
+                        .cornerRadius(6)
+                        .padding(.vertical, 10)
                     }
+                    //.background(.white)
+                    //.background(Color.white)
+                    .listRowBackground(Color.clear)
+                    //.listRowPlatterColor(Color.white)
+                    .listRowSeparator(.hidden)
+                    .listSectionSeparator(.hidden)
                     
-                    .padding(6)
-                    .background(.white)
-                    .cornerRadius(6)
                 }
-                //.background(.white)
-                //.background(Color.white)
-                .listRowBackground(Color.clear)
-                //.listRowPlatterColor(Color.white)
-                .listRowSeparator(.hidden)
-                .listSectionSeparator(.hidden)
                 
+                .coordinateSpace(name: "scroll")
+                
+                .listStyle(.plain)
+                .padding(.horizontal, -20)
             }
-            .listStyle(.plain)
-            .padding(.horizontal, -10)
-            
         }
     }
     private func row(cd curDish:Dish) -> some View{
         return HStack{
-            VStack(alignment: .leading){
+            VStack(alignment: .leading, spacing: 10){
                 Image(systemName: "dot.square").foregroundColor(Color("Green")).bold()
                 Text(curDish.name).font(Font(CTFont(.system, size: 16))).bold()
                 HStack{
@@ -124,25 +178,46 @@ struct RestaurantHomePage: View {
                 }
                 Text("₹130").bold()
                 Text("kjSBfdiuwbrgbwrjgbjwbrkgjwbkjebvgikwbrkgw rgbwkrbgkwb")
+                    .foregroundColor(Color("DarkGrey"))
                     .lineLimit(5)
                     .multilineTextAlignment(.leading)
 
             }.font(Font(CTFont(.system, size: 14)))
             Spacer()
-            ZStack(alignment: .bottom){
-                VStack{
+            ZStack(alignment: .bottomTrailing){
+                VStack(alignment: .trailing){
+                    Spacer()
                     Image("Pizza").resizable()
-                        .frame(width: 120 ,height: 100)
+                        .frame(width: 140 ,height: 140)
                         .scaledToFill()
                     
                         .cornerRadius(10)
+                    
                     HStack{
                         Spacer()
-                    }.frame(height: 20)
-                }
+                    }.frame(height: 10)
+                     
+                }.frame(maxHeight: .infinity)
+                VStack(spacing: -8){
+                    HStack{
+                        Spacer()
+                        Text("+").frame(alignment: .topTrailing).font(Font(CTFont(.system, size: 12))).bold()
+                            .padding(.trailing, 6)
+                    }
+                    
+                    Text("ADD").bold()
+                        .padding(.bottom, 6)
+                    
+                }.frame(width: 100, height: 32)
+                .background(Color("Light"))
+                .foregroundColor(Color("Dark"))
+                .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color("Dark"), lineWidth: 2))
+                .cornerRadius(6)
+                .padding(.trailing, 20)
                 
-            }
-        }.animation(Animation.easeInOut(duration: 0.2))
+            }.frame(maxHeight: .infinity)
+        }
+        //.animation(Animation.easeInOut(duration: 0.2))
         
     }
     func heading() -> some View{
@@ -174,6 +249,9 @@ struct RestaurantHomePage: View {
                 .font(Font(CTFont(.system, size: 10)))
             
         }
+        .padding(10)
+        .background(Color.white)
+        .cornerRadius(10)
     }
     
 }
@@ -214,6 +292,21 @@ struct DishView:View{
     }
 }
 */
+struct ViewOffsetKey: PreferenceKey{
+    typealias Value = CGFloat
+    static var defaultValue = CGFloat.zero
+    static func reduce(value: inout Value, nextValue: () -> Value) {
+        value += nextValue()
+    }
+}
+struct Line: Shape{
+    func path(in rect: CGRect) -> Path{
+        var path = Path()
+        path.move(to: CGPoint(x: 0, y: 0))
+        path.addLine(to: CGPoint(x: rect.width, y: 0))
+        return path
+    }
+}
 struct RestaurantHomePage_Previews: PreviewProvider {
     static var previews: some View {
         RestaurantHomePage()
