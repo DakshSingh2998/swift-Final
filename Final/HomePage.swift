@@ -27,6 +27,7 @@ struct HomePage: View {
     @State var paymentMode = PaymentMode.cash
     @State var deliveryTime = 20
     @State var restaurantModel:[RestaurantModel] = []
+    
     func addDummyData(){
         cartItems = []
         cartItems.append(Food(name: "Margherita", price: 100, quantity: 1))

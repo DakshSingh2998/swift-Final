@@ -27,28 +27,56 @@ struct RestaurantHomePage: View {
     @State var distance = 7
     @State var offset = CGFloat.zero
     @State var descArray:[String] = []
+    @State var dishModel:[DishModel] = []
+    @State var dishModel2d:[[DishModel]] = []
+    @Binding var restuarantDishUrl:String
     var body: some View {
         getContentView()
         
         .background(Color("LightGrey"))
         .onAppear(){
             
-            content.append(ContentData( name: "Restaurant", idx: 0) )
-            content.append(ContentData( name: "Recommended", idx: 0) )
-            content.append(ContentData( name: "Combos", idx: 1) )
-            content.append(ContentData( name: "Pizzas", idx: 2) )
-            content.append(ContentData( name: "Chinese", idx: 3) )
-            content.append(ContentData( name: "ABCD", idx: 4) )
-            content.append(ContentData( name: "EFGH", idx: 5) )
-            content.append(ContentData( name: "IJKL", idx: 6) )
-            for i in 0...6{
-                var temp:[Dish] = []
-                temp.append(Dish(name: "\(i)A", idx: i, childIdx: 0))
-                temp.append(Dish(name: "\(i)B", idx: i, childIdx: 1))
-                temp.append(Dish(name: "\(i)C", idx: i, childIdx: 2))
-                temp.append(Dish(name: "\(i)D", idx: i, childIdx: 3))
-                dish.append(temp)
+            NetworkManager.shared.getApi(url: self.restuarantDishUrl){
+                data in
+                guard let data = data as? [[String: Any]] else {return}
+                var values:[[String: Any]] = []
+                for i in 0..<20{
+                    values.append(data[i])
+                }
+                //print(values)
+                self.dishModel = values.map{DishModel(data: $0)}
+                var k = 0
+                
+                for i in 0...5{
+                    var temp:[DishModel] = []
+                    for j in 0...2{
+                        temp.append(self.dishModel[k])
+                        k = k + 1
+                    }
+                    self.dishModel2d.append(temp)
+                }
+                var temp:[DishModel] = []
+                while(k < dishModel.count){
+                    temp.append(self.dishModel[k])
+                    k = k + 1
+                }
+                self.dishModel2d.append(temp)
+                
+                //print(dishModel)
             }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+                self.content.append(ContentData( name: "Restaurant", idx: 0) )
+                self.content.append(ContentData( name: "Recommended", idx: 0) )
+                self.content.append(ContentData( name: "Combos", idx: 1) )
+                self.content.append(ContentData( name: "Pizzas", idx: 2) )
+                self.content.append(ContentData( name: "Chinese", idx: 3) )
+                self.content.append(ContentData( name: "ABCD", idx: 4) )
+                self.content.append(ContentData( name: "EFGH", idx: 5) )
+                self.content.append(ContentData( name: "IJKL", idx: 6) )
+                //print(self.dishModel2d)
+            })
+            
+            
              
         }
          
@@ -78,7 +106,7 @@ struct RestaurantHomePage: View {
                                     Spacer()
                                     Text(content[idx].isOpen ? "▲" : "▼").onTapGesture(perform: {
                                         
-                                        content[idx] = ContentData(id: content[idx].id, name: content[idx].name, isOpen: !content[idx].isOpen, offset: content[idx].offset)
+                                        content[idx] = ContentData(id: content[idx].id, name: content[idx].name, isOpen: !content[idx].isOpen, idx: content[idx].idx, offset: content[idx].offset)
                                     })
                                 }
                                 .onTapGesture(perform: {
@@ -86,7 +114,7 @@ struct RestaurantHomePage: View {
                                 })
                                 .background(GeometryReader{ proxy -> Color in
                                     DispatchQueue.main.async{
-                                        content[idx] = ContentData(id: content[idx].id, name: content[idx].name, isOpen: content[idx].isOpen, offset: proxy.frame(in: .named("scroll")).origin.y)
+                                        content[idx] = ContentData(id: content[idx].id, name: content[idx].name, isOpen: content[idx].isOpen, idx: content[idx].idx, offset: proxy.frame(in: .named("scroll")).origin.y)
                                         //print(idx, content[idx].offset)
                                         
                                         if(content[idx].offset < 110 && content[idx].offset > 0 && idx >= 1){
@@ -111,16 +139,19 @@ struct RestaurantHomePage: View {
                                 
                                 
                                 //Group{
+                                
                                 if(content[idx].isOpen){
-                                    ForEach(dish[content[idx].idx]){ curDish in
+                                    
+                                    ForEach(dishModel2d[content[idx].idx]){ curDish in
+                                        
                                         row(cd: curDish)
-                                        if(curDish.childIdx < dish[curDish.idx].count - 1){
+                                        
+                                        if(0 < 1){
                                             Line().stroke(style: StrokeStyle(lineWidth: 1, dash: [5]))
                                                 .frame( height: 1)
                                                 .foregroundColor(Color("DarkGrey"))
                                                 .padding(.vertical, 8)
                                                 .padding(.bottom, 6)
-                                            
                                         }
                                         else{
                                             VStack{
@@ -131,6 +162,7 @@ struct RestaurantHomePage: View {
                                         }
                                         
                                     }
+                                    
                                 }else{
                                     VStack{
                                         Spacer()
@@ -165,19 +197,19 @@ struct RestaurantHomePage: View {
             }
         }
     }
-    private func row(cd curDish:Dish) -> some View{
+    private func row(cd curDish:DishModel) -> some View{
         return HStack{
             VStack(alignment: .leading, spacing: 10){
-                Image(systemName: "dot.square").foregroundColor(Color("Green")).bold()
-                Text(curDish.name).font(Font(CTFont(.system, size: 16))).bold()
+                Image(systemName: "dot.square").foregroundColor(curDish.isVeg! ? Color("Green") : Color.red).bold()
+                Text(curDish.name!).font(Font(CTFont(.system, size: 16))).bold()
                 HStack{
-                    Text("4.5 ★").padding(4)
+                    Text(curDish.rating!).padding(4)
                         .background(Color("Green"))
                         .cornerRadius(6)
-                    Text("29 ratings")
+                    Text("\(curDish.votes!) votes")
                 }
-                Text("₹130").bold()
-                Text("kjSBfdiuwbrgbwrjgbjwbrkgjwbkjebvgikwbrkgw rgbwkrbgkwb")
+                Text("₹\(curDish.price!)").bold()
+                Text(curDish.description!)
                     .foregroundColor(Color("DarkGrey"))
                     .lineLimit(5)
                     .multilineTextAlignment(.leading)
@@ -187,7 +219,10 @@ struct RestaurantHomePage: View {
             ZStack(alignment: .bottomTrailing){
                 VStack(alignment: .trailing){
                     Spacer()
-                    Image("Pizza").resizable()
+                    
+                    AsyncImage(url: URL(string: curDish.imageUrl!)!,
+                                  placeholder: { Text("Loading ...") },
+                                  image: { Image(uiImage: $0).resizable() })
                         .frame(width: 140 ,height: 140)
                         .scaledToFill()
                     
@@ -307,8 +342,10 @@ struct Line: Shape{
         return path
     }
 }
-struct RestaurantHomePage_Previews: PreviewProvider {
-    static var previews: some View {
-        RestaurantHomePage()
-    }
-}
+/*
+ struct RestaurantHomePage_Previews: PreviewProvider {
+ static var previews: some View {
+ RestaurantHomePage()
+ }
+ }
+ */

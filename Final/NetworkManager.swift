@@ -10,9 +10,8 @@ import SwiftUI
 struct NetworkManager{
     static var shared = NetworkManager()
     
-    var url = "https://retoolapi.dev/fX72QN/data"
     
-    func getApi(completition: ((Any)->())?){
+    func getApi(url:String, completition: ((Any)->())?){
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Accept")
@@ -28,7 +27,7 @@ struct NetworkManager{
                 print("SERL ERR")
                 return
             }
-            print(jsonData)
+            //print(jsonData)
             completition?(jsonData)
         }.resume()
         

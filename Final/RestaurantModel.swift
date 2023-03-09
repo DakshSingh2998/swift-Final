@@ -16,6 +16,7 @@ struct RestaurantModel: Identifiable{
     var rating:String?
     var name:String?
     
+    
     init(data: [String:Any]){
         if let isVeg = data["D"]{ self.isVeg = isVeg as? Bool
         }
@@ -43,5 +44,6 @@ struct RestaurantModel: Identifiable{
         self.location = location
         self.rating = rating
         self.name = name
+        
     }
 }

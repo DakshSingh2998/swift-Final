@@ -42,8 +42,8 @@ struct DeliveryMenu: View {
     @State var tempFilterCategory:[FilterCategory] = []
     @State var filterCategoryCount = 0
     @State var gotoRestaurantHomePage = false
-    @State var restaurantHomePage = RestaurantHomePage()
     @Binding var restaurantModel:[RestaurantModel]
+    @State var restaurantDishUrl = ""
     var body: some View {
         ZStack(alignment: .bottom){
             ZStack(alignment: .top){
@@ -130,6 +130,7 @@ struct DeliveryMenu: View {
                             VStack(spacing: 0){
                                 //Text(item.name)
                                 FoodItemCell(restaurantModel: $restaurantModel, idx: idx, height: 200.0).frame(height: 200).onTapGesture(perform: {
+                                    restaurantDishUrl = "https://retoolapi.dev/5DddMe/data"
                                     gotoRestaurantHomePage = true
                                 })
                             }
@@ -341,7 +342,7 @@ struct DeliveryMenu: View {
                 .padding(.bottom, sortPaddingBottom)
                 .isHidden(sortHidden)
                 
-            NavigationLink(destination: restaurantHomePage, isActive: $gotoRestaurantHomePage){
+            NavigationLink(destination: RestaurantHomePage(restuarantDishUrl: $restaurantDishUrl), isActive: $gotoRestaurantHomePage){
             }.hidden()
         }
         .gesture(DragGesture(minimumDistance: 10, coordinateSpace: .local)
@@ -390,11 +391,11 @@ struct DeliveryMenu: View {
         )
         //.frame(maxWidth: .infinity)
         .onAppear(){
-            NetworkManager.shared.getApi(){
+            NetworkManager.shared.getApi(url: "https://retoolapi.dev/fX72QN/data"){
                 data in
                 guard let data = data as? [[String: Any]] else {return}
                 let values = data
-                print(values)
+                //print(values)
                 self.restaurantModel = values.map{RestaurantModel(data: $0)}
             }
             cartItems.append(Food(name: "Margherita", price: 100, quantity: 1))
