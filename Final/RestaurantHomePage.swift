@@ -50,6 +50,7 @@ struct RestaurantHomePage: View {
                 for i in 0...5{
                     var temp:[DishModel] = []
                     for j in 0...2{
+                        self.dishModel[k].imageUrl = "https://cityspideynews.s3.amazonaws.com/uploads/spidey/202202/cover---2022-02-23t172733893-1645617459.webp"
                         temp.append(self.dishModel[k])
                         k = k + 1
                     }
@@ -57,6 +58,7 @@ struct RestaurantHomePage: View {
                 }
                 var temp:[DishModel] = []
                 while(k < dishModel.count){
+                    "https://cityspideynews.s3.amazonaws.com/uploads/spidey/202202/cover---2022-02-23t172733893-1645617459.webp"
                     temp.append(self.dishModel[k])
                     k = k + 1
                 }
@@ -141,12 +143,12 @@ struct RestaurantHomePage: View {
                                 //Group{
                                 
                                 if(content[idx].isOpen){
-                                    
-                                    ForEach(dishModel2d[content[idx].idx]){ curDish in
+                                    //var count = dishModel2d[content[idx].idx].count
+                                    ForEach(Array(dishModel2d[content[idx].idx].enumerated()), id: \.offset){ (index, curDish) in
                                         
                                         row(cd: curDish)
                                         
-                                        if(0 < 1){
+                                        if(index < 2){
                                             Line().stroke(style: StrokeStyle(lineWidth: 1, dash: [5]))
                                                 .frame( height: 1)
                                                 .foregroundColor(Color("DarkGrey"))
@@ -219,15 +221,14 @@ struct RestaurantHomePage: View {
             ZStack(alignment: .bottomTrailing){
                 VStack(alignment: .trailing){
                     Spacer()
-                    
-                    AsyncImage(url: URL(string: curDish.imageUrl!)!,
-                                  placeholder: { Text("Loading ...") },
-                                  image: { Image(uiImage: $0).resizable() })
+                    AsyncImage(url: URL(string: curDish.imageUrl!)) { image in
+                        image.resizable()
+                    } placeholder: {
+                        Text("Loading")
+                    }
                         .frame(width: 140 ,height: 140)
                         .scaledToFill()
-                    
                         .cornerRadius(10)
-                    
                     HStack{
                         Spacer()
                     }.frame(height: 10)

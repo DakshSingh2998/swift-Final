@@ -43,7 +43,9 @@ struct DeliveryMenu: View {
     @State var filterCategoryCount = 0
     @State var gotoRestaurantHomePage = false
     @Binding var restaurantModel:[RestaurantModel]
+    @State var originalRestauratnModel:[RestaurantModel] = []
     @State var restaurantDishUrl = ""
+    @State var showRestaurantModel:[RestaurantModel] = []
     var body: some View {
         ZStack(alignment: .bottom){
             ZStack(alignment: .top){
@@ -129,10 +131,12 @@ struct DeliveryMenu: View {
                         ForEach(0..<restaurantModel.count, id: \.self) { idx in
                             VStack(spacing: 0){
                                 //Text(item.name)
-                                FoodItemCell(restaurantModel: $restaurantModel, idx: idx, height: 200.0).frame(height: 200).onTapGesture(perform: {
+                                
+                                FoodItemCell(restaurantModel: $restaurantModel, showRestaurantModel: $restaurantModel[idx], idx: idx, height: 200.0).frame(height: 200).onTapGesture(perform: {
                                     restaurantDishUrl = "https://retoolapi.dev/5DddMe/data"
                                     gotoRestaurantHomePage = true
                                 })
+                                 
                             }
                             .padding(12)
                             //.background(Color.black.opacity(0.2))
@@ -318,6 +322,7 @@ struct DeliveryMenu: View {
                         CustomPrimaryButton(title: "Apply", height: 32, colorr: Color("Dark"), textColor: Color.white, closure: {
                             if(filterHidden == true){
                                 sortSelected = tempSortSelected
+                                
                             }
                             else{
                                 vegOnly = tempVegOnly
@@ -325,6 +330,8 @@ struct DeliveryMenu: View {
                                 filterMax.value = tempFilterMax.value
                                 filterCategory = tempFilterCategory
                             }
+                            applyFilter()
+                            applySort()
                             
                             sortHide()
                         })
@@ -391,13 +398,7 @@ struct DeliveryMenu: View {
         )
         //.frame(maxWidth: .infinity)
         .onAppear(){
-            NetworkManager.shared.getApi(url: "https://retoolapi.dev/fX72QN/data"){
-                data in
-                guard let data = data as? [[String: Any]] else {return}
-                let values = data
-                //print(values)
-                self.restaurantModel = values.map{RestaurantModel(data: $0)}
-            }
+            loadApi()
             cartItems.append(Food(name: "Margherita", price: 100, quantity: 1))
             sortCategoryList = []
             sortCategoryList.append(sortCategory(category: "Rating: High To Low", idx: 0))
@@ -426,6 +427,59 @@ struct DeliveryMenu: View {
             sortHidden = true
         }
         
+    }
+    
+    func loadApi(){
+        NetworkManager.shared.getApi(url: "https://retoolapi.dev/fX72QN/data"){
+            data in
+            guard let data = data as? [[String: Any]] else {return}
+            let values = data
+            //print(values)
+            self.restaurantModel = values.map{RestaurantModel(data: $0)}
+            self.originalRestauratnModel = self.restaurantModel
+            //self.showRestaurantModel = restaurantModel
+        }
+    }
+    func applySort(){
+        
+        if(sortSelected == 0){
+            //print(restaurantModel[0].rating!.count)
+            restaurantModel = restaurantModel.sorted{
+                $0.rating! > $1.rating!
+            }
+        }
+        else if(sortSelected == 1 || sortSelected == 2){
+            restaurantModel = restaurantModel.sorted{
+                $0.category! < $1.category!
+            }
+        }
+        else if(sortSelected == 3){
+            restaurantModel = restaurantModel.sorted{
+                $0.price! < $1.price!
+            }
+        }
+        else if(sortSelected == 4){
+            restaurantModel = restaurantModel.sorted{
+                $0.price! > $1.price!
+            }
+        }
+        else if(sortSelected == -1){
+            restaurantModel = restaurantModel
+        }
+        print(restaurantModel.count)
+        //showRestaurantModel = restaurantModel
+    }
+    func applyFilter(){
+        self.showRestaurantModel = originalRestauratnModel.filter{
+            ($0.price!) >= Int(filterMin.value == "" ? "0" : filterMin.value)! && $0.price! <= Int(filterMax.value == "" ? "99999" : filterMax.value)!
+        }
+        if(vegOnly == true){
+            self.showRestaurantModel = self.showRestaurantModel.filter{
+                $0.isVeg == true
+            }
+        }
+        
+        self.restaurantModel = showRestaurantModel
     }
     func sortHide(){
         tempSortSelected = sortSelected

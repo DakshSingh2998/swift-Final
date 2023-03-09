@@ -1,14 +1,10 @@
-//
-//  FoodItemCell.swift
-//  Final
-//
-//  Created by Daksh on 01/03/23.
-//
 
 import SwiftUI
 
 struct FoodItemCell: View {
     @Binding var restaurantModel:[RestaurantModel]
+    @Binding var showRestaurantModel:RestaurantModel
+    //= RestaurantModel(isVeg: true, category: 0, price: 0, isLiked: true, id: 0, location: "", rating: "", name: "")
     @State var idx = -1
     @State var bgImage = "Pizza"
     @State var height = CGFloat(100)
@@ -36,7 +32,7 @@ struct FoodItemCell: View {
                         
                         HStack{
                             Text("Margherita•")
-                            Text("\(restaurantModel[idx].price!)")
+                            Text("\(showRestaurantModel.price!)")
                         }
                         .padding(2)
                         .foregroundColor(.white)
@@ -62,7 +58,7 @@ struct FoodItemCell: View {
                                 .resizable()
                             //.shadow(radius: 6)
                             
-                                .foregroundColor(restaurantModel[idx].isLiked! ? Color.pink.opacity(0.9) : Color.black.opacity(0.9))
+                                .foregroundColor(showRestaurantModel.isLiked! ? Color.pink.opacity(0.9) : Color.black.opacity(0.9))
                                 .frame(width: 20, height: 18)
                                 .overlay(Image(systemName: "suit.heart")
                                     .resizable()
@@ -71,7 +67,7 @@ struct FoodItemCell: View {
                                 .scaleEffect(loveScale)
                                 .animation(.linear(duration: 0.2))
                                 .onTapGesture(){
-                                    if(restaurantModel[idx].isLiked!){
+                                    if(showRestaurantModel.isLiked!){
                                         loveScale = 0.7
                                     }
                                     else{
@@ -98,8 +94,6 @@ struct FoodItemCell: View {
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
                                             
                                         }
-                                        
-                                        
                                     }
                                 }
                         }
@@ -113,14 +107,14 @@ struct FoodItemCell: View {
                         
                             
                             VStack(alignment: .leading){
-                                Text(restaurantModel[idx].name!).font(Font(CTFont(.system, size: 24))).bold()
+                                Text(showRestaurantModel.name!).font(Font(CTFont(.system, size: 24))).bold()
                                     
                                 Text("Pizza • Pasta").font(Font(CTFont(.system, size: 14)))
                                     
                             }
                             Spacer()
                         HStack(spacing: 0){
-                            Text("\(restaurantModel[idx].rating!)").font(Font(CTFont(.system, size: 14)))
+                            Text("\(showRestaurantModel.rating!)").font(Font(CTFont(.system, size: 14)))
                                 .padding(.all, 2)
                                 //Text("★").font(Font(CTFont(.system, size: 10)))
                                 //.padding(.all, 2)
@@ -142,10 +136,10 @@ struct FoodItemCell: View {
             HStack{
                 Image(systemName: "deskclock.fill").frame(width: 20, height: 20)
                     .foregroundColor(Color("Green"))
-                Text("\(restaurantModel[idx].category! * 5 )-\(restaurantModel[idx].category! * 5 + 5) min • ")
-                Text("\(restaurantModel[idx].category!) km")
+                Text("\(showRestaurantModel.category! * 5 )-\(showRestaurantModel.category! * 5 + 5) min • ")
+                Text("\(showRestaurantModel.category!) km")
                 Spacer()
-                Text("\(restaurantModel[idx].price!) for one")
+                Text("\(showRestaurantModel.price!) for one")
             }.font(Font(CTFont(.system, size: 14)))
                 .padding(.all, 6)
                 .padding(.bottom, 8)
@@ -175,5 +169,4 @@ struct FoodItemCell_Previews: PreviewProvider {
         FoodItemCell()
     }
 }
-
 */
