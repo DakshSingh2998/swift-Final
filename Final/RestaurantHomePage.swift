@@ -30,6 +30,7 @@ struct RestaurantHomePage: View {
     @State var dishModel:[DishModel] = []
     @State var dishModel2d:[[DishModel]] = []
     @Binding var restuarantDishUrl:String
+    //@Binding var restaurantModel:RestaurantModel
     var body: some View {
         getContentView()
         
@@ -117,6 +118,7 @@ struct RestaurantHomePage: View {
                                 .background(GeometryReader{ proxy -> Color in
                                     DispatchQueue.main.async{
                                         content[idx] = ContentData(id: content[idx].id, name: content[idx].name, isOpen: content[idx].isOpen, idx: content[idx].idx, offset: proxy.frame(in: .named("scroll")).origin.y)
+                                        
                                         //print(idx, content[idx].offset)
                                         
                                         if(content[idx].offset < 110 && content[idx].offset > 0 && idx >= 1){
