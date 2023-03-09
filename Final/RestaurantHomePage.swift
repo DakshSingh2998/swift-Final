@@ -23,14 +23,13 @@ struct Dish: Identifiable{
 struct RestaurantHomePage: View {
     @State var content:[ContentData] = []
     @State var dish:[[Dish]] = []
-    @State var location = "Noida sec 68"
     @State var distance = 7
     @State var offset = CGFloat.zero
     @State var descArray:[String] = []
     @State var dishModel:[DishModel] = []
     @State var dishModel2d:[[DishModel]] = []
     @Binding var restuarantDishUrl:String
-    //@Binding var restaurantModel:RestaurantModel
+    @State var restaurantModel:RestaurantModel 
     var body: some View {
         getContentView()
         
@@ -91,7 +90,7 @@ struct RestaurantHomePage: View {
             //LinearGradient(gradient: Gradient(colors: [Color("Dark"), Color("Light")]), startPoint: .topLeading, endPoint: .bottomTrailing).ignoresSafeArea()
             VStack{
                 HStack{
-                    Text((descArray.count - 1) >= 0 ? descArray[descArray.count - 1] : "Restaurant Name" )
+                    Text((descArray.count - 1) >= 0 ? descArray[descArray.count - 1] : restaurantModel.name! )
                     Spacer()
                 }.frame(maxWidth: .infinity)
                     .background(Color.white)
@@ -224,12 +223,12 @@ struct RestaurantHomePage: View {
                 VStack(alignment: .trailing){
                     Spacer()
                     AsyncImage(url: URL(string: curDish.imageUrl!)) { image in
-                        image.resizable()
+                        image.resizable().frame(width: 140 ,height: 140)
+                            .scaledToFill()
                     } placeholder: {
                         Text("Loading")
                     }
-                        .frame(width: 140 ,height: 140)
-                        .scaledToFill()
+                    .frame(width: 140 ,height: 140)
                         .cornerRadius(10)
                     HStack{
                         Spacer()
@@ -261,26 +260,26 @@ struct RestaurantHomePage: View {
     func heading() -> some View{
         return HStack{
             VStack(alignment: .leading, spacing: 6){
-                Text("Restaurant Name").font(Font(CTFont(.system, size: 20))).bold()
+                Text(restaurantModel.name!).font(Font(CTFont(.system, size: 20))).bold()
                 Text("North India, Chinese")
-                Text(location).foregroundColor(Color("Grey"))
+                Text(restaurantModel.location!).foregroundColor(Color("Grey"))
                 HStack{
                     Image(systemName: "deskclock.fill")
-                    Text("\(distance * 5) mins | \(distance) km away")
+                    Text("\(restaurantModel.category! * 5) mins | \(restaurantModel.category!) km away")
                 }
                 
             }
             Spacer()
             VStack(spacing: 0){
                 VStack{
-                    Text("5.5 ★").font(Font(CTFont(.system, size: 20))).bold()
+                    Text("\(restaurantModel.rating!.count) ★").font(Font(CTFont(.system, size: 20))).bold()
                         .padding(.vertical, 4)
                         .padding(.horizontal, 8)
                 }.background(Color("Green"))
                     .foregroundColor(Color.white)
                     .upperCurve(10, corners: [.topLeft, .topRight])
                 VStack{
-                    Text("14.3K").bold()
+                    Text("\(restaurantModel.price!)K").bold()
                     Text("Reviews")
                 }
             }.overlay(RoundedRectangle(cornerRadius: 10).stroke(Color("Grey"), lineWidth:1))

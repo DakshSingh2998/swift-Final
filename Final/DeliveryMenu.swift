@@ -46,6 +46,8 @@ struct DeliveryMenu: View {
     @State var originalRestauratnModel:[RestaurantModel] = []
     @State var restaurantDishUrl = ""
     @State var showRestaurantModel:[RestaurantModel] = []
+    @State var onTapped = RestaurantModel(isVeg: true, category: 0, price: 0, isLiked: true, id: 0, location: "", rating: "", name: "")
+
     var body: some View {
         ScrollViewReader{scrollProxy in
             ZStack(alignment: .bottom){
@@ -143,6 +145,7 @@ struct DeliveryMenu: View {
                                         .id(idx)
                                         .onTapGesture(perform: {
                                             restaurantDishUrl = "https://retoolapi.dev/5DddMe/data"
+                                            onTapped = restaurantModel[idx]
                                             gotoRestaurantHomePage = true
                                         })
                                     
@@ -359,7 +362,7 @@ struct DeliveryMenu: View {
                     .padding(.bottom, sortPaddingBottom)
                     .isHidden(sortHidden)
                 
-                NavigationLink(destination: RestaurantHomePage(restuarantDishUrl: $restaurantDishUrl), isActive: $gotoRestaurantHomePage){
+                NavigationLink(destination: RestaurantHomePage(restuarantDishUrl: $restaurantDishUrl, restaurantModel: onTapped), isActive: $gotoRestaurantHomePage){
                 }.hidden()
                 
                     .gesture(DragGesture(minimumDistance: 10, coordinateSpace: .local)
