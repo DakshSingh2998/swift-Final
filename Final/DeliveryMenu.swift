@@ -144,7 +144,7 @@ struct DeliveryMenu: View {
                                     FoodItemCell(restaurantModel: $restaurantModel, showRestaurantModel: $restaurantModel[idx], idx: idx, height: 200.0).frame(height: 200)
                                         .id(idx)
                                         .onTapGesture(perform: {
-                                            restaurantDishUrl = "https://retoolapi.dev/K9ecdS/akadbakadbambeboaasinabepureso"
+                                            restaurantDishUrl = "https://retoolapi.dev/kzWdFZ/jaimatadi"
                                             onTapped = restaurantModel[idx]
                                             gotoRestaurantHomePage = true
                                         })

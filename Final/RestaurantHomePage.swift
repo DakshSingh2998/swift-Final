@@ -46,6 +46,30 @@ struct RestaurantHomePage: View {
                 }
                 //print(values)
                 self.dishModel = values.map{DishModel(data: $0)}
+                //DispatchQueue.n.async {
+                for curDish in self.dishModel {
+                    let url = URL(string: curDish.imageUrl!)!
+                        // Fetch Image Data
+                    let dataTask = URLSession.shared.dataTask(with: url) { [self] (data, response, err) in
+                        if data != nil {
+                            do{
+                                let tempImage = try? UIImage(data: data!)
+                                let image = try? Image(uiImage: tempImage!)
+                                try? self.imageForDish[curDish] = image
+                                
+                            }
+                            catch{
+                                print("\(err) \(curDish)")
+                            }
+                            //print(self.imageForDish.count)
+                        }
+                    }
+                    dataTask.resume()
+                }
+                //}
+                
+                
+                        
                 var k = 0
                 
                 for i in 0...5{
@@ -64,10 +88,7 @@ struct RestaurantHomePage: View {
                     k = k + 1
                 }
                 self.dishModel2d.append(temp)
-                
-                //print(dishModel)
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+                /////////////////////////////////// load category
                 self.content.append(ContentData( name: "Restaurant", idx: 0) )
                 self.content.append(ContentData( name: "Recommended", idx: 0) )
                 self.content.append(ContentData( name: "Combos", idx: 1) )
@@ -76,8 +97,11 @@ struct RestaurantHomePage: View {
                 self.content.append(ContentData( name: "ABCD", idx: 4) )
                 self.content.append(ContentData( name: "EFGH", idx: 5) )
                 self.content.append(ContentData( name: "IJKL", idx: 6) )
+                //print(dishModel)
+            }
+                
                 //print(self.dishModel2d)
-            })
+            
             
             
              
@@ -115,19 +139,25 @@ struct RestaurantHomePage: View {
                                 .onTapGesture(perform: {
                                     print(content[idx].offset)
                                 })
+                                
                                 .background(GeometryReader{ proxy -> Color in
-                                    DispatchQueue.main.async{
+                                    
+                                    DispatchQueue.main.async {
+                                        /*
                                         content[idx] = ContentData(id: content[idx].id, name: content[idx].name, isOpen: content[idx].isOpen, idx: content[idx].idx, offset: proxy.frame(in: .named("scroll")).origin.y)
+                                         */
                                         
-                                        //print(idx, content[idx].offset)
+                                        print(idx, content[idx].offset)
                                         
-                                        if(content[idx].offset < 110 && content[idx].offset > 0 && idx >= 1){
+                                        if(content[idx].offset < 110
+                                           && content[idx].offset > 0
+                                           && idx >= 1){
                                             if((idx - 1) == descArray.count){
                                                 descArray.append(content[idx].name)
                                             }
                                             
                                         }
-                                        else if(content[idx].offset > 80 && idx >= 1){
+                                        else if(content[idx].offset > 110 && idx >= 1){
                                             if(descArray.count <= 0){
                                                 
                                             }
@@ -194,8 +224,8 @@ struct RestaurantHomePage: View {
                     
                 }
                 
-                .coordinateSpace(name: "scroll")
                 
+                .coordinateSpace(name: "scroll")
                 .listStyle(.plain)
                 .padding(.horizontal, -20)
             }
@@ -226,7 +256,7 @@ struct RestaurantHomePage: View {
                         .onAppear(){
                         }
                     if(imageForDish[curDish] == nil){
-                       
+                       /*
                         AsyncImage(
                             url: URL(string: curDish.imageUrl!),
                                     transaction: Transaction(animation: .easeInOut)
@@ -260,6 +290,9 @@ struct RestaurantHomePage: View {
                                 }
                                 .frame(width: 140, height: 140)
                                 .cornerRadius(10)
+                        */
+                        Image(systemName: "circle.dashed").frame(width: 140 ,height: 140)
+                            .scaledToFill().cornerRadius(10)
                     }
                     else{
                         imageForDish[curDish]!.resizable().transition(.scale(scale: 0.1, anchor: .center))
