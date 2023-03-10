@@ -6,7 +6,7 @@
 //
 
 import Foundation
-struct DishModel: Identifiable{
+struct DishModel: Hashable{
     var name:String?
     var price:Int?
     var imageUrl:String?
@@ -33,7 +33,7 @@ struct DishModel: Identifiable{
         }
         if let votes = data["col3"]{ self.votes = Int("\(votes)") ?? 0
         }
-        if let isVeg = data["isUser"]{ self.isVeg = isVeg as? Bool
+        if let isVeg = data["isUser"]{ self.isVeg = isVeg as! String == "true" ? true : false
         }
         
        

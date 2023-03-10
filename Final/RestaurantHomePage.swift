@@ -29,7 +29,8 @@ struct RestaurantHomePage: View {
     @State var dishModel:[DishModel] = []
     @State var dishModel2d:[[DishModel]] = []
     @Binding var restuarantDishUrl:String
-    @State var restaurantModel:RestaurantModel 
+    @State var restaurantModel:RestaurantModel
+    @State var imageForDish:[DishModel:Image] = [:]
     var body: some View {
         getContentView()
         
@@ -50,7 +51,7 @@ struct RestaurantHomePage: View {
                 for i in 0...5{
                     var temp:[DishModel] = []
                     for j in 0...2{
-                        self.dishModel[k].imageUrl = "https://cityspideynews.s3.amazonaws.com/uploads/spidey/202202/cover---2022-02-23t172733893-1645617459.webp"
+                        //self.dishModel[k].imageUrl = "https://cityspideynews.s3.amazonaws.com/uploads/spidey/202202/cover---2022-02-23t172733893-1645617459.webp"
                         temp.append(self.dishModel[k])
                         k = k + 1
                     }
@@ -58,7 +59,7 @@ struct RestaurantHomePage: View {
                 }
                 var temp:[DishModel] = []
                 while(k < dishModel.count){
-                    "https://cityspideynews.s3.amazonaws.com/uploads/spidey/202202/cover---2022-02-23t172733893-1645617459.webp"
+                    
                     temp.append(self.dishModel[k])
                     k = k + 1
                 }
@@ -222,14 +223,51 @@ struct RestaurantHomePage: View {
             ZStack(alignment: .bottomTrailing){
                 VStack(alignment: .trailing){
                     Spacer()
-                    AsyncImage(url: URL(string: curDish.imageUrl!)) { image in
-                        image.resizable().frame(width: 140 ,height: 140)
-                            .scaledToFill()
-                    } placeholder: {
-                        Text("Loading")
+                        .onAppear(){
+                        }
+                    if(imageForDish[curDish] == nil){
+                       
+                        AsyncImage(
+                            url: URL(string: curDish.imageUrl!),
+                                    transaction: Transaction(animation: .easeInOut)
+                                ) { phase in
+                                    switch phase {
+                                    case .empty:
+                                        Image(systemName: "circle.dashed")
+                                    case .success(let image):
+                                        image
+                                            .resizable()
+                                            .transition(.scale(scale: 0.1, anchor: .center))
+                                            .onAppear(){
+                                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
+                                                    imageForDish[curDish] = image
+
+                                                })
+                                                       
+                                            }
+                                    case .failure:
+                                        Image(systemName: "circle.dashed")
+
+                                            .onAppear(){
+                                                imageForDish[curDish] = Image(systemName: "circle.dashed")
+                                                imageForDish[curDish] = nil
+                                                
+                                                
+                                            }
+                                    @unknown default:
+                                        EmptyView()
+                                    }
+                                }
+                                .frame(width: 140, height: 140)
+                                .cornerRadius(10)
                     }
-                    .frame(width: 140 ,height: 140)
-                        .cornerRadius(10)
+                    else{
+                        imageForDish[curDish]!.resizable().transition(.scale(scale: 0.1, anchor: .center))
+                            //.transaction(Transaction(animation: .easeInOut))
+                            .frame(width: 140 ,height: 140)
+                            .scaledToFill().cornerRadius(10)
+                    }
+                    
                     HStack{
                         Spacer()
                     }.frame(height: 10)
@@ -351,3 +389,32 @@ struct Line: Shape{
  }
  }
  */
+extension View {
+// This function changes our View to UIView, then calls another function
+// to convert the newly-made UIView to a UIImage.
+    public func asUIImage() -> UIImage {
+        let controller = UIHostingController(rootView: self)
+        
+        controller.view.frame = CGRect(x: 0, y: CGFloat(Int.max), width: 1, height: 1)
+        UIApplication.shared.windows.first!.rootViewController?.view.addSubview(controller.view)
+        
+        let size = controller.sizeThatFits(in: UIScreen.main.bounds.size)
+        controller.view.bounds = CGRect(origin: .zero, size: size)
+        controller.view.sizeToFit()
+        
+// here is the call to the function that converts UIView to UIImage: `.asUIImage()`
+        let image = controller.view.asUIImage()
+        controller.view.removeFromSuperview()
+        return image
+    }
+}
+
+extension UIView {
+// This is the function to convert UIView to UIImage
+    public func asUIImage() -> UIImage {
+        let renderer = UIGraphicsImageRenderer(bounds: bounds)
+        return renderer.image { rendererContext in
+            layer.render(in: rendererContext.cgContext)
+        }
+    }
+}
