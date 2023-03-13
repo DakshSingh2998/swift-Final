@@ -31,6 +31,8 @@ struct RestaurantHomePage: View {
     @Binding var restuarantDishUrl:String
     @State var restaurantModel:RestaurantModel
     @State var imageForDish:[DishModel:Image] = [:]
+    @State var offsets:[Double] = []
+    @State var filterCategory:[FilterCategory]
     var body: some View {
         getContentView()
         
@@ -89,7 +91,7 @@ struct RestaurantHomePage: View {
                 }
                 self.dishModel2d.append(temp)
                 /////////////////////////////////// load category
-                self.content.append(ContentData( name: "Restaurant", idx: 0) )
+                self.content.append(ContentData( name: restaurantModel.name!, idx: 0) )
                 self.content.append(ContentData( name: "Recommended", idx: 0) )
                 self.content.append(ContentData( name: "Combos", idx: 1) )
                 self.content.append(ContentData( name: "Pizzas", idx: 2) )
@@ -97,6 +99,15 @@ struct RestaurantHomePage: View {
                 self.content.append(ContentData( name: "ABCD", idx: 4) )
                 self.content.append(ContentData( name: "EFGH", idx: 5) )
                 self.content.append(ContentData( name: "IJKL", idx: 6) )
+                self.offsets.append(0)
+                self.offsets.append(0)
+                self.offsets.append(0)
+                self.offsets.append(0)
+                self.offsets.append(0)
+                self.offsets.append(0)
+                self.offsets.append(0)
+                self.offsets.append(0)
+
                 //print(dishModel)
             }
                 
@@ -114,11 +125,13 @@ struct RestaurantHomePage: View {
         ZStack{
             //LinearGradient(gradient: Gradient(colors: [Color("Dark"), Color("Light")]), startPoint: .topLeading, endPoint: .bottomTrailing).ignoresSafeArea()
             VStack{
+                /*
                 HStack{
                     Text((descArray.count - 1) >= 0 ? descArray[descArray.count - 1] : restaurantModel.name! )
                     Spacer()
                 }.frame(maxWidth: .infinity)
                     .background(Color.white)
+                 */
                 List{
                     ForEach(0..<content.count, id: \.self){ idx in
                         VStack{
@@ -139,25 +152,40 @@ struct RestaurantHomePage: View {
                                 .onTapGesture(perform: {
                                     print(content[idx].offset)
                                 })
-                                
+                                /*
                                 .background(GeometryReader{ proxy -> Color in
                                     
                                     DispatchQueue.main.async {
                                         /*
                                         content[idx] = ContentData(id: content[idx].id, name: content[idx].name, isOpen: content[idx].isOpen, idx: content[idx].idx, offset: proxy.frame(in: .named("scroll")).origin.y)
                                          */
-                                        
-                                        print(idx, content[idx].offset)
-                                        
-                                        if(content[idx].offset < 110
-                                           && content[idx].offset > 0
+                                        self.offsets[idx] = proxy.frame(in: .named("scroll")).origin.y
+                                        print(idx, self.offsets)
+                                        var flag = 0
+                                        for i in 0..<self.offsets.count{
+                                            print(i)
+                                            if(self.offsets[i] > 100.0 && self.offsets[i] < 150){
+                                                self.descArray = []
+                                                self.descArray.append(content[i - 1].name)
+                                                flag = 1
+                                                break
+                                            }
+                                        }
+                                        if(flag == 0){
+                                            self.descArray = []
+                                            self.descArray.append(content[content.count - 1].name)
+                                        }
+                                        print(descArray)
+                                        /*
+                                        if(offset < 110
+                                           && offset > 0
                                            && idx >= 1){
                                             if((idx - 1) == descArray.count){
                                                 descArray.append(content[idx].name)
                                             }
                                             
                                         }
-                                        else if(content[idx].offset > 110 && idx >= 1){
+                                        else if(offset > 110 && idx >= 1){
                                             if(descArray.count <= 0){
                                                 
                                             }
@@ -166,12 +194,13 @@ struct RestaurantHomePage: View {
                                             }
                                          
                                         }
+                                         */
                                         
                                     }
                                     return Color.white
                                 })
                                 
-                                
+                                */
                                 //Group{
                                 
                                 if(content[idx].isOpen){
@@ -332,11 +361,11 @@ struct RestaurantHomePage: View {
         return HStack{
             VStack(alignment: .leading, spacing: 6){
                 Text(restaurantModel.name!).font(Font(CTFont(.system, size: 20))).bold()
-                Text("North India, Chinese")
+                Text(filterCategory[Int(restaurantModel.category!)! - 1].category)
                 Text(restaurantModel.location!).foregroundColor(Color("Grey"))
                 HStack{
                     Image(systemName: "deskclock.fill")
-                    Text("\(restaurantModel.category! * 5) mins | \(restaurantModel.category!) km away")
+                    Text("\(restaurantModel.distance! * 5) mins | \(restaurantModel.distance!) km away")
                 }
                 
             }

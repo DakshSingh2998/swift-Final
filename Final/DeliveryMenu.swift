@@ -46,7 +46,8 @@ struct DeliveryMenu: View {
     @State var originalRestauratnModel:[RestaurantModel] = []
     @State var restaurantDishUrl = ""
     @State var showRestaurantModel:[RestaurantModel] = []
-    @State var onTapped = RestaurantModel(isVeg: true, category: 0, price: 0, isLiked: true, id: 0, location: "", rating: "", name: "")
+    @State var onTapped = RestaurantModel(isVeg: false, distance: 0, price: 0, isLiked: false, id: 0, category: "", rating: "", name: "", location: "")
+    @State var didLoad = true
 
     var body: some View {
         ScrollViewReader{scrollProxy in
@@ -141,7 +142,7 @@ struct DeliveryMenu: View {
                                 VStack(spacing: 0){
                                     //Text(item.name)
                                     
-                                    FoodItemCell(restaurantModel: $restaurantModel, showRestaurantModel: $restaurantModel[idx], idx: idx, height: 200.0).frame(height: 200)
+                                    FoodItemCell(restaurantModel: $restaurantModel, showRestaurantModel: $restaurantModel[idx], idx: idx, height: 200.0, filterCategory: filterCategory).frame(height: 200)
                                         .id(idx)
                                         .onTapGesture(perform: {
                                             restaurantDishUrl = "https://retoolapi.dev/kzWdFZ/jaimatadi"
@@ -149,7 +150,7 @@ struct DeliveryMenu: View {
                                             gotoRestaurantHomePage = true
                                         })
                                     
-                                }
+                                                                    }
                                 .padding(12)
                                 //.background(Color.black.opacity(0.2))
                                 .shadow(radius: 6)
@@ -362,7 +363,7 @@ struct DeliveryMenu: View {
                     .padding(.bottom, sortPaddingBottom)
                     .isHidden(sortHidden)
                 
-                NavigationLink(destination: RestaurantHomePage(restuarantDishUrl: $restaurantDishUrl, restaurantModel: onTapped), isActive: $gotoRestaurantHomePage){
+                NavigationLink(destination: RestaurantHomePage(restuarantDishUrl: $restaurantDishUrl, restaurantModel: onTapped, filterCategory: filterCategory), isActive: $gotoRestaurantHomePage){
                 }.hidden()
                 
                     .gesture(DragGesture(minimumDistance: 10, coordinateSpace: .local)
@@ -411,29 +412,31 @@ struct DeliveryMenu: View {
                     )
                 //.frame(maxWidth: .infinity)
                     .onAppear(){
-                        loadApi()
-                        cartItems.append(Food(name: "Margherita", price: 100, quantity: 1))
-                        sortCategoryList = []
-                        sortCategoryList.append(sortCategory(category: "Rating: High To Low", idx: 0))
+                        if(didLoad){
+
+                            
+                            loadApi()
+                            cartItems.append(Food(name: "Margherita", price: 100, quantity: 1))
+                            sortCategoryList = []
+                            sortCategoryList.append(sortCategory(category: "Rating: High To Low", idx: 0))
+                            
+                            sortCategoryList.append(sortCategory(category: "Delivery Time : Low to High", idx: 1))
+                            sortCategoryList.append(sortCategory(category: "Distance: Low to High", idx: 2))
+                            sortCategoryList.append(sortCategory(category: "Cost: Low to High", idx: 3))
+                            sortCategoryList.append(sortCategory(category: "Cost: High To Low", idx: 4))
+                            filterCategory = []
+                            
+                            filterCategory.append(FilterCategory(category: "North Indian", idx: 0))
+                            filterCategory.append(FilterCategory(category: "South Indian", idx: 1))
+                            filterCategory.append(FilterCategory(category: "East Indian", idx: 2))
+                            filterCategory.append(FilterCategory(category: "West Indian", idx: 3))
+                            filterCategory.append(FilterCategory(category: "Eastern", idx: 4))
+                            filterCategory.append(FilterCategory(category: "Western", idx: 5))
+                            tempFilterCategory = filterCategory
+                            print(filterCategory.count)
+                            //didLoad = false
+                        }
                         
-                        sortCategoryList.append(sortCategory(category: "Delivery Time : Low to High", idx: 1))
-                        sortCategoryList.append(sortCategory(category: "Distance: Low to High", idx: 2))
-                        sortCategoryList.append(sortCategory(category: "Cost: Low to High", idx: 3))
-                        sortCategoryList.append(sortCategory(category: "Cost: High To Low", idx: 4))
-                        filterCategory = []
-                        
-                        filterCategory.append(FilterCategory(category: "North Indian", idx: 0))
-                        filterCategory.append(FilterCategory(category: "South Indian", idx: 1))
-                        filterCategory.append(FilterCategory(category: "East Indian", idx: 2))
-                        filterCategory.append(FilterCategory(category: "West Indian", idx: 3))
-                        filterCategory.append(FilterCategory(category: "Eastern", idx: 4))
-                        filterCategory.append(FilterCategory(category: "Western", idx: 5))
-                        filterCategory.append(FilterCategory(category: "Chinese", idx: 6))
-                        filterCategory.append(FilterCategory(category: "Chinese", idx: 7))
-                        filterCategory.append(FilterCategory(category: "Chinese", idx: 7))
-                        filterCategory.append(FilterCategory(category: "Chinese", idx: 7))
-                        tempFilterCategory = filterCategory
-                        print(filterCategory.count)
                         
                     }
                     .onDisappear(){
@@ -444,11 +447,11 @@ struct DeliveryMenu: View {
     }
     
     func loadApi(){
-        NetworkManager.shared.getApi(url: "https://retoolapi.dev/fX72QN/data"){
+        NetworkManager.shared.getApi(url: "https://retoolapi.dev/UY30s0/hum_name_rahe_hum_jo_the_kabhi"){
             data in
             guard let data = data as? [[String: Any]] else {return}
             let values = data
-            //print(values)
+            print(values)
             self.restaurantModel = values.map{RestaurantModel(data: $0)}
             self.originalRestauratnModel = self.restaurantModel
             //self.showRestaurantModel = restaurantModel
@@ -504,6 +507,18 @@ struct DeliveryMenu: View {
                 $0.name!.lowercased().contains(searchText.lowercased()) || $0.location!.lowercased().contains(searchText.lowercased())
             }
         }
+        var flagFilterCategory = false
+        for i in filterCategory{
+            if(i.isSelected == true){
+                flagFilterCategory = true
+            }
+        }
+        if(flagFilterCategory){
+            self.showRestaurantModel = self.showRestaurantModel.filter{
+                return filterCategory[Int($0.category!)! - 1].isSelected
+            }
+        }
+        
         
         self.restaurantModel = showRestaurantModel
     }

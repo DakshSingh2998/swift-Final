@@ -12,6 +12,7 @@ struct FoodItemCell: View {
     @State var loveAnimationScale = 1.0
     @State var loveAnimationHidden = true
     @State var animationRotation = 0.0
+    @State var filterCategory:[FilterCategory]
     var body: some View {
         VStack(spacing: 6){
             ZStack(alignment: .bottom){
@@ -81,7 +82,12 @@ struct FoodItemCell: View {
                                         }
                                         
                                     }
-                                    restaurantModel[idx] = RestaurantModel(isVeg: restaurantModel[idx].isVeg, category: restaurantModel[idx].category, price: restaurantModel[idx].price, isLiked: !restaurantModel[idx].isLiked!, id: restaurantModel[idx].id, location: restaurantModel[idx].location, rating: restaurantModel[idx].rating, name:restaurantModel[idx].name)
+                                    restaurantModel[idx] = RestaurantModel(isVeg: restaurantModel[idx].isVeg, distance: restaurantModel[idx].distance, price: restaurantModel[idx].price, isLiked: !restaurantModel[idx].isLiked!, id: restaurantModel[idx].id, category: restaurantModel[idx].category, rating: restaurantModel[idx].rating, name: restaurantModel[idx].name, location: restaurantModel[idx].location)
+                                    guard let jsonData = try? JSONEncoder().encode(restaurantModel) else {
+                                                print("Error: Trying to convert model to JSON data")
+                                                return
+                                    }
+                                    
                                     
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
                                         withAnimation(.linear(duration: 0.1)){
@@ -109,7 +115,7 @@ struct FoodItemCell: View {
                             VStack(alignment: .leading){
                                 Text(showRestaurantModel.name!).font(Font(CTFont(.system, size: 24))).bold()
                                     
-                                Text("Pizza • Pasta").font(Font(CTFont(.system, size: 14)))
+                                Text(filterCategory[Int(showRestaurantModel.category!)! - 1].category).font(Font(CTFont(.system, size: 14)))
                                     
                             }
                             Spacer()
@@ -136,8 +142,8 @@ struct FoodItemCell: View {
             HStack{
                 Image(systemName: "deskclock.fill").frame(width: 20, height: 20)
                     .foregroundColor(Color("Green"))
-                Text("\(showRestaurantModel.category! * 5 )-\(showRestaurantModel.category! * 5 + 5) min • ")
-                Text("\(showRestaurantModel.category!) km")
+                Text("\(showRestaurantModel.distance! * 5 )-\(showRestaurantModel.distance! * 5 + 5) min • ")
+                Text("\(showRestaurantModel.distance!) km")
                 Spacer()
                 Text("\(showRestaurantModel.price!) for one")
             }.font(Font(CTFont(.system, size: 14)))
