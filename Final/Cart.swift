@@ -25,6 +25,7 @@ struct Cart: View {
     @State var showDeliveryInfo = false
     @State var gotoProfile = false
     @Binding var ONPAGE:Double
+    @State var userData:UserData?
     func calcSubTotal(){
         subTotal = 0
         for i in cartItems.indices{
@@ -59,25 +60,24 @@ struct Cart: View {
                             
                             
                             
-                            List(cartItems) { val in
+                            List(0..<cartItems.count, id: \.self) { val in
                                 HStack(alignment: .top){
                                     Image(systemName: "eye.fill")
                                     
                                     VStack(spacing: 0){
                                         HStack{
                                             
-                                            Text(val.name).font(Font(CTFont(.system, size: 14))).font(Font(CTFont(.system, size: 14))).bold()
+                                            Text(cartItems[val].name).font(Font(CTFont(.system, size: 14))).font(Font(CTFont(.system, size: 14))).bold()
                                                 .onTapGesture {
-                                                    
                                                 }
                                             Spacer()
-                                            PlusMinus(cartItems: $cartItems, food: val, id: val.id, subTotal: $subTotal)
+                                            PlusMinus(cartItems: $cartItems, food: $cartItems[val], id: cartItems[val].id, subTotal: $subTotal)
                                             //Text("\(val.quantity)")
                                         }
                                         HStack{
-                                            Text("₹\(val.price)").font(Font(CTFont(.system, size: 14))).font(Font(CTFont(.system, size: 14)))
+                                            Text("₹\(cartItems[val].price)").font(Font(CTFont(.system, size: 14))).font(Font(CTFont(.system, size: 14)))
                                             Spacer()
-                                            Text("₹\(val.price*val.quantity)").font(Font(CTFont(.system, size: 14)))
+                                            Text("₹\(cartItems[val].price*cartItems[val].quantity)").font(Font(CTFont(.system, size: 14)))
                                         }
                                     }
                                     Spacer()
@@ -473,6 +473,7 @@ struct Cart: View {
         .onAppear(){
             calcSubTotal()
             print(cartItems.count)
+            DatabaseHelper.shared.updateCart(cartItems: cartItems, userData: userData!)
             
         }
         
@@ -490,7 +491,7 @@ struct PlusMinus:View{
     @Binding var cartItems:[Food]
     
     @State var showRemove = false
-    @State var food:Food
+    @Binding var food:Food
     @State var id: UUID?
     @State var index = 0
     @Binding var subTotal:Int

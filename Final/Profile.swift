@@ -182,8 +182,9 @@ struct Profile: View {
                         DispatchQueue.main.asyncAfter(deadline: .now()+1, execute: {
                             if(toast == "Log Out Successful"){
                                 withAnimation(.linear(duration: 0.2)){
-                                    ONPAGE = 1.0
                                     UserDefaults.standard.removeObject(forKey: "loggedInUser")
+                                    ONPAGE = 1.0
+                                    
                                 }
                                 
                             }

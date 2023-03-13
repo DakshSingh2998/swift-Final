@@ -148,7 +148,9 @@ struct ContentView: View {
                         }
                         print("data saved")
                         successfulSignup = true
-                        UserDefaults.standard.set(vmPass.value, forKey: vmEmail.value)
+                        //UserDefaults.standard.set(vmPass.value, forKey: vmEmail.value)
+                        DatabaseHelper.shared.saveUser(name: vmName.value, email: vmEmail.value, password: vmPass.value, dob: vmDOB.value)
+                        //print(DatabaseHelper.shared.loadUsers())
                     }.alert("SignUp Successful", isPresented: $successfulSignup, actions: {
                         
                     }).onChange(of: successfulSignup, perform: { newVal in

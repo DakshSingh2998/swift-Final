@@ -21,6 +21,8 @@ struct LoginPage: View {
     @State var isPassIncorrect = false
     @State var isEmailIncorrect = false
     @State var gotoHomePage = false
+    @Binding var userData: UserData?
+    @State var homePage:HomePage?
     var body: some View {
         ZStack{
             ScrollView{
@@ -49,22 +51,31 @@ struct LoginPage: View {
                         isEmailIncorrect = false
                         emailFocus = false
                         passFocus = false
-                        var originalPass = UserDefaults.standard.value(forKey: vmEmail.value)
-                        if(originalPass == nil){
+                        
+                        var userData:[UserData] = DatabaseHelper.shared.loadUsers()
+                        var email404 = true
+                        for i in 0..<userData.count{
+                            if(userData[i].email! == vmEmail.value){
+                                if(userData[i].password == vmPass.value){
+                                    print("Correct")
+                                    self.userData = userData[i]
+                                    //homePage = HomePage(ONPAGE: $ONPAGE, userData: sendUserData)
+                                    UserDefaults.standard.set(vmEmail.value, forKey: "loggedInUser")
+                                    ONPAGE = 4.0
+                                    break
+                                }
+                                else{
+                                    isPassIncorrect = true
+                                    print("INCorrect")
+                                }
+                                email404 = false
+                            }
+                        }
+                        if(email404 == true){
                             isEmailIncorrect = true
-                            return
+                            print("dash dash")
                         }
-                        if(vmPass.value != originalPass as! String){
-                            isPassIncorrect = true
-                            print("Incorrect")
-                        }else{
-                            print("Correct")
-                            UserDefaults.standard.set(vmEmail.value, forKey: "loggedInUser")
-                            ONPAGE = 4.0
-                            //gotoHomePage = true
-                            
-                        }
-                         
+                        
                         
                         
                         
@@ -92,9 +103,6 @@ struct LoginPage: View {
                         }
                     }
                     .frame(minHeight: self.height - self.height/3)
-                NavigationLink(destination: HomePage(ONPAGE: $ONPAGE), isActive: $gotoHomePage){
-                    
-                }.hidden()
                     .navigationBarHidden(true)
             }
             .padding(.top, 40)
@@ -103,6 +111,9 @@ struct LoginPage: View {
                 if(ONPAGE < 3.0){
                     try? dismiss()
                 }
+            }
+            .onAppear(){
+                
             }
             //.animation(.easeInOut(duration: 0.5))
     }

@@ -7,10 +7,12 @@
 
 import SwiftUI
 struct Food: Identifiable{
+    
     @State var id = UUID()
     @State var name = ""
     @State var price = 0
     @State var quantity = 0
+    @State var restaurantName = ""
 }
 enum PaymentMode{
     case cash, upi
@@ -27,6 +29,7 @@ struct HomePage: View {
     @State var paymentMode = PaymentMode.cash
     @State var deliveryTime = 20
     @State var restaurantModel:[RestaurantModel] = []
+    @State var userData:UserData?
     
     func addDummyData(){
         cartItems = []
@@ -53,7 +56,7 @@ struct HomePage: View {
                         Label("Grocery", systemImage: "basket")
                     }.tag(2)
                 
-                Cart(deliveryTime: $deliveryTime, cartItems: $cartItems, gotoPage: $onPage, location: $location, gst: $gst, paymentMode: $paymentMode, distance: $distance, ONPAGE: $ONPAGE)
+                Cart(deliveryTime: $deliveryTime, cartItems: $cartItems, gotoPage: $onPage, location: $location, gst: $gst, paymentMode: $paymentMode, distance: $distance, ONPAGE: $ONPAGE, userData: userData)
                     .tabItem{
                         Label("Cart", systemImage: "cart")
                         
@@ -70,6 +73,11 @@ struct HomePage: View {
             .accentColor(onPage == 1 ? .brown : onPage == 2 ? Color("GroceryBorder") : Color("Dark"))
 
             .onAppear(){
+                print(userData)
+                var cartItemDish :[CartItemDish] = DatabaseHelper.shared.loadCart()
+                for i in 0..<cartItemDish.count{
+                    cartItems.append(Food(name: cartItemDish[i].name!, price: Int(cartItemDish[i].price), quantity: Int(cartItemDish[i].quantity), restaurantName: cartItemDish[i].restaurantName!))
+                }
                 print("ONPAGE4 \(ONPAGE)")
                 UITableView.appearance().separatorStyle = .none
                 UITableViewCell.appearance().tintColor = .systemPink
@@ -78,7 +86,8 @@ struct HomePage: View {
                 UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
                 gst = gst.roundTo()
                 distance = distance.roundTo()
-                addDummyData()
+                
+                //addDummyData()
                 
             }
         .onChange(of: ONPAGE){ newVal in
@@ -86,6 +95,7 @@ struct HomePage: View {
                 try? dismiss()
             }
         }
+        
     }
 }
 

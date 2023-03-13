@@ -33,6 +33,8 @@ struct RestaurantHomePage: View {
     @State var imageForDish:[DishModel:Image] = [:]
     @State var offsets:[Double] = []
     @State var filterCategory:[FilterCategory]
+    @Binding var cartItems:[Food]
+    
     var body: some View {
         getContentView()
         
@@ -351,6 +353,21 @@ struct RestaurantHomePage: View {
                 .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color("Dark"), lineWidth: 2))
                 .cornerRadius(6)
                 .padding(.trailing, 20)
+                .onTapGesture {
+                    var dishFound = -1
+                    for i in 0..<cartItems.count{
+                        if(cartItems[i].name == curDish.name!){
+                            dishFound = i
+                            break
+                        }
+                    }
+                    if(dishFound != -1){
+                        cartItems[dishFound] = Food(id: cartItems[dishFound].id, name: cartItems[dishFound].name, price: cartItems[dishFound].price, quantity: cartItems[dishFound].quantity + 1, restaurantName: cartItems[dishFound].restaurantName)
+                    }
+                    else{
+                        cartItems.append(Food(name: curDish.name!, price: curDish.price!, quantity: 1, restaurantName: restaurantModel.name!))
+                    }
+                }
                 
             }.frame(maxHeight: .infinity)
         }

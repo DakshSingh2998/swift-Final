@@ -21,6 +21,7 @@ struct FirstPage: View {
     @Binding var ONPAGE:Double
     @State var signUp:ContentView?
     @State var signIn:LoginPage?
+    @Binding var userData:UserData?
     var body: some View {
         NavigationView
         {
@@ -84,8 +85,8 @@ struct FirstPage: View {
         .onAppear(){
             print("ONPAGE1 \(ONPAGE)")
                 CommonMethods.shared.updateOrientation()
-                signUp = ContentView(ONPAGE: $ONPAGE)
-                signIn = LoginPage(ONPAGE: $ONPAGE)
+            signUp = ContentView(ONPAGE: $ONPAGE)
+            signIn = LoginPage(ONPAGE: $ONPAGE, userData: $userData)
                 if(ONPAGE == 2.0){
                     withAnimation(.linear(duration: 0.3)){
                         self.gotoSignUp = true

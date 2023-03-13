@@ -363,7 +363,7 @@ struct DeliveryMenu: View {
                     .padding(.bottom, sortPaddingBottom)
                     .isHidden(sortHidden)
                 
-                NavigationLink(destination: RestaurantHomePage(restuarantDishUrl: $restaurantDishUrl, restaurantModel: onTapped, filterCategory: filterCategory), isActive: $gotoRestaurantHomePage){
+                NavigationLink(destination: RestaurantHomePage(restuarantDishUrl: $restaurantDishUrl, restaurantModel: onTapped, filterCategory: filterCategory, cartItems: $cartItems), isActive: $gotoRestaurantHomePage){
                 }.hidden()
                 
                     .gesture(DragGesture(minimumDistance: 10, coordinateSpace: .local)
@@ -416,7 +416,7 @@ struct DeliveryMenu: View {
 
                             
                             loadApi()
-                            cartItems.append(Food(name: "Margherita", price: 100, quantity: 1))
+                            //cartItems.append(Food(name: "Margherita", price: 100, quantity: 1))
                             sortCategoryList = []
                             sortCategoryList.append(sortCategory(category: "Rating: High To Low", idx: 0))
                             
@@ -436,8 +436,6 @@ struct DeliveryMenu: View {
                             print(filterCategory.count)
                             //didLoad = false
                         }
-                        
-                        
                     }
                     .onDisappear(){
                         sortHidden = true
@@ -451,7 +449,7 @@ struct DeliveryMenu: View {
             data in
             guard let data = data as? [[String: Any]] else {return}
             let values = data
-            print(values)
+            //print(values)
             self.restaurantModel = values.map{RestaurantModel(data: $0)}
             self.originalRestauratnModel = self.restaurantModel
             //self.showRestaurantModel = restaurantModel

@@ -11,6 +11,7 @@ struct LoadingScreen: View {
     @State var loadingAngle = 0.0
     @State var ONPAGE:Double = 0.0
     @State var image = "Logo"
+    @State var userData:UserData?
     var body: some View {
         ZStack{
             LinearGradient(gradient: Gradient(colors: [Color("Dark"), Color("Light")]), startPoint: .topLeading, endPoint: .bottomTrailing).ignoresSafeArea()
@@ -18,11 +19,11 @@ struct LoadingScreen: View {
                 .foregroundColor(Color("Blue"))
                 .rotationEffect(.degrees(loadingAngle))
             if(ONPAGE <= 3.0 && ONPAGE > 0.0){
-                FirstPage(ONPAGE: $ONPAGE)
+                FirstPage(ONPAGE: $ONPAGE, userData: $userData)
             }
             
             if(ONPAGE >= 4.0){
-                HomePage(ONPAGE: $ONPAGE)
+                HomePage(ONPAGE: $ONPAGE, userData: userData)
             }
         }.onAppear(){
             withAnimation(.linear(duration: 2)){
@@ -36,7 +37,21 @@ struct LoadingScreen: View {
                     ONPAGE = 1.0
                 }
                 else{
-                    ONPAGE = 4.0
+                    var userData = DatabaseHelper.shared.loadUsers()
+                    var email404 = true
+                    for i in 0..<userData.count{
+                        if(userData[i].email! == loggedInUser as! String){
+                            self.userData = userData[i]
+                            ONPAGE = 4.0
+                            email404 = false
+                            break
+                        }
+                    }
+                    if(email404 == true){
+                        print("dash dash")
+                        ONPAGE = 1.0
+                    }
+                    
                 }
             })
         }
