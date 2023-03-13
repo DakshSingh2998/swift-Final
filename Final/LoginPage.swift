@@ -113,7 +113,8 @@ struct LoginPage: View {
                 }
             }
             .onAppear(){
-                
+                vmEmail.value = "d@gmail.com"
+                vmPass.value = "111"
             }
             //.animation(.easeInOut(duration: 0.5))
     }

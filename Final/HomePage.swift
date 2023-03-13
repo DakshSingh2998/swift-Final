@@ -45,7 +45,7 @@ struct HomePage: View {
     var body: some View {
         NavigationView{
             TabView(selection: $onPage){
-                DeliveryMenu(cartItems: $cartItems, onPage: $onPage, ONPAGE: $ONPAGE, restaurantModel: $restaurantModel)
+                DeliveryMenu(cartItems: $cartItems, onPage: $onPage, ONPAGE: $ONPAGE, restaurantModel: $restaurantModel, userData: $userData)
                     .tabItem{
                         Label("Delivery", systemImage: "eye.fill").background(.green)
                     }.tag(1)
@@ -73,10 +73,13 @@ struct HomePage: View {
             .accentColor(onPage == 1 ? .brown : onPage == 2 ? Color("GroceryBorder") : Color("Dark"))
 
             .onAppear(){
-                print(userData)
+                print("impppppppp",userData)
                 var cartItemDish :[CartItemDish] = DatabaseHelper.shared.loadCart()
                 for i in 0..<cartItemDish.count{
-                    cartItems.append(Food(name: cartItemDish[i].name!, price: Int(cartItemDish[i].price), quantity: Int(cartItemDish[i].quantity), restaurantName: cartItemDish[i].restaurantName!))
+                    if(cartItemDish[i].toUserData == userData){
+                        cartItems.append(Food(name: cartItemDish[i].name!, price: Int(cartItemDish[i].price), quantity: Int(cartItemDish[i].quantity), restaurantName: cartItemDish[i].restaurantName!))
+                    }
+                    
                 }
                 print("ONPAGE4 \(ONPAGE)")
                 UITableView.appearance().separatorStyle = .none

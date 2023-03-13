@@ -50,40 +50,42 @@ struct DatabaseHelper{
         return obj
     }
     
-    func updateCart(cartItems:[Food], userData:UserData){
+    func updateCart(cartItems:[Food], userData:UserData?){
         if(userData == nil){
             return
         }
-        var obj:[CartItemDish] = []
+        
         //let fetchreq = NSFetchRequest<NSManagedObject>(entityName: "Movies")
         do{
+            var obj:[CartItemDish] = []
             obj = try context.fetch(NSFetchRequest(entityName: "CartItemDish")) as! [CartItemDish]
-            var copy = obj
-            obj = []
-            for i in 0..<copy.count{
-                if(copy[i].toUserData! == userData){
-                    
-                }
-                else{
-                    obj.append(copy[i])
+            print(obj)
+            print("kkkkkkkkkkkkkkkkkkkkk")
+            for i in obj{
+                if(i.toUserData == nil ||  i.toUserData == userData){
+                    //obj.remove(at: obj.firstIndex(of: i)!)
+                    //userData?.removeFromToCartItem(i)
+                    context.delete(i)
                 }
             }
-            userData.toCartItem = []
-            for i in 0..<cartItems.count{
+            userData!.toCartItem = nil
+            for i in cartItems{
                 var temp = NSEntityDescription.insertNewObject(forEntityName: "CartItemDish", into: context) as! CartItemDish
-                temp.name = cartItems[i].name
-                temp.price = Int64(cartItems[i].price)
-                temp.quantity = Int64(cartItems[i].quantity)
-                temp.restaurantName = cartItems[i].restaurantName
+                temp.name = i.name
+                temp.price = Int64(i.price)
+                temp.quantity = Int64(i.quantity)
+                temp.restaurantName = i.restaurantName
                 temp.toUserData = userData
-                userData.addToToCartItem(temp)
-                obj.append(temp)
+                userData!.addToToCartItem(temp)
+                //obj.append(temp)
+                try? context.save()
             }
-            try? context.save()
+            print(obj)
         }
         catch{
             print("Error in loading")
         }
+        
     }
     
     /*

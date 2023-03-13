@@ -48,6 +48,7 @@ struct DeliveryMenu: View {
     @State var showRestaurantModel:[RestaurantModel] = []
     @State var onTapped = RestaurantModel(isVeg: false, distance: 0, price: 0, isLiked: false, id: 0, category: "", rating: "", name: "", location: "")
     @State var didLoad = true
+    @Binding var userData:UserData?
 
     var body: some View {
         ScrollViewReader{scrollProxy in
@@ -363,7 +364,7 @@ struct DeliveryMenu: View {
                     .padding(.bottom, sortPaddingBottom)
                     .isHidden(sortHidden)
                 
-                NavigationLink(destination: RestaurantHomePage(restuarantDishUrl: $restaurantDishUrl, restaurantModel: onTapped, filterCategory: filterCategory, cartItems: $cartItems), isActive: $gotoRestaurantHomePage){
+                NavigationLink(destination: RestaurantHomePage(restuarantDishUrl: $restaurantDishUrl, restaurantModel: onTapped, filterCategory: filterCategory, cartItems: $cartItems, userData: $userData), isActive: $gotoRestaurantHomePage){
                 }.hidden()
                 
                     .gesture(DragGesture(minimumDistance: 10, coordinateSpace: .local)

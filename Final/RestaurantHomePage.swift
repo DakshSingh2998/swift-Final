@@ -34,7 +34,7 @@ struct RestaurantHomePage: View {
     @State var offsets:[Double] = []
     @State var filterCategory:[FilterCategory]
     @Binding var cartItems:[Food]
-    
+    @Binding var userData:UserData?
     var body: some View {
         getContentView()
         
@@ -367,6 +367,10 @@ struct RestaurantHomePage: View {
                     else{
                         cartItems.append(Food(name: curDish.name!, price: curDish.price!, quantity: 1, restaurantName: restaurantModel.name!))
                     }
+                    DispatchQueue.main.async {
+                        DatabaseHelper.shared.updateCart(cartItems: cartItems, userData: userData)
+                    }
+                    
                 }
                 
             }.frame(maxHeight: .infinity)

@@ -229,8 +229,10 @@ struct ContentView: View {
         }
         .overlay(CustomNavigation(title: "Sign Up", ONPAGE: $ONPAGE, rightImage: ""))
         .onAppear(){
-            //loginPage = LoginPage(ONPAGE: $ONPAGE)
-            //print("ONPAGE \(ONPAGE)")
+            vmName.value = "ddd"
+            vmEmail.value = "d@gmail.com"
+            vmPass.value = "111"
+            vmDOB.value = "28/07/2000"
         }
         
         .onChange(of: ONPAGE){newVal in

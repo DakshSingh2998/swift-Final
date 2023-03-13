@@ -473,7 +473,7 @@ struct Cart: View {
         .onAppear(){
             calcSubTotal()
             print(cartItems.count)
-            DatabaseHelper.shared.updateCart(cartItems: cartItems, userData: userData!)
+            
             
         }
         
