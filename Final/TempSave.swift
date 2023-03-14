@@ -1,128 +1,145 @@
 /*
- 
  //
- //  Profile.swift
- //  Final
+ //  DatabaseHelper.swift
+ //  First
  //
- //  Created by Daksh on 27/02/23.
+ //  Created by Daksh on 09/02/23.
  //
 
+ import CoreData
+ import UIKit
+ import Foundation
  import SwiftUI
-
- struct Section: Identifiable{
-     @State var id = UUID()
-     @State var sectionName = ""
-     @State var sectionNumber:Int = 0
- }
- struct childSection: Identifiable{
-     @State var id = UUID()
-     @State var name = ""
-     @State var image = ""
- }
-
- struct Profile: View {
-     @State var sectionList:[Section] = []
-     @State var sectionChildList:[[childSection]] = []
-     @State var secNo = 0
-     @State var i = 0
-     var body: some View {
-         ZStack{
-             LinearGradient(gradient: Gradient(colors: [Color("Dark"), Color("Light")]), startPoint: .topLeading, endPoint: .bottomTrailing)
-                 .ignoresSafeArea()
-             VStack(spacing: 0){
-                 VStack{
-                     HStack{
-                         VStack{
-                             Text("Name").font(Font(CTFont(.system, size: 24))).bold()
-                             Text("email").font(Font(CTFont(.system, size: 18)))
-                         }
-                         Spacer()
-                         VStack{
-                             Image("BlinkitLogo").resizable().scaledToFit()
-                                 .frame(width: 100, height: 100)
-                                 .cornerRadius(50)
-                         }
-                     }
-                     .padding(20)
-                     
-                     
-                 }
-                 
-                 .frame(maxWidth: .infinity)
-                 .background(Color("Light"))
-                 .upperCurve(10, corners: [.topLeft, .topRight])
-                 //.cornerRadius(10)
-                 
-                 LinearGradient(gradient: Gradient(colors: [Color("Dark"), Color("LightDark")]), startPoint: .top, endPoint: .bottom)
-                     .frame(height: 8)
-                     .upperCurve(10, corners: [.bottomLeft, .bottomRight])
-                 
-                     .background(.clear)
-                 
-                 List(sectionList){newVVal in
-                     VStack(alignment: .leading){
- //                        secNo = newVVal.sectionNumber
- //                        print(sectionNumber)
-                         if(newVVal.sectionName == "Food Order"){
-                             VStack{
-                                 
-                             }.frame(height: 20)
-                         }
-                         Text(newVVal.sectionName).font(Font(CTFont(.system, size: 16))).bold()
-                             .onAppear(){
-                             secNo = newVVal.sectionNumber
-                                 print(secNo)
-                                 
-                         }
-                          VStack{
- //
-                              ForEach(sectionChildList[i], id: \.id){ cc in
-                                  HStack{
-                                      Image(systemName: cc.image)
-                                      Text(cc.name)
-                                      Spacer()
-                                      Text(">")
-                                  }
-                              }
-                               
-                          }.padding(.horizontal, 6)
-                          
-                     }
-                     .onAppear(){
-                         i = i + 1
-                     }
-                     
-                     .listRowBackground(Color.clear)
-                 }
-                 .onAppear(){
-                     i = 0
-                 }
-                 .background(.clear)
-                 .padding(.top, -2)
-                 .listStyle(.plain)
-                 
-             
-             
-             
-             Spacer()
-         }.padding(.all, 10)
-             
+ struct DatabaseHelper{
+     //@Environment(\.managedObjectContext) var context
+     var context = PersistenceController.shared.container.viewContext
+     static var shared = DatabaseHelper()
+     func saveUser(name:String, email:String, password:String, dob:String){
+         let obj = NSEntityDescription.insertNewObject(forEntityName: "UserData", into: context) as! UserData
+         obj.name = name
+         obj.email = email
+         obj.password = password
+         obj.dob = dob
+         do{
+             try? context.save()
          }
-         .onAppear(){
-             
-             sectionList.append(Section(sectionName: "Food Order", sectionNumber: 0))
-             sectionList.append(Section(sectionName: "More", sectionNumber: 1))
-             sectionChildList.append([childSection(name: "Your orders", image: "takeoutbag.and.cup.and.straw.fill"), childSection(name: "Address Book", image: "text.book.closed.fill")])
-             sectionChildList.append([childSection(name: "About", image: "info.circle"), childSection(name: "Log Out", image: "power.circle.fill")])
-             //print(sectionChildList)
+         catch{
+             print("Error in saving")
          }
      }
+     func loadUsers() -> [UserData]{
+         var obj:[UserData] = []
+         //let fetchreq = NSFetchRequest<NSManagedObject>(entityName: "Movies")
+         do{
+             obj = try context.fetch(NSFetchRequest(entityName: "UserData")) as! [UserData]
+         }
+         catch{
+             print("Error in loading")
+         }
+         return obj
+     }
+     
+     func loadCart() -> [CartItemDish]{
+         var obj:[CartItemDish] = []
+         //let fetchreq = NSFetchRequest<NSManagedObject>(entityName: "Movies")
+         do{
+             obj = try context.fetch(NSFetchRequest(entityName: "CartItemDish")) as! [CartItemDish]
+         }
+         catch{
+             print("Error in loading")
+         }
+         return obj
+     }
+     
+     func updateCart(cartItems:[Food], userData:UserData?){
+         if(userData == nil){
+             return
+         }
+         
+         //let fetchreq = NSFetchRequest<NSManagedObject>(entityName: "Movies")
+         do{
+             var obj:[CartItemDish] = []
+             obj = try context.fetch(NSFetchRequest(entityName: "CartItemDish")) as! [CartItemDish]
+             print(obj)
+             print("kkkkkkkkkkkkkkkkkkkkk")
+             for i in obj{
+                 if(i.toUserData == nil ||  i.toUserData == userData){
+                     //obj.remove(at: obj.firstIndex(of: i)!)
+                     //userData?.removeFromToCartItem(i)
+                     context.delete(i)
+                 }
+             }
+             userData!.toCartItem = nil
+             for i in cartItems{
+                 var temp = NSEntityDescription.insertNewObject(forEntityName: "CartItemDish", into: context) as! CartItemDish
+                 temp.name = i.name
+                 temp.price = Int64(i.price)
+                 temp.quantity = Int64(i.quantity)
+                 temp.restaurantName = i.restaurantName
+                 temp.toUserData = userData
+                 userData!.addToToCartItem(temp)
+                 //obj.append(temp)
+                 try? context.save()
+             }
+             print(obj)
+         }
+         catch{
+             print("Error in loading")
+         }
+         
+     }
+     
+     /*
+     func deleteData(object:Movies) -> [Movies]{
+         var movies = loadData()
+         var toDelete:Movies? = nil
+         var i = 0
+         for ele in movies{
+             if(ele == object){
+                 toDelete = ele
+                 break
+             }
+             i = i+1
+         }
+         if(toDelete == nil){
+             return movies
+         }
+         
+         do{
+             try? context?.delete(toDelete!)
+             try? (UIApplication.shared.delegate as?
+                   AppDelegate)?.saveContext()
+             
+         }
+         catch{
+             print("Error in deleting")
+         }
+         movies.remove(at: i)
+         return movies
+     }
+     func updateData(object:Movies, title:String? = "", language:String? = ""){
+         var movies = loadData()
+         var i = 0
+         for ele in movies{
+             if(ele == object){
+                 break
+             }
+             i = i+1
+         }
+         if(title != ""){
+             object.title = title
+         }
+         if(language != ""){
+             object.language = language
+         }
+         movies[i] = object
+         
+         do{
+             try? context?.save()
+         }
+     }
+     */
  }
 
- struct Profile_Previews: PreviewProvider {
-     static var previews: some View {
-         Profile()
-     }
- }
 
  */

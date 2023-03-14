@@ -37,6 +37,7 @@ struct ContentView: View {
     @State var isDOBIncorrect = false
     @State var False = false
     @State var successfulSignup = false
+    @State var alertText = ""
     var coloredSignIn: AttributedString{
         var result = AttributedString("Sign In")
         result.foregroundColor = Color("Blue")
@@ -146,12 +147,22 @@ struct ContentView: View {
                         if(isEmailIncorrect || isDOBIncorrect || isNameIncorrect || isPassIncorrect){
                             return
                         }
+                        var userData:[UserData] = DatabaseHelper.shared.loadUsers()
+                        for i in userData{
+                            if(i.email! == vmEmail.value){
+                                alertText = "User already present, Please Sign In"
+                                successfulSignup = true
+                                return
+                            }
+                        }
                         print("data saved")
+                        alertText = "Successful Sign Up"
                         successfulSignup = true
+                        
                         //UserDefaults.standard.set(vmPass.value, forKey: vmEmail.value)
                         DatabaseHelper.shared.saveUser(name: vmName.value, email: vmEmail.value, password: vmPass.value, dob: vmDOB.value)
                         //print(DatabaseHelper.shared.loadUsers())
-                    }.alert("SignUp Successful", isPresented: $successfulSignup, actions: {
+                    }.alert(alertText, isPresented: $successfulSignup, actions: {
                         
                     }).onChange(of: successfulSignup, perform: { newVal in
                         if(successfulSignup == false){
@@ -160,6 +171,7 @@ struct ContentView: View {
                         }
                     })
                     .padding(.top, 32)
+                    
                     /*
                     NavigationLink(destination: loginPage, isActive: $gotoLogin){
                         

@@ -38,14 +38,11 @@ struct DatabaseHelper{
         return obj
     }
     
-    func loadCart() -> [CartItemDish]{
+    func loadCart(userData: UserData) -> [CartItemDish]{
+        var objset = userData.toCartItem
         var obj:[CartItemDish] = []
-        //let fetchreq = NSFetchRequest<NSManagedObject>(entityName: "Movies")
-        do{
-            obj = try context.fetch(NSFetchRequest(entityName: "CartItemDish")) as! [CartItemDish]
-        }
-        catch{
-            print("Error in loading")
+        for ele in objset!{
+            obj.append((ele as! CartItemDish))
         }
         return obj
     }
@@ -57,30 +54,20 @@ struct DatabaseHelper{
         
         //let fetchreq = NSFetchRequest<NSManagedObject>(entityName: "Movies")
         do{
-            var obj:[CartItemDish] = []
-            obj = try context.fetch(NSFetchRequest(entityName: "CartItemDish")) as! [CartItemDish]
-            print(obj)
-            print("kkkkkkkkkkkkkkkkkkkkk")
-            for i in obj{
-                if(i.toUserData == nil ||  i.toUserData == userData){
-                    //obj.remove(at: obj.firstIndex(of: i)!)
-                    //userData?.removeFromToCartItem(i)
-                    context.delete(i)
-                }
-            }
-            userData!.toCartItem = nil
+            userData!.toCartItem = []
             for i in cartItems{
                 var temp = NSEntityDescription.insertNewObject(forEntityName: "CartItemDish", into: context) as! CartItemDish
                 temp.name = i.name
                 temp.price = Int64(i.price)
                 temp.quantity = Int64(i.quantity)
+                temp.isVeg = i.isVeg
                 temp.restaurantName = i.restaurantName
-                temp.toUserData = userData
+                //temp.toUserData = userData
                 userData!.addToToCartItem(temp)
                 //obj.append(temp)
                 try? context.save()
             }
-            print(obj)
+            //print(userData?.toCartItem)
         }
         catch{
             print("Error in loading")

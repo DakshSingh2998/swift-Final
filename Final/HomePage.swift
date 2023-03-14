@@ -12,6 +12,7 @@ struct Food: Identifiable{
     @State var name = ""
     @State var price = 0
     @State var quantity = 0
+    @State var isVeg = false
     @State var restaurantName = ""
 }
 enum PaymentMode{
@@ -74,10 +75,10 @@ struct HomePage: View {
 
             .onAppear(){
                 print("impppppppp",userData)
-                var cartItemDish :[CartItemDish] = DatabaseHelper.shared.loadCart()
+                var cartItemDish :[CartItemDish] = DatabaseHelper.shared.loadCart(userData: userData!)
                 for i in 0..<cartItemDish.count{
                     if(cartItemDish[i].toUserData == userData){
-                        cartItems.append(Food(name: cartItemDish[i].name!, price: Int(cartItemDish[i].price), quantity: Int(cartItemDish[i].quantity), restaurantName: cartItemDish[i].restaurantName!))
+                        cartItems.append(Food(name: cartItemDish[i].name!, price: Int(cartItemDish[i].price), quantity: Int(cartItemDish[i].quantity), isVeg: cartItemDish[i].isVeg, restaurantName: cartItemDish[i].restaurantName!))
                     }
                     
                 }

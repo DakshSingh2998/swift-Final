@@ -362,10 +362,10 @@ struct RestaurantHomePage: View {
                         }
                     }
                     if(dishFound != -1){
-                        cartItems[dishFound] = Food(id: cartItems[dishFound].id, name: cartItems[dishFound].name, price: cartItems[dishFound].price, quantity: cartItems[dishFound].quantity + 1, restaurantName: cartItems[dishFound].restaurantName)
+                        cartItems[dishFound] = Food(id: cartItems[dishFound].id, name: cartItems[dishFound].name, price: cartItems[dishFound].price, quantity: cartItems[dishFound].quantity + 1, isVeg: cartItems[dishFound].isVeg, restaurantName: cartItems[dishFound].restaurantName)
                     }
                     else{
-                        cartItems.append(Food(name: curDish.name!, price: curDish.price!, quantity: 1, restaurantName: restaurantModel.name!))
+                        cartItems.append(Food(name: curDish.name!, price: curDish.price!, quantity: 1, isVeg: curDish.isVeg!, restaurantName: restaurantModel.name!))
                     }
                     DispatchQueue.main.async {
                         DatabaseHelper.shared.updateCart(cartItems: cartItems, userData: userData)

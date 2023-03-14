@@ -2,7 +2,7 @@
 //  CartItemDish+CoreDataProperties.swift
 //  Final
 //
-//  Created by Daksh on 13/03/23.
+//  Created by Daksh on 14/03/23.
 //
 //
 
@@ -20,6 +20,7 @@ extension CartItemDish {
     @NSManaged public var price: Int64
     @NSManaged public var quantity: Int64
     @NSManaged public var restaurantName: String?
+    @NSManaged public var isVeg: Bool
     @NSManaged public var toUserData: UserData?
 
 }

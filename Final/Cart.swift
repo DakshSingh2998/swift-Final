@@ -62,7 +62,8 @@ struct Cart: View {
                             
                             List(0..<cartItems.count, id: \.self) { val in
                                 HStack(alignment: .top){
-                                    Image(systemName: "eye.fill")
+                                    Image(systemName: "dot.square").foregroundColor(cartItems[val].isVeg ? Color("Green") : Color.red).bold()
+
                                     
                                     VStack(spacing: 0){
                                         HStack{
@@ -71,7 +72,7 @@ struct Cart: View {
                                                 .onTapGesture {
                                                 }
                                             Spacer()
-                                            PlusMinus(cartItems: $cartItems, food: $cartItems[val], id: cartItems[val].id, subTotal: $subTotal)
+                                            PlusMinus(cartItems: $cartItems, food: $cartItems[val], id: cartItems[val].id, subTotal: $subTotal, userData: $userData)
                                             //Text("\(val.quantity)")
                                         }
                                         HStack{
@@ -495,6 +496,7 @@ struct PlusMinus:View{
     @State var id: UUID?
     @State var index = 0
     @Binding var subTotal:Int
+    @Binding var userData:UserData?
     var body: some View{
         HStack(spacing: 2){
             Text("-").padding(.leading, 8).onTapGesture {
@@ -509,7 +511,8 @@ struct PlusMinus:View{
                     showRemove = true
                     return
                 }
-                cartItems[index] = Food(name: cartItems[index].name, price: cartItems[index].price, quantity: cartItems[index].quantity - 1)
+                cartItems[index] = Food(id: cartItems[index].id, name: cartItems[index].name, price: cartItems[index].price, quantity: cartItems[index].quantity - 1, isVeg: cartItems[index].isVeg, restaurantName: cartItems[index].restaurantName)
+                DatabaseHelper.shared.updateCart(cartItems: cartItems, userData: userData)
                 subTotal = subTotal - cartItems[index].price
             }
             .alert("Do you want to remove this Item from Cart", isPresented: $showRemove, actions: {
@@ -520,7 +523,7 @@ struct PlusMinus:View{
                 Button("Yes", role: .destructive, action: {
                     subTotal = subTotal - cartItems[index].price
                     cartItems.remove(at: index)
-                    
+                    DatabaseHelper.shared.updateCart(cartItems: cartItems, userData: userData)
                     showRemove = false
                 })
             })
@@ -532,7 +535,9 @@ struct PlusMinus:View{
                         break
                     }
                 }
-                cartItems[index] = Food(name: cartItems[index].name, price: cartItems[index].price, quantity: cartItems[index].quantity + 1)
+                cartItems[index] = Food(name: cartItems[index].name, price: cartItems[index].price, quantity: cartItems[index].quantity + 1, isVeg: cartItems[index].isVeg, restaurantName: cartItems[index].restaurantName)
+                DatabaseHelper.shared.updateCart(cartItems: cartItems, userData: userData)
+
                 subTotal = subTotal + cartItems[index].price
                 
             }

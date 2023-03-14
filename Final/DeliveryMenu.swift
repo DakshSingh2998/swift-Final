@@ -440,6 +440,7 @@ struct DeliveryMenu: View {
                     }
                     .onDisappear(){
                         sortHidden = true
+                        searchText = ""
                     }
             }
         }
