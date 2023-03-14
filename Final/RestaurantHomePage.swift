@@ -35,6 +35,10 @@ struct RestaurantHomePage: View {
     @State var filterCategory:[FilterCategory]
     @Binding var cartItems:[Food]
     @Binding var userData:UserData?
+    @State var dishQuantity:[DishModel: Int] = [:]
+    @State var dummySubtotal = 0
+    @State var showRemove = false
+    @State var showRemoveCurDish:DishModel?
     var body: some View {
         getContentView()
         
@@ -51,6 +55,9 @@ struct RestaurantHomePage: View {
                 //print(values)
                 self.dishModel = values.map{DishModel(data: $0)}
                 //DispatchQueue.n.async {
+                for curDish in self.dishModel{
+                    dishQuantity[curDish] = 0
+                }
                 for curDish in self.dishModel {
                     let url = URL(string: curDish.imageUrl!)!
                         // Fetch Image Data
@@ -337,45 +344,89 @@ struct RestaurantHomePage: View {
                     }.frame(height: 10)
                      
                 }.frame(maxHeight: .infinity)
-                VStack(spacing: -8){
-                    HStack{
-                        Spacer()
-                        Text("+").frame(alignment: .topTrailing).font(Font(CTFont(.system, size: 12))).bold()
-                            .padding(.trailing, 6)
-                    }
-                    
-                    Text("ADD").bold()
-                        .padding(.bottom, 6)
-                    
-                }.frame(width: 100, height: 32)
-                .background(Color("Light"))
-                .foregroundColor(Color("Dark"))
-                .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color("Dark"), lineWidth: 2))
-                .cornerRadius(6)
-                .padding(.trailing, 20)
-                .onTapGesture {
-                    var dishFound = -1
-                    for i in 0..<cartItems.count{
-                        if(cartItems[i].name == curDish.name!){
-                            dishFound = i
-                            break
+                
+                if(getQuantity(curDish: curDish) == -1){
+                    VStack(spacing: -8){
+                        HStack{
+                            Spacer()
+                            Text("+").frame(alignment: .topTrailing).font(Font(CTFont(.system, size: 12))).bold()
+                                .padding(.trailing, 6)
+                        }
+                        
+                        Text("ADD").bold()
+                            .padding(.bottom, 6)
+                        
+                    }.frame(width: 100, height: 32)
+                    .background(Color("Light"))
+                    .foregroundColor(Color("Dark"))
+                    .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color("Dark"), lineWidth: 2))
+                    .cornerRadius(6)
+                    .padding(.trailing, 20)
+                    .onTapGesture {
+                        if(cartItems.count != 0){
+                            if(cartItems[0].restaurantName != restaurantModel.name!){
+                                showRemoveCurDish = curDish
+                                showRemove = true
+                                
+                                return
+                            }
+                        }
+                        var dishFound = -1
+                        for i in 0..<cartItems.count{
+                            if(cartItems[i].name == curDish.name!){
+                                dishFound = i
+                                break
+                            }
+                        }
+                        if(dishFound != -1){
+                            cartItems[dishFound] = Food(id: cartItems[dishFound].id, name: cartItems[dishFound].name, price: cartItems[dishFound].price, quantity: cartItems[dishFound].quantity + 1, isVeg: cartItems[dishFound].isVeg, restaurantName: cartItems[dishFound].restaurantName)
+                        }
+                        else{
+                            cartItems.append(Food(name: curDish.name!, price: curDish.price!, quantity: 1, isVeg: curDish.isVeg!, restaurantName: restaurantModel.name!))
+                        }
+                        DispatchQueue.main.async {
+                            DatabaseHelper.shared.updateCart(cartItems: cartItems, userData: userData)
                         }
                     }
-                    if(dishFound != -1){
-                        cartItems[dishFound] = Food(id: cartItems[dishFound].id, name: cartItems[dishFound].name, price: cartItems[dishFound].price, quantity: cartItems[dishFound].quantity + 1, isVeg: cartItems[dishFound].isVeg, restaurantName: cartItems[dishFound].restaurantName)
-                    }
-                    else{
-                        cartItems.append(Food(name: curDish.name!, price: curDish.price!, quantity: 1, isVeg: curDish.isVeg!, restaurantName: restaurantModel.name!))
-                    }
-                    DispatchQueue.main.async {
-                        DatabaseHelper.shared.updateCart(cartItems: cartItems, userData: userData)
-                    }
-                    
+                    .alert("U have items from other restaurant in cart, Press Yes to clear cart and continue", isPresented: $showRemove, actions: {
+                        Button("No", role: .cancel, action: {
+                            
+                            showRemove = false
+                        })
+                        Button("Yes", role: .destructive, action: {
+                            cartItems = []
+                            cartItems.append(Food(name: showRemoveCurDish!.name!, price: showRemoveCurDish!.price!, quantity: 1, isVeg: showRemoveCurDish!.isVeg!, restaurantName: restaurantModel.name!))
+                                DatabaseHelper.shared.updateCart(cartItems: cartItems, userData: userData)
+                            print(cartItems)
+                            showRemove = false
+                        })
+                    })
                 }
+                else{
+                    PlusMinusBig(cartItems: $cartItems, food: $cartItems[getQuantity(curDish: curDish)], id:cartItems[getQuantity(curDish: curDish)].id, subTotal: $dummySubtotal, userData: $userData)
+                        .font(Font(CTFont(.system, size: 12))).bold()
+
+                        .padding(.trailing, 20)
+                }
+                
                 
             }.frame(maxHeight: .infinity)
         }
         //.animation(Animation.easeInOut(duration: 0.2))
+        
+    }
+    func getQuantity(curDish:DishModel) -> Int{
+        var quantity = -1
+        if(cartItems.count == 0 || cartItems[0].restaurantName != restaurantModel.name!){
+            return quantity
+        }
+        for i in 0..<cartItems.count{
+            if(cartItems[i].name == curDish.name!){
+                return i
+            }
+        }
+        
+        return quantity
         
     }
     func heading() -> some View{
@@ -450,6 +501,72 @@ struct DishView:View{
     }
 }
 */
+
+struct PlusMinusBig:View{
+    @Binding var cartItems:[Food]
+    
+    @State var showRemove = false
+    @Binding var food:Food
+    @State var id: UUID?
+    @State var index = 0
+    @Binding var subTotal:Int
+    @Binding var userData:UserData?
+    var body: some View{
+        HStack(spacing: 4){
+            Text("-").padding(.leading, 8).onTapGesture {
+                for i in cartItems.indices{
+                    if(id == cartItems[i].id){
+                        index = i
+                        break
+                    }
+                }
+                if(cartItems[index].quantity == 1){
+                    
+                    showRemove = true
+                    return
+                }
+                cartItems[index] = Food(id: cartItems[index].id, name: cartItems[index].name, price: cartItems[index].price, quantity: cartItems[index].quantity - 1, isVeg: cartItems[index].isVeg, restaurantName: cartItems[index].restaurantName)
+                DatabaseHelper.shared.updateCart(cartItems: cartItems, userData: userData)
+                subTotal = subTotal - cartItems[index].price
+            }
+            .alert("Do you want to remove this Item from Cart", isPresented: $showRemove, actions: {
+                Button("No", role: .cancel, action: {
+                    
+                    showRemove = false
+                })
+                Button("Yes", role: .destructive, action: {
+                    subTotal = subTotal - cartItems[index].price
+                    cartItems.remove(at: index)
+                    DatabaseHelper.shared.updateCart(cartItems: cartItems, userData: userData)
+                    showRemove = false
+                })
+            })
+            Text("\(food.quantity)").font(Font(CTFont(.system, size: 14))).frame(width: 20)
+            Text("+").padding(.trailing, 8).onTapGesture {
+                for i in cartItems.indices{
+                    if(id == cartItems[i].id){
+                        index = i
+                        break
+                    }
+                }
+                cartItems[index] = Food(id: cartItems[index].id, name: cartItems[index].name, price: cartItems[index].price, quantity: cartItems[index].quantity + 1, isVeg: cartItems[index].isVeg, restaurantName: cartItems[index].restaurantName)
+                DatabaseHelper.shared.updateCart(cartItems: cartItems, userData: userData)
+
+                subTotal = subTotal + cartItems[index].price
+                
+            }
+        }
+        .frame(width: 100, height: 32)
+        .background(Color("Light"))
+        .foregroundColor(Color("Dark"))
+        .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color("Dark"), lineWidth: 2))
+        .cornerRadius(6)
+        
+        .onAppear(){
+            
+        }
+    }
+}
 struct ViewOffsetKey: PreferenceKey{
     typealias Value = CGFloat
     static var defaultValue = CGFloat.zero

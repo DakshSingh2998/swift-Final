@@ -535,7 +535,7 @@ struct PlusMinus:View{
                         break
                     }
                 }
-                cartItems[index] = Food(name: cartItems[index].name, price: cartItems[index].price, quantity: cartItems[index].quantity + 1, isVeg: cartItems[index].isVeg, restaurantName: cartItems[index].restaurantName)
+                cartItems[index] = Food(id: cartItems[index].id, name: cartItems[index].name, price: cartItems[index].price, quantity: cartItems[index].quantity + 1, isVeg: cartItems[index].isVeg, restaurantName: cartItems[index].restaurantName)
                 DatabaseHelper.shared.updateCart(cartItems: cartItems, userData: userData)
 
                 subTotal = subTotal + cartItems[index].price
