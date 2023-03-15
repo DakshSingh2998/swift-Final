@@ -24,6 +24,7 @@ struct GroceryMenu: View {
     }
     @State var seen = true
     @Binding var ONPAGE:Double
+    @Binding var userData:UserData?
     
     func addDummyData(){
         groceryData = []
@@ -34,7 +35,7 @@ struct GroceryMenu: View {
     
     var body: some View {
         ZStack(alignment: .top){
-            CustomNavigation(title: "Grocery" , ONPAGE: $ONPAGE, leftImage: "location.north.circle.fill")
+            CustomNavigation(title: "Grocery" , ONPAGE: $ONPAGE, leftImage: "location.north.circle.fill", userData: userData)
                 .frame(height: 40)
             VStack(spacing: 0){
                 

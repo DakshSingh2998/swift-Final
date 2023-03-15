@@ -66,7 +66,7 @@ struct DeliveryMenu: View {
                      .overlay()
                      */
                     VStack(spacing: 0){
-                        CustomNavigation(title: "Delivery" , ONPAGE: $ONPAGE, leftImage: "location.north.circle.fill")
+                        CustomNavigation(title: "Delivery" , ONPAGE: $ONPAGE, leftImage: "location.north.circle.fill", userData: userData)
                             .frame(height: 40)
                             .frame(maxWidth: .infinity)
                             .frame(height: 40)
@@ -101,41 +101,39 @@ struct DeliveryMenu: View {
                             .padding(6)
                         }
                         .shadow(radius: 6)
-                        HStack{
-                            
-                            Button(action:{
-                                sortShow()
+                        VStack{
+                            HStack{
                                 
-                            }){
-                                Image(systemName: "slider.horizontal.3").resizable()
-                                    .frame(width: 12, height: 10)
-                                Text("Sort ▼")
-                            }.font(Font(CTFont(.system, size: 12)))
-                                .foregroundColor(Color.black)
-                                .padding(4)
-                                .overlay(RoundedCorner(radius: 6).stroke(Color("Grey"), lineWidth:0.5))
-                                .background(Rectangle().fill(Color.white).shadow(radius: 6))
-                                .cornerRadius(6)
-                            //
-                            Button(action:{
-                                sortShow()
-                                filterHidden = false
-                            }){
-                                Image(systemName: "highlighter").resizable()
-                                    .frame(width: 12, height: 10)
-                                Text("Filter ▼")
-                            }.font(Font(CTFont(.system, size: 12)))
-                                .foregroundColor(Color.black)
-                                .padding(4)
-                                .overlay(RoundedCorner(radius: 6).stroke(Color("Grey"), lineWidth:0.5))
-                                .background(Rectangle().fill(Color.white).shadow(radius: 6))
-                                .cornerRadius(6)
-                            
-                            
-                            
-                            
-                            Spacer()
-                        }.padding(6)
+                                Button(action:{
+                                    sortShow()
+                                    
+                                }){
+                                    Image(systemName: "slider.horizontal.3").resizable()
+                                        .frame(width: 12, height: 10)
+                                    Text("Sort ▼")
+                                }.font(Font(CTFont(.system, size: 12)))
+                                    .foregroundColor(Color.black)
+                                    .padding(4)
+                                    .overlay(RoundedCorner(radius: 6).stroke(Color("Grey"), lineWidth:0.5))
+                                    .background(Rectangle().fill(Color.white).shadow(radius: 6))
+                                    .cornerRadius(6)
+                                //
+                                Button(action:{
+                                    sortShow()
+                                    filterHidden = false
+                                }){
+                                    Image(systemName: "highlighter").resizable()
+                                        .frame(width: 12, height: 10)
+                                    Text("Filter ▼")
+                                }.font(Font(CTFont(.system, size: 12)))
+                                    .foregroundColor(Color.black)
+                                    .padding(4)
+                                    .overlay(RoundedCorner(radius: 6).stroke(Color("Grey"), lineWidth:0.5))
+                                    .background(Rectangle().fill(Color.white).shadow(radius: 6))
+                                    .cornerRadius(6)
+                            }
+                        }.frame(maxWidth: .infinity)
+                        .padding(6)
                         
                         
                         List{
@@ -151,7 +149,7 @@ struct DeliveryMenu: View {
                                             gotoRestaurantHomePage = true
                                         })
                                     
-                                                                    }
+                                    }
                                 .padding(12)
                                 //.background(Color.black.opacity(0.2))
                                 .shadow(radius: 6)

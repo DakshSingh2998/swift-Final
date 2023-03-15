@@ -100,7 +100,9 @@ struct ContentView: View {
                         DispatchQueue.main.asyncAfter(deadline: .now()+0.2){
                             dobFocus = true
                         }
-                    }).focused($passFocus).onTapGesture {
+                    })
+                    
+                    .focused($passFocus).onTapGesture {
                         isPassIncorrect = false
                     }
                     //

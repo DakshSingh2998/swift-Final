@@ -53,11 +53,11 @@ struct CustomNavigation: View{
     @Environment(\.dismiss) var dismiss
     
     @State var title = ""
-    
     @Binding var ONPAGE:Double
     @State var rightImage = "person.fill"
     @State var leftImage = "arrowshape.turn.up.backward.fill"
     @State var gotoProfile = false
+    @State var userData:UserData?
     var body: some View{
         ZStack(alignment: .top){
             VStack(spacing: -1){
@@ -107,7 +107,7 @@ struct CustomNavigation: View{
             .padding(16)
             .frame(height: 40)
             .background(Color("Light"))
-            NavigationLink("Profile", destination: Profile(ONPAGE: $ONPAGE), isActive: $gotoProfile).hidden()
+            NavigationLink("Profile", destination: Profile(ONPAGE: $ONPAGE, userData: userData), isActive: $gotoProfile).hidden()
         }
         //.frame(height: 40)
         //.frame(alignment: .top)

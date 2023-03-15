@@ -52,12 +52,12 @@ struct RestaurantHomePage: View {
                 for i in 0..<20{
                     values.append(data[i])
                 }
-                //print(values)
                 self.dishModel = values.map{DishModel(data: $0)}
-                //DispatchQueue.n.async {
                 for curDish in self.dishModel{
                     dishQuantity[curDish] = 0
                 }
+                // load image
+                
                 for curDish in self.dishModel {
                     let url = URL(string: curDish.imageUrl!)!
                         // Fetch Image Data
@@ -72,12 +72,11 @@ struct RestaurantHomePage: View {
                             catch{
                                 print("\(err) \(curDish)")
                             }
-                            //print(self.imageForDish.count)
                         }
                     }
                     dataTask.resume()
                 }
-                //}
+                
                 
                 
                         
@@ -86,7 +85,6 @@ struct RestaurantHomePage: View {
                 for i in 0...5{
                     var temp:[DishModel] = []
                     for j in 0...2{
-                        //self.dishModel[k].imageUrl = "https://cityspideynews.s3.amazonaws.com/uploads/spidey/202202/cover---2022-02-23t172733893-1645617459.webp"
                         temp.append(self.dishModel[k])
                         k = k + 1
                     }
@@ -134,19 +132,16 @@ struct RestaurantHomePage: View {
         ZStack{
             //LinearGradient(gradient: Gradient(colors: [Color("Dark"), Color("Light")]), startPoint: .topLeading, endPoint: .bottomTrailing).ignoresSafeArea()
             VStack{
-                /*
-                HStack{
-                    Text((descArray.count - 1) >= 0 ? descArray[descArray.count - 1] : restaurantModel.name! )
-                    Spacer()
-                }.frame(maxWidth: .infinity)
-                    .background(Color.white)
-                 */
                 List{
                     ForEach(0..<content.count, id: \.self){ idx in
                         VStack{
                             if(idx == 0){
                                 heading()
                                     .font(Font(CTFont(.system, size: 14)))
+                                    //.background(Color.black.opacity(0.2))
+                                    .shadow(radius: 6)
+                                    .cornerRadius(10)
+                                    
                                 
                             }
                             else{
@@ -248,7 +243,7 @@ struct RestaurantHomePage: View {
                             
                         }
                         
-                        .padding(10)
+                        .padding(idx == 0 ? 0 : 10)
                         .background(idx == 0 ? Color("LightGrey") : Color.white)
                         .cornerRadius(6)
                         .padding(.vertical, 10)
@@ -275,7 +270,9 @@ struct RestaurantHomePage: View {
                 Image(systemName: "dot.square").foregroundColor(curDish.isVeg! ? Color("Green") : Color.red).bold()
                 Text(curDish.name!).font(Font(CTFont(.system, size: 16))).bold()
                 HStack{
-                    Text(curDish.rating!).padding(4)
+                    Text(curDish.rating!)
+                        .lineLimit(1)
+                        .padding(4)
                         .background(Color("Green"))
                         .cornerRadius(6)
                     Text("\(curDish.votes!) votes")
@@ -294,41 +291,6 @@ struct RestaurantHomePage: View {
                         .onAppear(){
                         }
                     if(imageForDish[curDish] == nil){
-                       /*
-                        AsyncImage(
-                            url: URL(string: curDish.imageUrl!),
-                                    transaction: Transaction(animation: .easeInOut)
-                                ) { phase in
-                                    switch phase {
-                                    case .empty:
-                                        Image(systemName: "circle.dashed")
-                                    case .success(let image):
-                                        image
-                                            .resizable()
-                                            .transition(.scale(scale: 0.1, anchor: .center))
-                                            .onAppear(){
-                                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
-                                                    imageForDish[curDish] = image
-
-                                                })
-                                                       
-                                            }
-                                    case .failure:
-                                        Image(systemName: "circle.dashed")
-
-                                            .onAppear(){
-                                                imageForDish[curDish] = Image(systemName: "circle.dashed")
-                                                imageForDish[curDish] = nil
-                                                
-                                                
-                                            }
-                                    @unknown default:
-                                        EmptyView()
-                                    }
-                                }
-                                .frame(width: 140, height: 140)
-                                .cornerRadius(10)
-                        */
                         Image(systemName: "circle.dashed").frame(width: 140 ,height: 140)
                             .scaledToFill().cornerRadius(10)
                     }
@@ -404,7 +366,7 @@ struct RestaurantHomePage: View {
                 }
                 else{
                     PlusMinusBig(cartItems: $cartItems, food: $cartItems[getQuantity(curDish: curDish)], id:cartItems[getQuantity(curDish: curDish)].id, subTotal: $dummySubtotal, userData: $userData)
-                        .font(Font(CTFont(.system, size: 12))).bold()
+                        .font(Font(CTFont(.system, size: 16))).bold()
 
                         .padding(.trailing, 20)
                 }
@@ -541,7 +503,9 @@ struct PlusMinusBig:View{
                     showRemove = false
                 })
             })
+            Spacer()
             Text("\(food.quantity)").font(Font(CTFont(.system, size: 14))).frame(width: 20)
+            Spacer()
             Text("+").padding(.trailing, 8).onTapGesture {
                 for i in cartItems.indices{
                     if(id == cartItems[i].id){

@@ -39,7 +39,7 @@ struct Cart: View {
                 .ignoresSafeArea()
             if(cartItems.count != 0){
                 VStack(spacing: 0){
-                    CustomNavigation(title: "Cart" , ONPAGE: $ONPAGE, leftImage: "location.north.circle.fill").frame(height: 40)
+                    CustomNavigation(title: "Cart" , ONPAGE: $ONPAGE, leftImage: "location.north.circle.fill", userData: userData).frame(height: 40)
                     
                     ScrollView{
                         VStack(spacing: 20){
@@ -110,8 +110,7 @@ struct Cart: View {
                             .background(Color("Light"))
                             .cornerRadius(10)
                             .onTapGesture {
-                                //gotoPage = 1
-                                gotoProfile = true
+                                gotoPage = 1
                             }
                             Separator(text: "BILL SUMMARY")
                             
@@ -333,6 +332,11 @@ struct Cart: View {
                                 
                                 
                             }.frame(maxWidth: .infinity)
+                                .contentShape(Rectangle())
+                                .onTapGesture(perform: {
+                                    ONPAGE = 5.0
+                                    gotoProfile = true
+                                })
                                 .background(Color("Light"))
                                 .cornerRadius(10)
                             
@@ -456,7 +460,7 @@ struct Cart: View {
                     .frame(maxWidth: .infinity)
                     .frame(maxHeight: .infinity)
                     .frame(height: 40, alignment: .top)
-                    .overlay(CustomNavigation(title: "Cart" , ONPAGE: $ONPAGE, leftImage: "location.north.circle.fill"))
+                    .overlay(CustomNavigation(title: "Cart" , ONPAGE: $ONPAGE, leftImage: "location.north.circle.fill", userData: userData))
                     Spacer()
                     Image(systemName: "cart.fill.badge.questionmark.rtl").resizable().scaledToFit()
                         .minimumScaleFactor(2)
@@ -468,7 +472,7 @@ struct Cart: View {
                 }.frame(maxHeight: .infinity)
             }
             
-            
+            NavigationLink("Profile", destination: Profile(ONPAGE: $ONPAGE, userData: userData), isActive: $gotoProfile).hidden()
         }
         .animation(.easeInOut(duration: 0.1))
         .onAppear(){

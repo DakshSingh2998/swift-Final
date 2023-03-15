@@ -13,7 +13,7 @@ struct CustomTextField: View{
     @ObservedObject var vm:TextModel
     @State var placeholder = ""
     @Binding var width:CGFloat
-    var height = 36.0
+    var height = 40.0
     @State var isProtected = false
     @State var tempIsProtected = false
     @FocusState var isFocused:Bool
@@ -32,19 +32,24 @@ struct CustomTextField: View{
                 ZStack{
                     //border
                     VStack{
-                    }.frame(width: width-2, height: height+2)
+                    }.frame(width: width - 2, height: height + 10)
                         
                         .background(isInCorrect ? Color(.systemRed): isFocused ?  Color("Blue") : Color("Grey")).cornerRadius(8.0)
                     //secure tf
+                    VStack{
+                    }.frame(width: width - 10, height: height + 4)
+                        
+                        .background(Color(.white)).cornerRadius(4.0)
                     SecureField(placeholder, text: $vm.value, onCommit: {
                         CustomTextField.sendFocus?(defaultplaceholder)
                         commitClosure?()
                     })
+                    .padding(6)
+                    .frame(width: width-50-8, height: height)
                     .animation(nil)
-                    .autocorrectionDisabled(true).textInputAutocapitalization(TextInputAutocapitalization(.none)).frame(width: width-50-6, height: height).textFieldStyle(.roundedBorder)
-                    .padding(.trailing, 50)
+                    .autocorrectionDisabled(true).textInputAutocapitalization(TextInputAutocapitalization(.none))//.textFieldStyle(.roundedBorder)
+                    .padding(.trailing, 54)
                     .isHidden(isProtected ? (tempIsProtected ? false : true) : true)
-
                     //simple tf
                     TextField(placeholder, text: $vm.value).onChange(of: vm.value){newVal in
                         if(isDate == false){
@@ -79,12 +84,16 @@ struct CustomTextField: View{
                         else{
                             vm.value.remove(at: vm.value.index(vm.value.startIndex, offsetBy: 10))
                         }
-                    }.keyboardType((isDate || isNumeric) ? .asciiCapableNumberPad : .asciiCapable).onSubmit {
+                    }
+                    .padding(6)
+                    .keyboardType((isDate || isNumeric) ? .asciiCapableNumberPad : .asciiCapable).onSubmit {
                         commitClosure?()
                     }
                     //CustomTextField.sendFocus!(defaultplaceholder)
                     .animation(nil)
-                    .autocorrectionDisabled(true).textInputAutocapitalization(TextInputAutocapitalization(.none)).frame(width: isProtected ? width-6-50 : width-6, height: height).textFieldStyle(.roundedBorder).isHidden(isProtected ? (tempIsProtected ? true : false) : false).padding(.trailing, isProtected ? 50 : 0)
+                    .autocorrectionDisabled(true).textInputAutocapitalization(TextInputAutocapitalization(.none)).frame(width: isProtected ? width-6-50 : width-6, height: height)
+                    //.textFieldStyle(.roundedBorder)
+                    .isHidden(isProtected ? (tempIsProtected ? true : false) : false).padding(.trailing, isProtected ? 50 : 0)
                     //pass image
                     
                     HStack{
@@ -96,8 +105,12 @@ struct CustomTextField: View{
                             }
                         }
                     }
-                    .frame(width: 50+4, height: 36-2.5).background(.white).padding(.leading, width-50-10).cornerRadius(6)
-                        .isHidden(!isProtected)
+                    .frame(width: 50+4, height: height-5)
+                    .padding(.leading, width-50-8)
+                    .cornerRadius(6)
+                    .isHidden(!isProtected)
+                    
+                    // here
                     ///Label
                     Text(labelText).background(.white).padding(.leading, -width/2.2).padding(.bottom, height+4).contentShape(Rectangle()).foregroundColor(Color("Blue")).opacity(isFocused ? 1 : 0).animation(.linear(duration: 0.1)).font(Font(CTFont(.system, size: 14)))
                     //incorrect label
@@ -105,7 +118,10 @@ struct CustomTextField: View{
                         .background(.white)
                         .foregroundColor(Color(.systemRed)).opacity(isInCorrect ? 1 : 0).animation(.linear(duration: 0.1))
                         .padding(.leading, +width/1.4).padding(.top, height).font(Font(CTFont(.system, size: 14)))
-                }.focused($isFocused)
+                }
+                .padding(.vertical, 4)
+                .font(Font(CTFont(.system, size: height - 18)))
+                .focused($isFocused)
             
         }.animation(nil)
             .onAppear(){

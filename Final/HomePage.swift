@@ -52,7 +52,7 @@ struct HomePage: View {
                     }.tag(1)
                 
                 
-                GroceryMenu(ONPAGE: $ONPAGE)
+                GroceryMenu(ONPAGE: $ONPAGE, userData: $userData)
                     .tabItem{
                         Label("Grocery", systemImage: "basket")
                     }.tag(2)

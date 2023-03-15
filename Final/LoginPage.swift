@@ -105,7 +105,7 @@ struct LoginPage: View {
                     .frame(minHeight: self.height - self.height/3)
                     .navigationBarHidden(true)
             }
-            .padding(.top, 40)
+            .padding(.top, 80)
         }.overlay(CustomNavigation(title: "Log In", ONPAGE: $ONPAGE, rightImage: ""))
             .onChange(of: ONPAGE){newVal in
                 if(ONPAGE < 3.0){

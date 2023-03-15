@@ -28,6 +28,7 @@ struct Profile: View {
     @State var i = 0
     @State var toast:String?
     @Binding var ONPAGE:Double
+    @State var userData:UserData?
     var body: some View {
         ZStack(alignment: .top){
             LinearGradient(gradient: Gradient(colors: [Color("Dark"), Color("Light")]), startPoint: .topLeading, endPoint: .bottomTrailing)
@@ -42,8 +43,8 @@ struct Profile: View {
                 VStack{
                     HStack{
                         VStack{
-                            Text("Name").font(Font(CTFont(.system, size: 24))).bold()
-                            Text("email").font(Font(CTFont(.system, size: 18)))
+                            Text(userData!.name!).font(Font(CTFont(.system, size: 24))).bold()
+                            Text(userData!.email!).font(Font(CTFont(.system, size: 18)))
                         }
                         Spacer()
                         VStack{
