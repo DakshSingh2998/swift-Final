@@ -76,10 +76,6 @@ struct RestaurantHomePage: View {
                     }
                     dataTask.resume()
                 }
-                
-                
-                
-                        
                 var k = 0
                 
                 for i in 0...5{
