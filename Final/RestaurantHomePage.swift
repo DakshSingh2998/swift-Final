@@ -39,8 +39,19 @@ struct RestaurantHomePage: View {
     @State var dummySubtotal = 0
     @State var showRemove = false
     @State var showRemoveCurDish:DishModel?
+    @State var apiLoaded = false
     var body: some View {
-        getContentView()
+        VStack{
+            if(apiLoaded == true){
+                getContentView()
+            }
+            else{
+                ProgressView("Ready to Eat?")
+                    .background(Color.white)
+            }
+            
+        }
+        
         
         .background(Color("LightGrey"))
         .onAppear(){
@@ -56,6 +67,7 @@ struct RestaurantHomePage: View {
                 for curDish in self.dishModel{
                     dishQuantity[curDish] = 0
                 }
+                apiLoaded = true    
                 // load image
                 
                 for curDish in self.dishModel {
@@ -76,6 +88,7 @@ struct RestaurantHomePage: View {
                     }
                     dataTask.resume()
                 }
+
                 var k = 0
                 
                 for i in 0...5{

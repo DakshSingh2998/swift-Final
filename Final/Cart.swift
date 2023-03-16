@@ -39,7 +39,7 @@ struct Cart: View {
                 .ignoresSafeArea()
             if(cartItems.count != 0){
                 VStack(spacing: 0){
-                    CustomNavigation(title: "Cart" , ONPAGE: $ONPAGE, leftImage: "location.north.circle.fill", userData: userData).frame(height: 40)
+                    CustomNavigation(title: cartItems.count == 0 ? "Cart" : cartItems[0].restaurantName , ONPAGE: $ONPAGE, leftImage: "location.north.circle.fill", userData: userData).frame(height: 40)
                     
                     ScrollView{
                         VStack(spacing: 20){
