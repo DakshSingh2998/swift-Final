@@ -120,7 +120,7 @@ struct CustomTextField: View{
                         .padding(.leading, +width/1.4).padding(.top, height).font(Font(CTFont(.system, size: 14)))
                 }
                 .padding(.vertical, 4)
-                .font(Font(CTFont(.system, size: height - 18)))
+                .font(Font(CTFont(.system, size: height - 22)))
                 .focused($isFocused)
             
         }.animation(nil)

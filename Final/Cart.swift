@@ -202,14 +202,14 @@ struct Cart: View {
                                     Image(systemName: "car")
                                         .frame(width: 20, height: 20)
                                     
-                                    Text("Delivery partner fee for \(String(format: "%.2f", distance)) km").font(Font(CTFont(.system, size: 12)))
+                                    Text("Delivery partner fee for \(String(format: "%.2f", cartItems[0].distance)) km").font(Font(CTFont(.system, size: 12)))
                                         .onTapGesture(perform: {
-                                            gst = gst + 2
-                                            distance = distance + 2
+                                            //gst = gst + 2
+                                            //distance = distance + 2
                                             
                                         })
                                     Spacer()
-                                    Text("₹\(String(format: "%.2f", (distance <= 5.0 ? 40.0 : 40.0 + (distance - 5) * 5 ) ))").font(Font(CTFont(.system, size: 12)))
+                                    Text("₹\(String(format: "%.2f", (Double(cartItems[0].distance) <= 5.0 ? 40.0 : 40.0 + (cartItems[0].distance - 5) * 5 ) ))").font(Font(CTFont(.system, size: 12)))
                                     /*
                                      
                                      */
@@ -254,12 +254,12 @@ struct Cart: View {
                                         }
                                         //.padding(.top, 6)
                                             //.padding(.horizontal, 6)
-                                        if(distance > 5){
+                                        if(cartItems[0].distance > 5){
                                             HStack{
                                                 Text("Long Distance Fee")
                                                     .font(Font(CTFont(.system, size: 12)))
                                                 Spacer()
-                                                Text("₹\(String(format: "%.2f",(distance <= 5.0 ? 0 : (distance - 5.0) * 5)) ) ")
+                                                Text("₹\(String(format: "%.2f",(cartItems[0].distance <= 5.0 ? 0 : (cartItems[0].distance - 5.0) * 5)) ) ")
                                                     .font(Font(CTFont(.system, size: 12)))
                                             }
                                             HStack{
@@ -302,7 +302,7 @@ struct Cart: View {
                                     .padding(.horizontal, 10)
                                     Spacer()
                                     VStack(alignment: .trailing, spacing: 10){
-                                        Text("₹\(String(format: "%.2f", (Double(subTotal) * gst / 100).roundTo() + Double(subTotal) + (distance <= 5.0 ? 40.0 : 40.0 + (distance - 5) * 5 ) ))").font(Font(CTFont(.system, size: 16))).bold()
+                                        Text("₹\(String(format: "%.2f", (Double(subTotal) * gst / 100).roundTo() + Double(subTotal) + (cartItems[0].distance <= 5.0 ? 40.0 : 40.0 + (cartItems[0].distance - 5) * 5 ) ))").font(Font(CTFont(.system, size: 16))).bold()
                                     }
                                     .padding(.bottom, 10)
                                     .padding(.horizontal, 10)
@@ -411,7 +411,7 @@ struct Cart: View {
                             
                             HStack{
                                 VStack(alignment: .leading){
-                                    Text("₹\(String(format: "%.2f", (Double(subTotal) * gst / 100).roundTo() + Double(subTotal) + (distance <= 5.0 ? 40.0 : 40.0 + (distance - 5) * 5 ) ))")
+                                    Text("₹\(String(format: "%.2f", (Double(subTotal) * gst / 100).roundTo() + Double(subTotal) + (cartItems[0].distance <= 5.0 ? 40.0 : 40.0 + (cartItems[0].distance - 5) * 5 ) ))")
                                         .font(Font(CTFont(.system, size: 14))).foregroundColor(.white)
                                         .multilineTextAlignment(.leading)
                                         .lineLimit(1)
@@ -488,7 +488,7 @@ struct Cart: View {
         gstAmt = Double(subTotal) * gst / 100
         
         grandTotal = Double(subTotal) + gstAmt
-        grandTotal = grandTotal + distance * 5
+        grandTotal = grandTotal + cartItems[0].distance * 5
         //(Double(subTotal) * gst / 100) + Double(subTotal) + distance * 5
     }
 }
@@ -515,7 +515,7 @@ struct PlusMinus:View{
                     showRemove = true
                     return
                 }
-                cartItems[index] = Food(id: cartItems[index].id, name: cartItems[index].name, price: cartItems[index].price, quantity: cartItems[index].quantity - 1, isVeg: cartItems[index].isVeg, restaurantName: cartItems[index].restaurantName)
+                cartItems[index] = Food(id: cartItems[index].id, name: cartItems[index].name, price: cartItems[index].price, quantity: cartItems[index].quantity - 1, isVeg: cartItems[index].isVeg, restaurantName: cartItems[index].restaurantName, distance: cartItems[index].distance)
                 DatabaseHelper.shared.updateCart(cartItems: cartItems, userData: userData)
                 subTotal = subTotal - cartItems[index].price
             }
@@ -539,7 +539,7 @@ struct PlusMinus:View{
                         break
                     }
                 }
-                cartItems[index] = Food(id: cartItems[index].id, name: cartItems[index].name, price: cartItems[index].price, quantity: cartItems[index].quantity + 1, isVeg: cartItems[index].isVeg, restaurantName: cartItems[index].restaurantName)
+                cartItems[index] = Food(id: cartItems[index].id, name: cartItems[index].name, price: cartItems[index].price, quantity: cartItems[index].quantity + 1, isVeg: cartItems[index].isVeg, restaurantName: cartItems[index].restaurantName, distance: cartItems[index].distance)
                 DatabaseHelper.shared.updateCart(cartItems: cartItems, userData: userData)
 
                 subTotal = subTotal + cartItems[index].price

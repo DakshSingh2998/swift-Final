@@ -14,6 +14,7 @@ struct Food: Identifiable{
     @State var quantity = 0
     @State var isVeg = false
     @State var restaurantName = ""
+    @State var distance = 0.0
 }
 enum PaymentMode{
     case cash, upi
@@ -78,7 +79,7 @@ struct HomePage: View {
                 var cartItemDish :[CartItemDish] = DatabaseHelper.shared.loadCart(userData: userData!)
                 for i in 0..<cartItemDish.count{
                     if(cartItemDish[i].toUserData == userData){
-                        cartItems.append(Food(name: cartItemDish[i].name!, price: Int(cartItemDish[i].price), quantity: Int(cartItemDish[i].quantity), isVeg: cartItemDish[i].isVeg, restaurantName: cartItemDish[i].restaurantName!))
+                        cartItems.append(Food(name: cartItemDish[i].name!, price: Int(cartItemDish[i].price), quantity: Int(cartItemDish[i].quantity), isVeg: cartItemDish[i].isVeg, restaurantName: cartItemDish[i].restaurantName!, distance: cartItemDish[i].distance))
                     }
                     
                 }

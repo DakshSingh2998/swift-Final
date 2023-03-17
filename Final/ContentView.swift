@@ -94,7 +94,6 @@ struct ContentView: View {
                     }).focused($emailFocus).onTapGesture {
                         isEmailIncorrect = false
                     }
-                    ///
                     CustomTextField(defaultplaceholder: "Password", vm: vmPass, width: $tfWidth, isProtected: true, isInCorrect: $isPassIncorrect, commitClosure: {
                         isDOBIncorrect = false
                         DispatchQueue.main.asyncAfter(deadline: .now()+0.2){
@@ -105,7 +104,6 @@ struct ContentView: View {
                     .focused($passFocus).onTapGesture {
                         isPassIncorrect = false
                     }
-                    //
                     CustomTextField(defaultplaceholder: "dd/mm/yyyy", vm: vmDOB, width: $tfWidth, isInCorrect: $isDOBIncorrect, isDate: true, labelText: "Date Of Birth", commitClosure: {
                         if(CommonMethods.shared.isValidDate(vmDOB.value) == false){
                             isDOBIncorrect = true
@@ -173,18 +171,9 @@ struct ContentView: View {
                         }
                     })
                     .padding(.top, 32)
-                    
-                    /*
-                    NavigationLink(destination: loginPage, isActive: $gotoLogin){
-                        
-                        
-                    }
-                    
-                        */
                     Text("Already have account? " + coloredSignIn).font(Font(CTFont(.kCTFontSystemFontType, size: 16))).foregroundColor(.black).onTapGesture(perform: {
                         
                         ONPAGE = 3.0
-                        //gotoLogin = true
                     }).padding(.vertical, 16)
                 }
                 .padding(.horizontal, 50)
@@ -192,7 +181,6 @@ struct ContentView: View {
                 
                 .onAppear(){
                     print("ONPAGE2 \(ONPAGE)")
-                    //loginPage = LoginPage(ONPAGE: $ONPAGE)
                     CustomTextField.sendFocus = {received in
                         if(received == "Name"){
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){

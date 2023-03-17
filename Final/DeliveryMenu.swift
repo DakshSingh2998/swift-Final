@@ -367,7 +367,7 @@ struct DeliveryMenu: View {
                             .padding(.bottom, sortPaddingBottom)
                             .isHidden(sortHidden)
                         
-                        NavigationLink(destination: RestaurantHomePage(restuarantDishUrl: $restaurantDishUrl, restaurantModel: onTapped, filterCategory: filterCategory, cartItems: $cartItems, userData: $userData), isActive: $gotoRestaurantHomePage){
+                        NavigationLink(destination: RestaurantHomePage(restuarantDishUrl: $restaurantDishUrl, restaurantModel: onTapped, filterCategory: filterCategory, cartItems: $cartItems, userData: $userData, onPage: $onPage), isActive: $gotoRestaurantHomePage){
                         }.hidden()
                         
                             .gesture(DragGesture(minimumDistance: 10, coordinateSpace: .local)
@@ -420,6 +420,7 @@ struct DeliveryMenu: View {
                 }
             }
             else{
+
                 ProgressView("    Loading :)\nWait for Magic")
             }
             Spacer()

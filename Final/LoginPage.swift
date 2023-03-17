@@ -59,7 +59,6 @@ struct LoginPage: View {
                                 if(userData[i].password == vmPass.value){
                                     print("Correct")
                                     self.userData = userData[i]
-                                    //homePage = HomePage(ONPAGE: $ONPAGE, userData: sendUserData)
                                     UserDefaults.standard.set(vmEmail.value, forKey: "loggedInUser")
                                     ONPAGE = 4.0
                                     break
@@ -75,10 +74,6 @@ struct LoginPage: View {
                             isEmailIncorrect = true
                             print("dash dash")
                         }
-                        
-                        
-                        
-                        
                     }.padding(.top, 32)
                 }.padding(.horizontal, 50)
                     .onAppear(){
@@ -116,7 +111,6 @@ struct LoginPage: View {
                 vmEmail.value = "d@gmail.com"
                 vmPass.value = "111"
             }
-            //.animation(.easeInOut(duration: 0.5))
     }
 }
 /*

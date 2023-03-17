@@ -62,6 +62,7 @@ struct DatabaseHelper{
                 temp.quantity = Int64(i.quantity)
                 temp.isVeg = i.isVeg
                 temp.restaurantName = i.restaurantName
+                temp.distance = Double(i.distance)
                 //temp.toUserData = userData
                 userData!.addToToCartItem(temp)
                 //obj.append(temp)

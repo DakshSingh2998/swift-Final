@@ -142,8 +142,8 @@ struct FoodItemCell: View {
             HStack{
                 Image(systemName: "deskclock.fill").frame(width: 20, height: 20)
                     .foregroundColor(Color("Green"))
-                Text("\(showRestaurantModel.distance! * 5 )-\(showRestaurantModel.distance! * 5 + 5) min • ")
-                Text("\(showRestaurantModel.distance!) km")
+                Text("\(Int(showRestaurantModel.distance!) * 5 )-\(Int(showRestaurantModel.distance!) * 5 + 5) min • ")
+                Text("\(Int(showRestaurantModel.distance!)) km")
                 Spacer()
                 Text("\(showRestaurantModel.price!) for one")
             }.font(Font(CTFont(.system, size: 14)))

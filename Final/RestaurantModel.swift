@@ -8,7 +8,7 @@
 import Foundation
 struct RestaurantModel: Encodable{
     var isVeg:Bool?
-    var distance:Int?
+    var distance:Double?
     var price:Int?
     var isLiked:Bool?
     var id:Int?
@@ -21,7 +21,7 @@ struct RestaurantModel: Encodable{
     init(data: [String:Any]){
         if let isVeg = data["D"]{ self.isVeg = isVeg as? Bool
         }
-        if let distance = data["F"]{ self.distance = Int((distance as? String)!) ?? 0
+        if let distance = data["F"]{ self.distance = Double((distance as? String)!) ?? 0
         }
         if let price = data["G"]{ self.price = Int((price as? String)!) ?? 0
         }
@@ -38,7 +38,7 @@ struct RestaurantModel: Encodable{
         if let location = data["I"]{ self.location = location as? String
         }
     }
-    init(isVeg:Bool?, distance:Int?, price:Int?, isLiked:Bool?, id:Int?, category:String?, rating:String?, name:String?, location:String?){
+    init(isVeg:Bool?, distance:Double?, price:Int?, isLiked:Bool?, id:Int?, category:String?, rating:String?, name:String?, location:String?){
         self.isVeg = isVeg
         self.distance = distance
         self.price = price

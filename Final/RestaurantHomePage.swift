@@ -21,6 +21,7 @@ struct Dish: Identifiable{
     
 }
 struct RestaurantHomePage: View {
+    @Environment(\.dismiss) var dismiss
     @State var content:[ContentData] = []
     @State var dish:[[Dish]] = []
     @State var distance = 7
@@ -40,10 +41,39 @@ struct RestaurantHomePage: View {
     @State var showRemove = false
     @State var showRemoveCurDish:DishModel?
     @State var apiLoaded = false
+    @Binding var onPage:Int
     var body: some View {
-        VStack{
+        ZStack(alignment: .bottom){
             if(apiLoaded == true){
-                getContentView()
+                getContentView().padding(.bottom, cartItems.count == 0 || cartItems[0].restaurantName != restaurantModel.name! ? 0 : 60)
+                if(cartItems.count != 0 && cartItems[0].restaurantName == restaurantModel.name!){
+                    HStack{
+                        Text("\(cartItems.count) ITEM(s) ADDED").font(Font(CTFont(.system, size: 14)))
+                            .fixedSize()
+                            .padding(10)
+                            Spacer()
+                        CustomPrimaryButton(title: "Next", height: 40, colorr: Color("Dark"), borderColor: Color("Dark"), textColor: Color.white, closure: {
+                            try? dismiss()
+                            onPage = 3
+                        })
+                        .frame(width: 200)
+                        .fixedSize()
+                        .padding(10)
+                    }
+                    //.padding(20)
+                    //.background(Color("White"))
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 50)
+                    
+                }
+                else{
+                    VStack{
+                        Spacer()
+                    }
+                    .frame(height: 1)
+                    .background(Color.clear)
+                }
+                
             }
             else{
                 ProgressView("Ready to Eat?")
@@ -146,7 +176,7 @@ struct RestaurantHomePage: View {
                         VStack{
                             if(idx == 0){
                                 heading()
-                                    .font(Font(CTFont(.system, size: 14)))
+                                    
                                     //.background(Color.black.opacity(0.2))
                                     .shadow(radius: 6)
                                     .cornerRadius(10)
@@ -270,6 +300,12 @@ struct RestaurantHomePage: View {
                 .coordinateSpace(name: "scroll")
                 .listStyle(.plain)
                 .padding(.horizontal, -20)
+                
+//                LinearGradient(colors: [Color("White"), Color("LightGrey")], startPoint: .top, endPoint: .bottom)
+//
+//                .frame(maxWidth: .infinity)
+//                .frame(height: 20)
+                 
             }
         }
     }
@@ -350,10 +386,10 @@ struct RestaurantHomePage: View {
                             }
                         }
                         if(dishFound != -1){
-                            cartItems[dishFound] = Food(id: cartItems[dishFound].id, name: cartItems[dishFound].name, price: cartItems[dishFound].price, quantity: cartItems[dishFound].quantity + 1, isVeg: cartItems[dishFound].isVeg, restaurantName: cartItems[dishFound].restaurantName)
+                            cartItems[dishFound] = Food(id: cartItems[dishFound].id, name: cartItems[dishFound].name, price: cartItems[dishFound].price, quantity: cartItems[dishFound].quantity + 1, isVeg: cartItems[dishFound].isVeg, restaurantName: cartItems[dishFound].restaurantName, distance: cartItems[dishFound].distance)
                         }
                         else{
-                            cartItems.append(Food(name: curDish.name!, price: curDish.price!, quantity: 1, isVeg: curDish.isVeg!, restaurantName: restaurantModel.name!))
+                            cartItems.append(Food(name: curDish.name!, price: curDish.price!, quantity: 1, isVeg: curDish.isVeg!, restaurantName: restaurantModel.name!, distance: restaurantModel.distance!))
                         }
                         DispatchQueue.main.async {
                             DatabaseHelper.shared.updateCart(cartItems: cartItems, userData: userData)
@@ -366,7 +402,7 @@ struct RestaurantHomePage: View {
                         })
                         Button("Yes", role: .destructive, action: {
                             cartItems = []
-                            cartItems.append(Food(name: showRemoveCurDish!.name!, price: showRemoveCurDish!.price!, quantity: 1, isVeg: showRemoveCurDish!.isVeg!, restaurantName: restaurantModel.name!))
+                            cartItems.append(Food(name: showRemoveCurDish!.name!, price: showRemoveCurDish!.price!, quantity: 1, isVeg: showRemoveCurDish!.isVeg!, restaurantName: restaurantModel.name!, distance: restaurantModel.distance!))
                                 DatabaseHelper.shared.updateCart(cartItems: cartItems, userData: userData)
                             print(cartItems)
                             showRemove = false
@@ -496,7 +532,7 @@ struct PlusMinusBig:View{
                     showRemove = true
                     return
                 }
-                cartItems[index] = Food(id: cartItems[index].id, name: cartItems[index].name, price: cartItems[index].price, quantity: cartItems[index].quantity - 1, isVeg: cartItems[index].isVeg, restaurantName: cartItems[index].restaurantName)
+                cartItems[index] = Food(id: cartItems[index].id, name: cartItems[index].name, price: cartItems[index].price, quantity: cartItems[index].quantity - 1, isVeg: cartItems[index].isVeg, restaurantName: cartItems[index].restaurantName, distance: cartItems[index].distance)
                 DatabaseHelper.shared.updateCart(cartItems: cartItems, userData: userData)
                 subTotal = subTotal - cartItems[index].price
             }
@@ -522,7 +558,8 @@ struct PlusMinusBig:View{
                         break
                     }
                 }
-                cartItems[index] = Food(id: cartItems[index].id, name: cartItems[index].name, price: cartItems[index].price, quantity: cartItems[index].quantity + 1, isVeg: cartItems[index].isVeg, restaurantName: cartItems[index].restaurantName)
+                cartItems[index] = Food(id: cartItems[index].id, name: cartItems[index].name, price: cartItems[index].price, quantity: cartItems[index].quantity + 1, isVeg: cartItems[index].isVeg, restaurantName: cartItems[index].restaurantName, distance: cartItems[index].distance
+                )
                 DatabaseHelper.shared.updateCart(cartItems: cartItems, userData: userData)
 
                 subTotal = subTotal + cartItems[index].price

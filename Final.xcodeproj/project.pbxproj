@@ -19,6 +19,10 @@
 		5237A6F529BF0AD7001EB134 /* DatabaseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5237A6F429BF0AD7001EB134 /* DatabaseHelper.swift */; };
 		523819F929A5D1EB00C5F0F7 /* Cart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523819F829A5D1EB00C5F0F7 /* Cart.swift */; };
 		523819FB29A61E0000C5F0F7 /* TempSave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523819FA29A61E0000C5F0F7 /* TempSave.swift */; };
+		5238224229C43A08006EE550 /* CartItemDish+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5238223E29C43A08006EE550 /* CartItemDish+CoreDataClass.swift */; };
+		5238224329C43A08006EE550 /* CartItemDish+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5238223F29C43A08006EE550 /* CartItemDish+CoreDataProperties.swift */; };
+		5238224429C43A08006EE550 /* UserData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5238224029C43A08006EE550 /* UserData+CoreDataClass.swift */; };
+		5238224529C43A08006EE550 /* UserData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5238224129C43A08006EE550 /* UserData+CoreDataProperties.swift */; };
 		5238A3D229B993C200932482 /* DishModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5238A3D129B993C200932482 /* DishModel.swift */; };
 		523E4B4A404803F700ED87DD /* LoadingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523E4B49404803F700ED87DD /* LoadingScreen.swift */; };
 		523E4B4C404803F700ED87DD /* RestaurantHomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523E4B4B404803F700ED87DD /* RestaurantHomePage.swift */; };
@@ -40,10 +44,6 @@
 		52C87082299E20B800491700 /* CustomPrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C87081299E20B800491700 /* CustomPrimaryButton.swift */; };
 		52C87084299E213A00491700 /* CustomSecondaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C87083299E213A00491700 /* CustomSecondaryButton.swift */; };
 		52C87086299E247C00491700 /* FirstPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C87085299E247C00491700 /* FirstPage.swift */; };
-		52F6243C29C0352800F3EBD1 /* CartItemDish+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F6243829C0352800F3EBD1 /* CartItemDish+CoreDataClass.swift */; };
-		52F6243D29C0352800F3EBD1 /* CartItemDish+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F6243929C0352800F3EBD1 /* CartItemDish+CoreDataProperties.swift */; };
-		52F6243E29C0352800F3EBD1 /* UserData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F6243A29C0352800F3EBD1 /* UserData+CoreDataClass.swift */; };
-		52F6243F29C0352800F3EBD1 /* UserData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F6243B29C0352800F3EBD1 /* UserData+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +76,10 @@
 		5237A6F429BF0AD7001EB134 /* DatabaseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseHelper.swift; sourceTree = "<group>"; };
 		523819F829A5D1EB00C5F0F7 /* Cart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cart.swift; sourceTree = "<group>"; };
 		523819FA29A61E0000C5F0F7 /* TempSave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempSave.swift; sourceTree = "<group>"; };
+		5238223E29C43A08006EE550 /* CartItemDish+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CartItemDish+CoreDataClass.swift"; sourceTree = "<group>"; };
+		5238223F29C43A08006EE550 /* CartItemDish+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CartItemDish+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		5238224029C43A08006EE550 /* UserData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserData+CoreDataClass.swift"; sourceTree = "<group>"; };
+		5238224129C43A08006EE550 /* UserData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		5238A3D129B993C200932482 /* DishModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DishModel.swift; sourceTree = "<group>"; };
 		523E4B49404803F700ED87DD /* LoadingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingScreen.swift; sourceTree = "<group>"; };
 		523E4B4B404803F700ED87DD /* RestaurantHomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantHomePage.swift; sourceTree = "<group>"; };
@@ -100,10 +104,6 @@
 		52C87081299E20B800491700 /* CustomPrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPrimaryButton.swift; sourceTree = "<group>"; };
 		52C87083299E213A00491700 /* CustomSecondaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSecondaryButton.swift; sourceTree = "<group>"; };
 		52C87085299E247C00491700 /* FirstPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstPage.swift; sourceTree = "<group>"; };
-		52F6243829C0352800F3EBD1 /* CartItemDish+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CartItemDish+CoreDataClass.swift"; sourceTree = "<group>"; };
-		52F6243929C0352800F3EBD1 /* CartItemDish+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CartItemDish+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		52F6243A29C0352800F3EBD1 /* UserData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserData+CoreDataClass.swift"; sourceTree = "<group>"; };
-		52F6243B29C0352800F3EBD1 /* UserData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,14 +163,14 @@
 				5238A3D129B993C200932482 /* DishModel.swift */,
 				5233AAEF29ADE4870033B5C8 /* CustomNavigation.swift */,
 				5237A6F429BF0AD7001EB134 /* DatabaseHelper.swift */,
-				52F6243829C0352800F3EBD1 /* CartItemDish+CoreDataClass.swift */,
-				52F6243929C0352800F3EBD1 /* CartItemDish+CoreDataProperties.swift */,
-				52F6243A29C0352800F3EBD1 /* UserData+CoreDataClass.swift */,
-				52F6243B29C0352800F3EBD1 /* UserData+CoreDataProperties.swift */,
 				52C87085299E247C00491700 /* FirstPage.swift */,
 				526166A51A558EF8002D73DA /* ContentView.swift */,
 				52C8707D299E147C00491700 /* LoginPage.swift */,
 				529676BC29A4B57100DF6267 /* HomePage.swift */,
+				5238223E29C43A08006EE550 /* CartItemDish+CoreDataClass.swift */,
+				5238223F29C43A08006EE550 /* CartItemDish+CoreDataProperties.swift */,
+				5238224029C43A08006EE550 /* UserData+CoreDataClass.swift */,
+				5238224129C43A08006EE550 /* UserData+CoreDataProperties.swift */,
 				523E4B4B404803F700ED87DD /* RestaurantHomePage.swift */,
 				529676C029A4B66200DF6267 /* GroceryMenu.swift */,
 				523819F829A5D1EB00C5F0F7 /* Cart.swift */,
@@ -348,7 +348,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				52F6243E29C0352800F3EBD1 /* UserData+CoreDataClass.swift in Sources */,
+				5238224429C43A08006EE550 /* UserData+CoreDataClass.swift in Sources */,
 				529676BB29A49BF300DF6267 /* NoWidthTextField.swift in Sources */,
 				5237A6F529BF0AD7001EB134 /* DatabaseHelper.swift in Sources */,
 				526166B01A558EFA002D73DA /* Final.xcdatamodeld in Sources */,
@@ -363,10 +363,10 @@
 				522D978729AC97D800803BD9 /* Profile.swift in Sources */,
 				529676C129A4B66200DF6267 /* GroceryMenu.swift in Sources */,
 				5211AEC94036EAD900A97240 /* CustomTextField.swift in Sources */,
-				52F6243D29C0352800F3EBD1 /* CartItemDish+CoreDataProperties.swift in Sources */,
+				5238224329C43A08006EE550 /* CartItemDish+CoreDataProperties.swift in Sources */,
 				52329D7729B72B3A00F7E9F5 /* NetworkManager.swift in Sources */,
 				529676BD29A4B57100DF6267 /* HomePage.swift in Sources */,
-				52F6243C29C0352800F3EBD1 /* CartItemDish+CoreDataClass.swift in Sources */,
+				5238224229C43A08006EE550 /* CartItemDish+CoreDataClass.swift in Sources */,
 				52329D7929B72BEB00F7E9F5 /* RestaurantModel.swift in Sources */,
 				523E4B4A404803F700ED87DD /* LoadingScreen.swift in Sources */,
 				52BB038829AF50A8008D0AC7 /* FoodItemCell.swift in Sources */,
@@ -376,7 +376,7 @@
 				52C87084299E213A00491700 /* CustomSecondaryButton.swift in Sources */,
 				526166A61A558EF8002D73DA /* ContentView.swift in Sources */,
 				526166A41A558EF8002D73DA /* FinalApp.swift in Sources */,
-				52F6243F29C0352800F3EBD1 /* UserData+CoreDataProperties.swift in Sources */,
+				5238224529C43A08006EE550 /* UserData+CoreDataProperties.swift in Sources */,
 				523819F929A5D1EB00C5F0F7 /* Cart.swift in Sources */,
 				5233AAF229ADF0720033B5C8 /* temp.swift in Sources */,
 			);
@@ -545,7 +545,8 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationPortrait";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -575,7 +576,8 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationPortrait";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

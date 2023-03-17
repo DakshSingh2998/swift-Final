@@ -103,7 +103,7 @@ struct FirstPage: View {
             }
                 .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)){_ in
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
-                        CommonMethods.shared.updateOrientation()
+                        //CommonMethods.shared.updateOrientation()
                         self.width = CommonMethods.shared.width
                         self.height = CommonMethods.shared.height
                         self.orientation = CommonMethods.shared.currentOrientation

@@ -55,6 +55,13 @@ struct LoadingScreen: View {
                 }
             })
         }
+        .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)){_ in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
+                CommonMethods.shared.updateOrientation()
+                
+            }
+            
+        }
     }
 }
 /*
