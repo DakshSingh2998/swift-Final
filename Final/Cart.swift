@@ -207,6 +207,7 @@ struct Cart: View {
                                             //gst = gst + 2
                                             //distance = distance + 2
                                             
+                                            
                                         })
                                     Spacer()
                                     Text("₹\(String(format: "%.2f", (Double(cartItems[0].distance) <= 5.0 ? 40.0 : 40.0 + (cartItems[0].distance - 5) * 5 ) ))").font(Font(CTFont(.system, size: 12)))
