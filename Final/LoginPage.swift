@@ -23,6 +23,7 @@ struct LoginPage: View {
     @State var gotoHomePage = false
     @Binding var userData: UserData?
     @State var homePage:HomePage?
+    @State var CustomNavitaionTitle = "Log In"
     var body: some View {
         ZStack{
             ScrollView{
@@ -101,7 +102,7 @@ struct LoginPage: View {
                     .navigationBarHidden(true)
             }
             .padding(.top, 80)
-        }.overlay(CustomNavigation(title: "Log In", ONPAGE: $ONPAGE, rightImage: ""))
+        }.overlay(CustomNavigation(title: $CustomNavitaionTitle, ONPAGE: $ONPAGE, rightImage: ""))
             .onChange(of: ONPAGE){newVal in
                 if(ONPAGE < 3.0){
                     try? dismiss()

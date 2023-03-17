@@ -444,7 +444,7 @@ struct RestaurantHomePage: View {
                 Text(restaurantModel.location!).foregroundColor(Color("Grey"))
                 HStack{
                     Image(systemName: "deskclock.fill")
-                    Text("\(restaurantModel.distance! * 5) mins | \(restaurantModel.distance!) km away")
+                    Text("\(Int(restaurantModel.distance! * 5)) mins | \(String(format: "%.2f",restaurantModel.distance!)) km away")
                 }
                 
             }

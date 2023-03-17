@@ -52,7 +52,7 @@ struct ContentView: View {
 struct CustomNavigation: View{
     @Environment(\.dismiss) var dismiss
     
-    @State var title = ""
+    @Binding var title:String
     @Binding var ONPAGE:Double
     @State var rightImage = "person.fill"
     @State var leftImage = "arrowshape.turn.up.backward.fill"

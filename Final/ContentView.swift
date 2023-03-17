@@ -38,6 +38,7 @@ struct ContentView: View {
     @State var False = false
     @State var successfulSignup = false
     @State var alertText = ""
+    @State var CustomNavitaionTitle = "Sign Up"
     var coloredSignIn: AttributedString{
         var result = AttributedString("Sign In")
         result.foregroundColor = Color("Blue")
@@ -229,7 +230,7 @@ struct ContentView: View {
             .navigationBarHidden(true)
             .padding(.top, 40)
         }
-        .overlay(CustomNavigation(title: "Sign Up", ONPAGE: $ONPAGE, rightImage: ""))
+        .overlay(CustomNavigation(title: $CustomNavitaionTitle, ONPAGE: $ONPAGE, rightImage: ""))
         .onAppear(){
             vmName.value = "ddd"
             vmEmail.value = "d@gmail.com"

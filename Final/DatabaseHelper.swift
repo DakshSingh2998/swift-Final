@@ -68,6 +68,7 @@ struct DatabaseHelper{
                 //obj.append(temp)
                 try? context.save()
             }
+            try? context.save()
             //print(userData?.toCartItem)
         }
         catch{

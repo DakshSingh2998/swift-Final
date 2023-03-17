@@ -29,6 +29,7 @@ struct Profile: View {
     @State var toast:String?
     @Binding var ONPAGE:Double
     @State var userData:UserData?
+    @State var CustomNavitaionTitle = "Profile"
     var body: some View {
         ZStack(alignment: .top){
             LinearGradient(gradient: Gradient(colors: [Color("Dark"), Color("Light")]), startPoint: .topLeading, endPoint: .bottomTrailing)
@@ -38,7 +39,7 @@ struct Profile: View {
             }
             .frame(maxWidth: .infinity)
             .frame(height: 40)
-            .overlay(CustomNavigation(title: "Profile" , ONPAGE: $ONPAGE, rightImage: ""))
+            .overlay(CustomNavigation(title: $CustomNavitaionTitle, ONPAGE: $ONPAGE, rightImage: ""))
             VStack(spacing: 0){
                 VStack{
                     HStack{

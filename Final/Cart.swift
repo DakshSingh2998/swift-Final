@@ -26,6 +26,8 @@ struct Cart: View {
     @State var gotoProfile = false
     @Binding var ONPAGE:Double
     @State var userData:UserData?
+    @State var restaurantName = ""
+    @State var didLoad = false
     func calcSubTotal(){
         subTotal = 0
         for i in cartItems.indices{
@@ -35,11 +37,12 @@ struct Cart: View {
     var body: some View {
         
         ZStack{
+            
             LinearGradient(gradient: Gradient(colors: [Color("Dark"), Color("Light")]), startPoint: .topLeading, endPoint: .bottomTrailing)
                 .ignoresSafeArea()
             if(cartItems.count != 0){
                 VStack(spacing: 0){
-                    CustomNavigation(title: cartItems.count == 0 ? "Cart" : cartItems[0].restaurantName , ONPAGE: $ONPAGE, leftImage: "location.north.circle.fill", userData: userData).frame(height: 40)
+                    CustomNavigation(title: $restaurantName , ONPAGE: $ONPAGE, leftImage: "location.north.circle.fill", userData: userData).frame(height: 40)
                     
                     ScrollView{
                         VStack(spacing: 20){
@@ -461,14 +464,16 @@ struct Cart: View {
                     .frame(maxWidth: .infinity)
                     .frame(maxHeight: .infinity)
                     .frame(height: 40, alignment: .top)
-                    .overlay(CustomNavigation(title: "Cart" , ONPAGE: $ONPAGE, leftImage: "location.north.circle.fill", userData: userData))
+                    .overlay(CustomNavigation(title: $restaurantName , ONPAGE: $ONPAGE, leftImage: "location.north.circle.fill", userData: userData))
                     Spacer()
                     Image(systemName: "cart.fill.badge.questionmark.rtl").resizable().scaledToFit()
                         .minimumScaleFactor(2)
                         
                         .frame(width: 200, height: 200)
                         .fixedSize()
-                    Text("Cart is Empty :/")
+                    Text("Cart is Empty :/").onAppear(){
+                        restaurantName = "Cart"
+                    }
                     Spacer()
                 }.frame(maxHeight: .infinity)
             }
@@ -479,6 +484,12 @@ struct Cart: View {
         .onAppear(){
             calcSubTotal()
             print(cartItems.count)
+            if(cartItems.count == 0){
+                restaurantName = "Cart"
+            }
+            else{
+                restaurantName = cartItems[0].restaurantName
+            }
             
             
         }

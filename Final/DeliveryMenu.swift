@@ -50,10 +50,10 @@ struct DeliveryMenu: View {
     @State var didLoad = true
     @Binding var userData:UserData?
     @State var apiLoaded = false
-
+    @State var CustomNavitaionTitle = "Delivery"
     var body: some View {
         VStack{
-            CustomNavigation(title: "Delivery" , ONPAGE: $ONPAGE, leftImage: "location.north.circle.fill", userData: userData)
+            CustomNavigation(title: $CustomNavitaionTitle , ONPAGE: $ONPAGE, leftImage: "location.north.circle.fill", userData: userData)
                 .frame(height: 40)
                 .frame(maxWidth: .infinity)
                 .frame(height: 40)
@@ -495,11 +495,22 @@ struct DeliveryMenu: View {
             restaurantModel = restaurantModel
         }
         print(restaurantModel.count)
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.3, execute: {
-            withAnimation(.linear(duration: 0.3)){
-                try? scrollProxy.scrollTo(0)
+        if(restaurantModel.count != 0){
+            DispatchQueue.global(qos: .background).async {
+                withAnimation(.linear(duration: 0.5)){[self] in
+                    do {
+                        //call a throwable function, such as
+                        print("sp", scrollProxy)
+                        try? scrollProxy.scrollTo(0)
+                    } catch {
+                        print("scroll proxy not found")
+                    }
+                    
+                }
             }
-        })
+        }
+        
+        
         
         
         //showRestaurantModel = restaurantModel
