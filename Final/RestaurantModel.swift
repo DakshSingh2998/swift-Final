@@ -6,7 +6,7 @@
 //
 
 import Foundation
-struct RestaurantModel: Encodable{
+struct RestaurantModel: Encodable, Hashable{
     var isVeg:Bool?
     var distance:Double?
     var price:Int?

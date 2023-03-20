@@ -139,15 +139,16 @@ struct DeliveryMenu: View {
                                     }
                                 }.frame(maxWidth: .infinity)
                                     .padding(6)
-                                
+                                    
                                 
                                 List{
+                                    
+                                    
                                     ForEach(0..<restaurantModel.count, id: \.self) { idx in
                                         VStack(spacing: 0){
                                             //Text(item.name)
                                             
                                             FoodItemCell(restaurantModel: $restaurantModel, showRestaurantModel: $restaurantModel[idx], idx: idx, height: 200.0, filterCategory: filterCategory).frame(height: 200)
-                                                .id(idx)
                                                 .onTapGesture(perform: {
                                                     restaurantDishUrl = "https://retoolapi.dev/kzWdFZ/jaimatadi"
                                                     onTapped = restaurantModel[idx]
@@ -495,29 +496,26 @@ struct DeliveryMenu: View {
             restaurantModel = restaurantModel
         }
         print(restaurantModel.count)
-        if(restaurantModel.count != 0){
-            DispatchQueue.global(qos: .background).async {
-                withAnimation(.linear(duration: 0.5)){[self] in
+        //if(restaurantModel.count != 0){
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {[self] in
+                //withAnimation(.linear(duration: 0.1)){[self] in
                     do {
-                        //call a throwable function, such as
-                        print("sp", scrollProxy)
+                        if(self.restaurantModel.count == 0){
+                            return
+                        }
                         try? scrollProxy.scrollTo(0)
                     } catch {
                         print("scroll proxy not found")
                     }
                     
-                }
+                //}
             }
-        }
-        
-        
-        
-        
+        //}
         //showRestaurantModel = restaurantModel
     }
     func applyFilter(){
         self.showRestaurantModel = originalRestauratnModel.filter{
-            ($0.price!) >= Int(filterMin.value == "" ? "0" : filterMin.value)! && $0.price! <= Int(filterMax.value == "" ? "99999" : filterMax.value)!
+            ($0.price!) >= Int(filterMin.value == "" ? "0" : filterMin.value)! && $0.price! <= Int(filterMax.value == "" ? "999999" : filterMax.value)!
         }
         if(vegOnly == true){
             self.showRestaurantModel = self.showRestaurantModel.filter{
@@ -540,8 +538,6 @@ struct DeliveryMenu: View {
                 return filterCategory[Int($0.category!)! - 1].isSelected
             }
         }
-        
-        
         self.restaurantModel = showRestaurantModel
     }
     func sortHide(){

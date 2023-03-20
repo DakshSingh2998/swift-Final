@@ -395,9 +395,8 @@ struct RestaurantHomePage: View {
                             DatabaseHelper.shared.updateCart(cartItems: cartItems, userData: userData)
                         }
                     }
-                    .alert("U have items from other restaurant in cart, Press Yes to clear cart and continue", isPresented: $showRemove, actions: {
+                    .alert("U have items from \(cartItems[0].restaurantName) in cart, Press Yes to clear cart and continue", isPresented: $showRemove, actions: {
                         Button("No", role: .cancel, action: {
-                            
                             showRemove = false
                         })
                         Button("Yes", role: .destructive, action: {
